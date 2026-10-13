@@ -7,6 +7,7 @@
  *
  *   Main.dc.html (Login set) + Dashboard.dc.html + canvas.json → Claude Design artboards
  *   design-sandbox.html                                → standalone page (any browser)
+ *   design-sandbox.embedded.html                       → the same page for a host frame (postMessage bridge)
  *
  * Usage:
  *   node scripts/build.mjs --out ./out                       # no brand
@@ -436,13 +437,13 @@ ${chromeCss}
 
 // ---------- standalone canvas page ----------
 import { canvasPage } from './canvas-page.mjs';
-function standalone(bodyOnly = false) {
+function standalone(bodyOnly = false, { embedded = false } = {}) {
   const screensHtml = {};
   for (const set of SETS) for (const v of set.variants) {
     screensHtml[`${set.key}/${v.key}`] = expand(read(path.join('screens', v.file)), 'html');
     if (v.mobile) screensHtml[`${set.key}/${v.key}~m`] = expand(read(path.join('screens', v.mobile.file)), 'html');   // a variant's own mobile counterpart (pair)
   }
-  return canvasPage({ SETS, screensHtml, paletteOptions, fontOptions, defaultPalette, defaultFont, CLIENT, PAGE_TITLE, brand, report, googleHref, fontsCss, fontsHref, themeCss, iconsSprite, FALLBACK_HEAD, FALLBACK_BODY, bodyOnly });
+  return canvasPage({ SETS, screensHtml, paletteOptions, fontOptions, defaultPalette, defaultFont, CLIENT, PAGE_TITLE, brand, report, googleHref, fontsCss, fontsHref, themeCss, iconsSprite, FALLBACK_HEAD, FALLBACK_BODY, bodyOnly, embedded });
 }
 
 // ---------- export the picks as editable Claude Design artboards ----------
@@ -551,6 +552,7 @@ for (const set of SETS) fs.writeFileSync(path.join(OUT, set.file), post(artboard
 fs.writeFileSync(path.join(OUT, 'canvas.json'), canvasJson());
 fs.writeFileSync(path.join(OUT, 'design-sandbox.html'), post(standalone(false)));
 fs.writeFileSync(path.join(OUT, 'design-sandbox.artifact.html'), post(standalone(true)));
+fs.writeFileSync(path.join(OUT, 'design-sandbox.embedded.html'), post(standalone(false, { embedded: true })));   // framed by a host page: postMessage bridge, host-styled chrome
 if (brand && brand.logo) fs.writeFileSync(path.join(OUT, brand.logo.file), brand.logo.buf);
 fs.writeFileSync(path.join(OUT, 'build-info.json'), JSON.stringify({
   builtAt: new Date().toISOString(),
@@ -558,7 +560,7 @@ fs.writeFileSync(path.join(OUT, 'build-info.json'), JSON.stringify({
   brand: brand ? { name: brand.name, colors: brand.light || null, colorsDark: brand.dark || null, borrowedFrom: brand.borrowedFrom || null, font: brand.font ? brand.font.name : null, logo: brand.logo ? brand.logo.file : null, textSafeLight: brand.textSafeLight || null } : null,
   defaults: { density: 'comfortable', palette: defaultPalette, font: defaultFont, mode: 'light' },
   contrastReport: report,
-  files: [...SETS.map(s => s.file), 'canvas.json', 'design-sandbox.html', 'design-sandbox.artifact.html', ...(brand && brand.logo ? [brand.logo.file] : [])],
+  files: [...SETS.map(s => s.file), 'canvas.json', 'design-sandbox.html', 'design-sandbox.artifact.html', 'design-sandbox.embedded.html', ...(brand && brand.logo ? [brand.logo.file] : [])],
 }, null, 2) + '\n');
 
 if (EMIT_MD) {
@@ -583,4 +585,4 @@ if (APPENDIX) {
   fs.writeFileSync(APPENDIX, skill + app);
   console.log(`appended verbatim artboard sources to ${APPENDIX}`);
 }
-console.log(`built ${SETS.map(s => s.file).join(', ')}, canvas.json, design-sandbox.html, design-sandbox.artifact.html${brand && brand.logo ? ', ' + brand.logo.file : ''} → ${OUT}`);
+console.log(`built ${SETS.map(s => s.file).join(', ')}, canvas.json, design-sandbox.html, design-sandbox.artifact.html, design-sandbox.embedded.html${brand && brand.logo ? ', ' + brand.logo.file : ''} → ${OUT}`);

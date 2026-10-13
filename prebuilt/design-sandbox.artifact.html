@@ -17,7 +17,8 @@
 <style>
 html, body { margin: 0; height: 100%; background: #E9EAEE; overflow: hidden; }
 /* the page's own chrome is neutral in both themes so the screens are the only color on it; light is the default, the moon button flips it */
-.sb { position: fixed; inset: 0; display: grid; grid-template-rows: auto 1fr; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 14px; color-scheme: light;
+.sb { position: fixed; inset: 0; display: grid; grid-template-rows: auto 1fr; font-family: var(--ui-font); font-size: 14px; color-scheme: light;
+--ui-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; --ui-focus: var(--ui-accent);
 --ui-bg: #E9EAEE; --ui-dot: #D3D6DC; --ui-panel: #FFFFFF; --ui-panel-2: #EEF0F3; --ui-raised: #FFFFFF; --ui-border: #D7DAE0; --ui-border-strong: #C5C9D1;
 --ui-text: #1F2329; --ui-muted: #5F6672; --ui-accent: #1F2329; --ui-accent-hover: #000; --ui-on-accent: #FFFFFF;
 --ui-warn: #8A5A00; --ui-warn-bg: #FFF6E8; --ui-warn-border: #F0D9B0;
@@ -231,6 +232,15 @@ color: var(--ui-text); background: var(--ui-bg); }
 .sb-exportopts button[disabled] { opacity: .5; cursor: not-allowed; }
 .sb-exportopts button b { font-size: 14px; font-weight: 700; }
 .sb-exportopts button span { font-size: 12.5px; color: var(--ui-muted); line-height: 1.45; }
+/* embedded build only (the host styles the chrome through the --ui-* tokens) */
+.sb.embedded :focus-visible { outline: 2px solid var(--ui-focus); outline-offset: 2px; }
+.sb.embedded .sb-note:focus, .sb.embedded .sb-general:focus { border-color: var(--ui-focus); }
+.sb.embedded .sb-lockchip { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px; padding: 0 7px; border-radius: 11px; background: var(--ui-lock); color: var(--ui-on-lock); font-size: 11.5px; font-weight: 700; }
+.sb.embedded .sb-lockchip:empty { display: none; }
+.sb.embedded .sb-roflag { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--ui-warn); background: var(--ui-warn-bg); border: 1px solid var(--ui-warn-border); border-radius: 6px; padding: 2px 6px; white-space: nowrap; }
+.sb.embedded .sb-roflag[hidden] { display: none; }
+.sb.embedded.readonly .sb-ov .sb-lockbtn, .sb.embedded.readonly .sb-poplock { display: none; }
+.sb.embedded.readonly .sb-bar button:disabled, .sb.embedded.readonly .sb-bar select:disabled, .sb.embedded.readonly .sb-panebar button:disabled { opacity: .45; cursor: default; }
 </style>
 <div class="sb">
 <div class="sb-bar">
@@ -1213,6 +1223,11 @@ const STAGE = { w: 8280, h: 2850, pad: 120, gap: 160, pairGap: 60, rowGap: 480, 
 const CLIENT = null;
 const FONTS_HREF = "https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Public+Sans:wght@400;500;600&family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=Playfair+Display:wght@500;600;700&family=Source+Sans+3:wght@400;500;600&family=Nunito:wght@600;700;800&family=Nunito+Sans:wght@400;500;600&display=swap";
 const BRAND = null;
+// Embedded build (a host page frames this one): state comes and goes over the bridge, never browser storage.
+// Read-only until the host's first init; with no parent at all it stays read-only and never posts.
+const EMBEDDED = false;
+const HAS_PARENT = EMBEDDED && window.parent !== window;
+let READ_ONLY = EMBEDDED, hostOrigin = null;
 const DENSITIES = ['comfortable', 'compact'], MODES = ['light', 'dark'], FIELDS = ['density', 'palette', 'font', 'mode', 'navicons'];
 const next = (list, cur) => list[(list.indexOf(cur) + 1) % list.length];
 const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -1230,6 +1245,7 @@ ov: {}, locks: {}, notes: {}, general: { text: '', at: 0 },
 active: null, panel: null,   // UI only, never stored
 compare: { pins: [], open: false, choosing: false, confirm: false, focus: null, pov: [{}, {}] },   // compare view: chosen unit ids, per-pane look overrides (UI only, never saved)
 };
+const DEFAULT_BAR = { ...state.bar };
 const view = { x: 0, y: 0, s: 0.2 };
 const viewport = $('.sb-viewport'), stage = $('.sb-stage'), overlays = $('.sb-overlays'), pop = $('.sb-pop'), notesPanel = $('.sb-notes');
 const clean = (o) => { if (!o) return {}; const c = { ...o }; delete c.at; delete c._del; return c; };
@@ -1239,22 +1255,23 @@ function effective(uid) {
 if (isLocked(uid)) return clean(state.locks[uid]);
 return { navicons: 'on', ...clean(state.bar), ...overrides(uid) };
 }
-function setBar(field, val) { state.bar[field] = val; state.bar.at = now(); }
+function setBar(field, val) { if (READ_ONLY) return; state.bar[field] = val; state.bar.at = now(); }
 function setOverride(uid, field, val) {
-if (isLocked(uid)) return;
+if (READ_ONLY || isLocked(uid)) return;
 const ov = overrides(uid);
 if (val) ov[field] = val; else delete ov[field];
 state.ov[uid] = Object.keys(ov).length ? { ...ov, at: now() } : { _del: true, at: now() };
 }
-function clearOverride(uid) { if (!isLocked(uid)) state.ov[uid] = { _del: true, at: now() }; }
-function lock(uid) { state.locks[uid] = { ...effective(uid), at: now() }; state.ov[uid] = { _del: true, at: now() }; }
+function clearOverride(uid) { if (!READ_ONLY && !isLocked(uid)) state.ov[uid] = { _del: true, at: now() }; }
+function lock(uid) { if (READ_ONLY) return; state.locks[uid] = { ...effective(uid), at: now() }; state.ov[uid] = { _del: true, at: now() }; }
 function unlock(uid) {
+if (READ_ONLY) return;
 const captured = clean(state.locks[uid]), bar = clean(state.bar), ov = {};
 for (const f of FIELDS) if (captured[f] !== bar[f]) ov[f] = captured[f];     // the captured look stays, as an ordinary override
 state.locks[uid] = { _del: true, at: now() };
 state.ov[uid] = Object.keys(ov).length ? { ...ov, at: now() } : { _del: true, at: now() };
 }
-function setNote(uid, text) { state.notes[uid] = text.trim() ? { text, at: now() } : { _del: true, at: now() }; }
+function setNote(uid, text) { if (READ_ONLY) return; state.notes[uid] = text.trim() ? { text, at: now() } : { _del: true, at: now() }; }
 const noteOf = (uid) => (live(state.notes[uid]) ? state.notes[uid].text : '');
 const lockedUnits = () => UNITS.filter(u => isLocked(u.id));
 // ---------- persistence: this browser + the hosted page's database ----------
@@ -1277,7 +1294,45 @@ if (!dbDoc) return;
 clearTimeout(dbTimer);
 dbTimer = setTimeout(async () => { try { await dbDoc.set(serialize()); dbState = 'synced'; } catch (e) { dbState = 'error'; } paintSync(); }, 500);
 }
-function persist() { saveLocal(); saveDb(); }
+function persist(reason) {
+if (READ_ONLY) return;
+if (EMBEDDED) return bridgePost({ type: 'design-sandbox:state', state: serialize(), reason });
+saveLocal(); saveDb();
+}
+// ---------- bridge v1 (embedded build only; see references/embedding.md) ----------
+function bridgePost(msg) {
+if (!HAS_PARENT) return;
+const target = msg.type === 'design-sandbox:ready' || !hostOrigin || hostOrigin === 'null' ? '*' : hostOrigin;
+window.parent.postMessage({ ...msg, v: 1 }, target);
+}
+function replaceState(s) {
+const copy = (m) => (m && typeof m === 'object' ? JSON.parse(JSON.stringify(m)) : {});
+state.bar = { ...DEFAULT_BAR }; state.ov = {}; state.locks = {}; state.notes = {}; state.general = { text: '', at: 0 };
+if (!s || s.v !== 2) return;
+if (s.bar && typeof s.bar === 'object') state.bar = { ...DEFAULT_BAR, ...copy(s.bar) };
+state.ov = copy(s.ov); state.locks = copy(s.locks); state.notes = copy(s.notes);
+if (s.general && typeof s.general === 'object') state.general = { text: '', at: 0, ...copy(s.general) };
+}
+function applyHostTheme(t) {
+const sb = $('.sb'); if (!t || typeof t !== 'object') return;
+for (const k of [...sb.style]) if (k.startsWith('--ui-')) sb.style.removeProperty(k);   // a token set is a full set: drop the previous one
+const tokens = t.tokens && typeof t.tokens === 'object' ? t.tokens : {};
+for (const [k, v] of Object.entries(tokens)) if (/^--ui-[a-z0-9-]+$/.test(k) && typeof v === 'string') sb.style.setProperty(k, v);
+if (t.fonts && typeof t.fonts.ui === 'string') sb.style.setProperty('--ui-font', t.fonts.ui);
+sb.classList.toggle('dark', !!t.dark); sb.style.colorScheme = t.dark ? 'dark' : 'light';
+}
+function onBridge(e) {
+if (window.parent === window || e.source !== window.parent) return;
+const m = e.data; if (!m || typeof m !== 'object' || m.v !== 1) return;
+if (m.type !== 'design-sandbox:init' && m.type !== 'design-sandbox:theme') return;
+if (hostOrigin === null) hostOrigin = e.origin;
+clearTimeout(noteTimer);
+if (m.type === 'design-sandbox:theme') return applyHostTheme(m.theme);
+const ae = document.activeElement; if (ae && ae.matches && ae.matches('textarea')) ae.blur();
+replaceState(m.state); READ_ONLY = !!m.readOnly;
+if (m.theme) applyHostTheme(m.theme);
+paint();
+}
 function loadLocal() { try { const raw = localStorage.getItem(STORE_KEY); if (raw) merge(JSON.parse(raw)); } catch {} }
 // The database: ask once at load (so no prompt appears in front of a client), then subscribe live.
 async function connectDb() {
@@ -1295,7 +1350,7 @@ dbDoc.onSnapshot((s) => { if (!s.exists || s.metadata.hasPendingWrites) return; 
 }
 function paintSync() {
 const el = $('.sb-notes-sync'); if (!el) return;
-el.textContent = dbState === 'synced' ? 'Saved in this browser and on this page' : dbState === 'syncing' ? 'Saving to this page…' : dbState === 'error' ? 'Saved in this browser (page database unavailable)' : 'Saved in this browser';
+el.textContent = EMBEDDED ? 'Saved to the host' : dbState === 'synced' ? 'Saved in this browser and on this page' : dbState === 'syncing' ? 'Saving to this page…' : dbState === 'error' ? 'Saved in this browser (page database unavailable)' : 'Saved in this browser';
 }
 // ---------- theme ----------
 function paint() {
@@ -1318,8 +1373,19 @@ const lb = $('.sb-lockbtn', root); if (lb) { lb.classList.toggle('on', locked); 
 const nd = $('.sb-notedot', root); if (nd) nd.hidden = !noteOf(l.unit);
 }
 }
-const n = lockedUnits().length; $('.sb-lockcount').textContent = n ? String(n) : '';
-paintPop(); paintNotes(); paintCompare();
+const n = lockedUnits().length, lc = $('.sb-lockcount'); if (lc) lc.textContent = n ? String(n) : '';
+paintPop(); paintNotes(); paintCompare(); paintReadOnly();
+}
+// read-only (embedded only): every editing control disabled, note fields readonly, padlocks hidden (CSS)
+const RO_DISABLE = '.sb-bar [data-density], .sb-bar [data-mode], .sb-bar [data-navicons], .sb-bar .sb-swatch, .sb-bar select[data-font], .sb-applybrand, .sb-resetall';
+const RO_ARIA = RO_DISABLE + ', .sb-popcontrols, .sb-popreset, .sb-clearnotes, .sb-panesave, .sb-panelock';
+function paintReadOnly() {
+if (!EMBEDDED) return;
+const ro = READ_ONLY; $('.sb').classList.toggle('readonly', ro);
+const fl = $('.sb-roflag'); if (fl) fl.hidden = !ro;
+for (const el of $$(RO_DISABLE)) el.disabled = ro;
+for (const el of $$(RO_ARIA)) { if (ro) el.setAttribute('aria-disabled', 'true'); else el.removeAttribute('aria-disabled'); }
+for (const ta of $$('.sb-note, .sb-general')) ta.readOnly = ro;
 }
 // the per-unit card shows the active unit; "Set" positions mean "same as the bar"
 function paintPop() {
@@ -1330,9 +1396,9 @@ const pal = PALETTES.find(p => p.id === eff.palette) || PALETTES[0], font = FONT
 const badge = $('.sb-pophead .sb-badge', pop); badge.textContent = u.label; badge.classList.add('wide');
 $('.sb-popname', pop).textContent = u.name; $('.sb-popset', pop).textContent = u.setTitle + ' · ' + (u.role === 'mobile' ? 'mobile' : 'desktop');
 const lb = $('.sb-poplock', pop); lb.classList.toggle('on', locked); lb.setAttribute('aria-label', locked ? 'Unlock' : 'Lock'); lb.title = locked ? 'Unlock (L) — the look stays as an override' : "Lock this screen's look (L)";
-$('.sb-popcontrols', pop).disabled = locked;
+$('.sb-popcontrols', pop).disabled = locked || READ_ONLY;
 const overridden = !locked && Object.keys(ov).length > 0;
-$('.sb-popflag:not(.lock)', pop).hidden = !overridden; $('.sb-popflag.lock', pop).hidden = !locked; $('.sb-popreset', pop).disabled = !overridden;
+$('.sb-popflag:not(.lock)', pop).hidden = !overridden; $('.sb-popflag.lock', pop).hidden = !locked; $('.sb-popreset', pop).disabled = !overridden || READ_ONLY;
 const hint = $('.sb-pophint', pop); hint.hidden = overridden; hint.textContent = locked ? 'Locked in — unlock to change.' : 'Changes here affect only this screen.';
 for (const field of ['density', 'mode', 'navicons', 'palette']) {
 const cur = locked ? (eff[field] || (field === 'navicons' ? 'on' : '')) : (ov[field] !== undefined ? ov[field] : '');
@@ -1348,7 +1414,7 @@ notesPanel.hidden = state.panel !== 'notes'; if (notesPanel.hidden) return;
 const ga = $('.sb-general', notesPanel); if (document.activeElement !== ga) ga.value = state.general.text || '';
 const list = $('.sb-notelist', notesPanel); const items = UNITS.filter(u => noteOf(u.id));
 list.innerHTML = items.length ? items.map(u => '<li data-unit="' + u.id + '" title="Open this screen"><b>' + esc(shortTitle(u)) + '</b><span>' + esc(noteOf(u.id)) + '</span></li>').join('') : '<li class="empty">No per-screen notes yet — click a screen and type in its card.</li>';
-const cb = $('.sb-clearnotes', notesPanel); const any = items.length || (state.general.text || '').trim(); cb.disabled = !any; if (!any) { cb.dataset.armed = '0'; cb.textContent = 'Clear notes'; }
+const cb = $('.sb-clearnotes', notesPanel); const any = items.length || (state.general.text || '').trim(); cb.disabled = !any || READ_ONLY; if (!any) { cb.dataset.armed = '0'; cb.textContent = 'Clear notes'; }
 paintSync();
 }
 const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -1380,7 +1446,7 @@ apply();
 function fitAll() { fitRect(0, 0, STAGE.w, STAGE.h, 24); }
 // Show: all · desktop · mobile — which screens are on the canvas. Hidden screens keep their locks, notes and
 // overrides; the visible ones re-flow so each row stays tight. Remembered per browser, never exported.
-let show = 'all'; try { show = localStorage.getItem('sb-show') || 'all'; } catch {}
+let show = 'all'; if (!EMBEDDED) try { show = localStorage.getItem('sb-show') || 'all'; } catch {}
 const shown = (l) => show === 'all' || l.role === show;
 function reflow() {
 let maxW = 0, y = STAGE.pad + STAGE.labelH;
@@ -1398,7 +1464,7 @@ STAGE.w = maxW + STAGE.pad; STAGE.h = y - STAGE.rowGap + STAGE.pad; stage.style.
 for (const l of LAYOUT) { const el = $('.sb-screen[data-id="' + l.id + '"]'); el.style.left = l.x + 'px'; el.style.top = l.y + 'px'; el.hidden = !shown(l); const ov = $('.sb-ov[data-id="' + l.id + '"]'); if (ov) ov.classList.toggle('is-hidden', !shown(l)); }
 $$('.sb-bar [data-show]').forEach(b => b.classList.toggle('on', b.dataset.show === show));
 }
-function setShow(v) { show = v; try { localStorage.setItem('sb-show', v); } catch {} reflow(); fitAll(); }
+function setShow(v) { show = v; if (!EMBEDDED) try { localStorage.setItem('sb-show', v); } catch {} reflow(); fitAll(); }
 function fitUnit(uid) {
 const ls = screensOf(uid); const x = Math.min(...ls.map(l => l.x)), y = Math.min(...ls.map(l => l.y));
 const r = Math.max(...ls.map(l => l.x + l.w)), b = Math.max(...ls.map(l => l.y + l.h));
@@ -1432,11 +1498,11 @@ viewport.addEventListener('dblclick', (e) => { if (cmp().choosing || e.target.cl
 stage.addEventListener('click', (e) => { const a = e.target.closest('a'); if (a) e.preventDefault(); });
 window.addEventListener('resize', apply);
 function open(uid) { state.active = uid; state.panel = 'pop'; paint(); }
-function toggleLock(uid) { if (isLocked(uid)) unlock(uid); else lock(uid); persist(); paint(); }
+function toggleLock(uid) { if (READ_ONLY) return; const was = isLocked(uid); if (was) unlock(uid); else lock(uid); persist(was ? 'unlock' : 'lock'); paint(); }
 // One click puts the client's colors (and fonts, if supplied) on every unlocked screen: the bar takes the brand values
 // and per-screen color/font overrides are cleared so nothing hides it. Locked screens keep their captured look.
 function applyBrand() {
-if (!BRAND) return;
+if (!BRAND || READ_ONLY) return;
 if (BRAND.colors && PALETTES.some(p => p.id === 'brand')) setBar('palette', 'brand');
 if (BRAND.font && FONTS.some(f => f.id === 'brand')) setBar('font', 'brand');
 for (const u of UNITS) { if (isLocked(u.id)) continue; const ov = overrides(u.id); if (ov.palette !== undefined || ov.font !== undefined) { delete ov.palette; delete ov.font; state.ov[u.id] = Object.keys(ov).length ? { ...ov, at: now() } : { _del: true, at: now() }; } }
@@ -1462,10 +1528,11 @@ if (c.pins.length === 2) { c.choosing = false; c.open = true; c.focus = null; }
 paint();
 }
 function savePane(i) {
+if (READ_ONLY) return;
 const uid = cmp().pins[i], look = paneLook(i);
 if (isLocked(uid)) state.locks[uid] = { ...look, at: now() };                 // a locked screen keeps its lock, with the new look
 else { const ov = {}; for (const f of FIELDS) { const barVal = f === 'navicons' ? (state.bar.navicons || 'on') : state.bar[f]; if (look[f] !== barVal) ov[f] = look[f]; } state.ov[uid] = { ...ov, at: now() }; }
-cmp().pov[i] = {}; persist(); toast('Saved to ' + unitTitle(unitOf(uid)) + '.');
+cmp().pov[i] = {}; persist('compare-save'); toast('Saved to ' + unitTitle(unitOf(uid)) + '.');
 }
 // Done / Esc / bar button: close straight away when nothing is unsaved, otherwise ask first.
 function requestClose() {
@@ -1493,7 +1560,8 @@ const conf = $('.sb-cmpconfirm', cmpEl); conf.hidden = !c.confirm;
 if (c.confirm) {
 const same = c.pins[0] === c.pins[1], d0 = dirty(0), d1 = dirty(1), name = (i) => esc(unitTitle(unitOf(c.pins[i])));
 const btn = (act, label) => '<button type="button" class="sb-btn" data-cmpact="' + act + '">' + label + '</button>';
-if (same && d0 && d1) { $('.sb-cmpconfirmtext', conf).innerHTML = 'Both sides changed ' + name(0) + ' — which look should it keep?'; $('.sb-cmpconfirmbtns', conf).innerHTML = btn('left', 'Left') + btn('right', 'Right') + btn('discard', 'Neither') + btn('back', 'Keep comparing'); }
+if (READ_ONLY) { const side = d0 && d1 ? 'both sides' : d0 ? 'the left side (' + name(0) + ')' : 'the right side (' + name(1) + ')'; $('.sb-cmpconfirmtext', conf).innerHTML = 'Read-only — the look on ' + side + ' cannot be saved.'; $('.sb-cmpconfirmbtns', conf).innerHTML = btn('discard', 'Discard') + btn('back', 'Keep comparing'); }
+else if (same && d0 && d1) { $('.sb-cmpconfirmtext', conf).innerHTML = 'Both sides changed ' + name(0) + ' — which look should it keep?'; $('.sb-cmpconfirmbtns', conf).innerHTML = btn('left', 'Left') + btn('right', 'Right') + btn('discard', 'Neither') + btn('back', 'Keep comparing'); }
 else { const side = d0 && d1 ? 'both sides' : d0 ? 'the left side (' + name(0) + ')' : 'the right side (' + name(1) + ')'; $('.sb-cmpconfirmtext', conf).innerHTML = 'Unsaved look on ' + side + '.'; $('.sb-cmpconfirmbtns', conf).innerHTML = btn('save', 'Save & close') + btn('discard', 'Discard') + btn('back', 'Keep comparing'); }
 }
 cmpEl.classList.toggle('focus-0', c.focus === 0); cmpEl.classList.toggle('focus-1', c.focus === 1);
@@ -1504,8 +1572,8 @@ const badge = $('.sb-badge', bar); badge.textContent = u.label; badge.classList.
 $('.sb-panename', bar).textContent = unitTitle(u);
 for (const f of ['density', 'mode', 'navicons']) $$('[data-pfield="' + f + '"] button', bar).forEach(b => b.classList.toggle('on', b.dataset.val === (look[f] || (f === 'navicons' ? 'on' : ''))));
 $('[data-pfield="palette"]', bar).value = look.palette; $('[data-pfield="font"]', bar).value = look.font;
-const lb = $('.sb-panelock', bar); lb.classList.toggle('on', isLocked(uid)); lb.title = isLocked(uid) ? 'Unlock' : 'Lock this screen with the look shown here';
-const isDirty = dirty(i); pane.classList.toggle('is-dirty', isDirty); const sv = $('.sb-panesave', bar); sv.textContent = isDirty ? 'Save to screen' : 'Saved'; sv.disabled = !isDirty; sv.title = isDirty ? (isLocked(uid) ? "Update this locked screen's look to what is shown here" : "Save this look to the screen as its overrides") : 'The screen already has this look';
+const lb = $('.sb-panelock', bar); lb.classList.toggle('on', isLocked(uid)); lb.title = isLocked(uid) ? 'Unlock' : 'Lock this screen with the look shown here'; lb.disabled = READ_ONLY;
+const isDirty = dirty(i); pane.classList.toggle('is-dirty', isDirty); const sv = $('.sb-panesave', bar); sv.textContent = isDirty ? 'Save to screen' : 'Saved'; sv.disabled = !isDirty || READ_ONLY; sv.title = isDirty ? (isLocked(uid) ? "Update this locked screen's look to what is shown here" : "Save this look to the screen as its overrides") : 'The screen already has this look';
 // clones: rebuild only when the pinned unit changed; retheme every paint
 const stageEl = $('.sb-panestage', pane);
 if (stageEl.dataset.unit !== uid) { stageEl.innerHTML = ''; stageEl.dataset.unit = uid; for (const l of screensOf(uid)) { const src = $('.sb-screen[data-id="' + l.id + '"] > .screen'); const w = document.createElement('div'); w.className = 'sb-clone'; w.dataset.id = l.id; w.style.width = l.w + 'px'; w.style.height = l.h + 'px'; w.appendChild(src.cloneNode(true)); stageEl.appendChild(w); } }
@@ -1541,16 +1609,17 @@ return closeCompare();
 if (b.classList.contains('sb-cmpswap')) { const c = cmp(); c.pins.reverse(); c.pov.reverse(); if (c.focus !== null) c.focus = 1 - c.focus; return paint(); }
 const pane = b.closest('.sb-pane'); if (!pane) return; const i = Number(pane.dataset.pane), uid = cmp().pins[i];
 if (b.classList.contains('sb-panefocus')) { cmp().focus = cmp().focus === i ? null : i; return paint(); }
+if (READ_ONLY && (b.classList.contains('sb-panesave') || b.classList.contains('sb-panelock'))) return;
 if (b.classList.contains('sb-panesave')) { savePane(i); return paint(); }
-if (b.classList.contains('sb-panelock')) { if (isLocked(uid)) unlock(uid); else { state.locks[uid] = { ...paneLook(i), at: now() }; state.ov[uid] = { _del: true, at: now() }; cmp().pov[i] = {}; } persist(); return paint(); }
+if (b.classList.contains('sb-panelock')) { const was = isLocked(uid); if (was) unlock(uid); else { state.locks[uid] = { ...paneLook(i), at: now() }; state.ov[uid] = { _del: true, at: now() }; cmp().pov[i] = {}; } persist(was ? 'unlock' : 'lock'); return paint(); }
 const grp = b.closest('[data-pfield]'); if (grp) { cmp().pov[i][grp.dataset.pfield] = b.dataset.val; cmp().confirm = false; return paint(); }
 });
 cmpEl.addEventListener('change', (e) => { const sel = e.target; if (sel.tagName !== 'SELECT' || !sel.dataset.pfield) return; const i = Number(sel.closest('.sb-pane').dataset.pane); cmp().pov[i][sel.dataset.pfield] = sel.value; cmp().confirm = false; paint(); });
 chooseEl.addEventListener('click', (e) => { if (e.target.closest('.sb-choosecancel')) cancelChoose(); });
 cmpEl.addEventListener('input', (e) => {
-const t = e.target; if (!t.classList.contains('sb-pnote')) return;
+const t = e.target; if (READ_ONLY || !t.classList.contains('sb-pnote')) return;
 const pane = t.closest('.sb-pane'); const uid = pane ? cmp().pins[Number(pane.dataset.pane)] : cmp().pins[0];
-clearTimeout(noteTimer); noteTimer = setTimeout(() => { setNote(uid, t.value); persist(); paint(); }, 400);
+clearTimeout(noteTimer); noteTimer = setTimeout(() => { setNote(uid, t.value); persist('note'); paint(); }, 400);
 });
 // ---------- controls ----------
 document.addEventListener('click', (e) => {
@@ -1559,6 +1628,9 @@ if (e.target.classList && e.target.classList.contains('sb-exportmodal')) return 
 const b = e.target.closest('button'); if (!b) return;
 if (b.closest('.sb-exportmodal')) { if (b.classList.contains('sb-exportcancel')) return closeExport(); if (b.dataset.export) { closeExport(); return exportCopy(b.dataset.export); } return; }
 if (b.closest('.sb-bar')) {
+const editing = b.dataset.density || b.dataset.mode || b.dataset.navicons || b.dataset.palette || b.classList.contains('sb-applybrand') || b.classList.contains('sb-resetall');
+if (READ_ONLY && editing) return;
+const reason = b.classList.contains('sb-applybrand') ? 'apply-brand' : b.classList.contains('sb-resetall') ? 'reset' : 'bar';
 if (b.dataset.density) setBar('density', b.dataset.density);
 else if (b.dataset.mode) setBar('mode', b.dataset.mode);
 else if (b.dataset.navicons) setBar('navicons', b.dataset.navicons);
@@ -1572,40 +1644,43 @@ if (b.classList.contains('sb-theme')) return setTheme(!$('.sb').classList.contai
 else if (b.classList.contains('sb-resetall')) { for (const u of UNITS) clearOverride(u.id); }
 else if (b.classList.contains('sb-notesbtn')) { state.panel = state.panel === 'notes' ? null : 'notes'; return paint(); }
 else if (b.classList.contains('sb-comparebtn')) return cmp().open ? requestClose() : cmp().choosing ? cancelChoose() : startChoose();
-persist(); return paint();
+if (EMBEDDED && !editing) return paint();   // only real edits reach the host
+persist(reason); return paint();
 }
 if (b.closest('.sb-pop')) {
 const uid = state.active; if (!uid) return;
 if (b.classList.contains('sb-popclose')) { state.active = null; state.panel = null; return paint(); }
 if (b.classList.contains('sb-popzoom')) return fitUnit(uid);
+if (READ_ONLY && (b.classList.contains('sb-poplock') || b.classList.contains('sb-popreset') || b.closest('[data-field]'))) return;
 if (b.classList.contains('sb-poplock')) return toggleLock(uid);
-if (b.classList.contains('sb-popreset')) { clearOverride(uid); persist(); return paint(); }
+if (b.classList.contains('sb-popreset')) { clearOverride(uid); persist('override'); return paint(); }
 if (b.classList.contains('sb-popcompare')) return startChoose(uid);
 const grp = b.closest('[data-field]'); if (!grp || isLocked(uid)) return;
-setOverride(uid, grp.dataset.field, b.dataset.val); persist(); return paint();
+setOverride(uid, grp.dataset.field, b.dataset.val); persist('override'); return paint();
 }
 if (b.closest('.sb-notes')) {
 if (b.classList.contains('sb-notesclose')) { state.panel = null; return paint(); }
 if (b.classList.contains('sb-clearnotes')) {
+if (READ_ONLY) return;
 if (b.dataset.armed !== '1') { b.dataset.armed = '1'; b.textContent = 'Click again to clear every note'; clearTimeout(b._t); b._t = setTimeout(() => { b.dataset.armed = '0'; b.textContent = 'Clear notes'; }, 4000); return; }
 for (const u of UNITS) if (noteOf(u.id)) setNote(u.id, ''); state.general = { text: '', at: now() };
-b.dataset.armed = '0'; b.textContent = 'Clear notes'; persist(); paint(); return toast('Notes cleared.');
+b.dataset.armed = '0'; b.textContent = 'Clear notes'; persist('clear-notes'); paint(); return toast('Notes cleared.');
 }
 return;
 }
 const root = b.closest('.sb-ov');
-if (root) { if (cmp().choosing) return choose(root.dataset.unit); if (b.dataset.action === 'lock') return toggleLock(root.dataset.unit); if (b.dataset.action === 'open') return open(root.dataset.unit); }
+if (root) { if (cmp().choosing) return choose(root.dataset.unit); if (b.dataset.action === 'lock') return READ_ONLY ? undefined : toggleLock(root.dataset.unit); if (b.dataset.action === 'open') return open(root.dataset.unit); }
 });
 document.addEventListener('change', (e) => {
-const sel = e.target; if (sel.tagName !== 'SELECT') return;
-if (sel.dataset.font !== undefined && sel.closest('.sb-bar')) { setBar('font', sel.value); persist(); return paint(); }
-if (sel.closest('.sb-pop') && state.active && sel.dataset.field && !isLocked(state.active)) { setOverride(state.active, sel.dataset.field, sel.value); persist(); paint(); }
+const sel = e.target; if (sel.tagName !== 'SELECT' || READ_ONLY) return;
+if (sel.dataset.font !== undefined && sel.closest('.sb-bar')) { setBar('font', sel.value); persist('bar'); return paint(); }
+if (sel.closest('.sb-pop') && state.active && sel.dataset.field && !isLocked(state.active)) { setOverride(state.active, sel.dataset.field, sel.value); persist('override'); paint(); }
 });
 // notes save as you type (debounced), and show a small "saved" confirmation
 document.addEventListener('input', (e) => {
-const t = e.target;
-if (t.classList.contains('sb-note') && state.active) { const uid = state.active; clearTimeout(noteTimer); noteTimer = setTimeout(() => { setNote(uid, t.value); persist(); paint(); const s = $('.sb-notesaved', pop); s.hidden = false; clearTimeout(s._t); s._t = setTimeout(() => { s.hidden = true; }, 1500); }, 400); }
-else if (t.classList.contains('sb-general')) { clearTimeout(noteTimer); noteTimer = setTimeout(() => { state.general = { text: t.value, at: now() }; persist(); paintSync(); }, 400); }
+const t = e.target; if (READ_ONLY) return;
+if (t.classList.contains('sb-note') && state.active) { const uid = state.active; clearTimeout(noteTimer); noteTimer = setTimeout(() => { setNote(uid, t.value); persist('note'); paint(); const s = $('.sb-notesaved', pop); s.hidden = false; clearTimeout(s._t); s._t = setTimeout(() => { s.hidden = true; }, 1500); }, 400); }
+else if (t.classList.contains('sb-general')) { clearTimeout(noteTimer); noteTimer = setTimeout(() => { if (READ_ONLY) return; state.general = { text: t.value, at: now() }; persist('general'); paintSync(); }, 400); }
 });
 document.addEventListener('keydown', (e) => {
 if (e.target.matches('input, select, textarea')) { if (e.key === 'Escape') e.target.blur(); return; }
@@ -1617,10 +1692,10 @@ if (e.key === 'c' && !cmp().open) return cmp().choosing ? cancelChoose() : start
 if (e.key === '0') fitAll();
 else if (e.key === '=' || e.key === '+') zoomAt(1.25, viewport.clientWidth / 2, viewport.clientHeight / 2);
 else if (e.key === '-') zoomAt(0.8, viewport.clientWidth / 2, viewport.clientHeight / 2);
-else if (e.key === 'd') { setBar('mode', next(MODES, state.bar.mode)); persist(); paint(); }
-else if (e.key === 'l' && state.active) toggleLock(state.active);
+else if (e.key === 'd') { if (READ_ONLY) return; setBar('mode', next(MODES, state.bar.mode)); persist('bar'); paint(); }
+else if (e.key === 'l' && state.active) { if (READ_ONLY) return; toggleLock(state.active); }
 else if (e.key === 'n') { state.panel = state.panel === 'notes' ? null : 'notes'; paint(); }
-else if (e.key === 'Escape') { if (!$('.sb-exportmodal').hidden) return closeExport(); if (state.panel) { const was = state.panel; state.panel = null; if (was === 'pop') state.active = null; paint(); } }
+else if (e.key === 'Escape') { const em = $('.sb-exportmodal'); if (em && !em.hidden) return closeExport(); if (state.panel) { const was = state.panel; state.panel = null; if (was === 'pop') state.active = null; paint(); } }
 });
 // ---------- exports (the Export menu) — locked screens only ----------
 const F = '\u0060\u0060\u0060';
@@ -1726,12 +1801,12 @@ catch { window.prompt('Copy your export:', text); }
 function toast(msg, ms = 1800) { const t = $('.sb-toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), ms); }
 // Export modal (Abby, 2026-09-16): Actions ▸ Export… asks which of the two exports; both read the locked screens only.
 function openExport() {
-const n = lockedUnits().length, m = $('.sb-exportmodal');
+const n = lockedUnits().length, m = $('.sb-exportmodal'); if (!m) return;
 $('.sb-exportcount', m).textContent = n ? (n === 1 ? '1 locked screen will be exported, with its look and note.' : n + ' locked screens will be exported, each with its look and note.') : 'Nothing is locked yet — lock the screens you want to export, then come back here.';
 for (const b of m.querySelectorAll('[data-export]')) b.disabled = !n;
 m.hidden = false; (m.querySelector('[data-export]:not([disabled])') || $('.sb-exportcancel', m)).focus();
 }
-function closeExport() { $('.sb-exportmodal').hidden = true; }
+function closeExport() { const m = $('.sb-exportmodal'); if (m) m.hidden = true; }
 async function exportCopy(kind) {
 const ex = EXPORTS[kind]; if (!ex) return;
 const text = ex.text(); if (text === NO_PICKS) return toast(text, 3200);
@@ -1756,6 +1831,12 @@ overlays.appendChild(el);
 }
 // page theme (light by default; remembered per browser, never affects the screens)
 function setTheme(dark) { $('.sb').classList.toggle('dark', !!dark); try { localStorage.setItem('sb-theme', dark ? 'dark' : 'light'); } catch {} }
+if (EMBEDDED) {
+window.addEventListener('message', onBridge);
+paint(); reflow(); fitAll();
+bridgePost({ type: 'design-sandbox:ready' });
+} else {
 try { setTheme(localStorage.getItem('sb-theme') === 'dark'); } catch {}
 loadLocal(); paint(); reflow(); fitAll(); connectDb();
+}
 </script>
