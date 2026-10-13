@@ -114,7 +114,9 @@ Some chrome text (the title, row titles) uses weight 800. DM Sans is bundled at 
 
 ## Running the fixture
 
-`scripts/fixtures/embed-host.html` is a small host that frames the embedded build twice: (a) `<iframe src sandbox="allow-scripts">` and (b) `<iframe srcdoc sandbox="allow-scripts">` with a `Content-Security-Policy` meta tag prefixed to the page (`default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; font-src data:; img-src data:`), the shape a locked-down host uses. It has Light/Dark, Read-only on/off and Send sample state buttons, a message log, and Copilot token values for both themes mapped onto the `--ui-*` names above. `scripts/fixtures/sample-state.json` is a synthetic state with two locks, an override, notes and a non-default bar.
+`scripts/fixtures/embed-host.html` is a small host that frames the embedded build twice: (a) `<iframe src sandbox="allow-scripts">` and (b) `<iframe srcdoc sandbox="allow-scripts">` with a `Content-Security-Policy` meta tag inserted right after the page's `<head>` (`default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; font-src data:; img-src data:`), the shape a locked-down host uses. (Placing it before `<!doctype>` would put the frame in quirks mode.) It has Light/Dark, Read-only on/off and Send sample state buttons, a message log, and Copilot token values for both themes mapped onto the `--ui-*` names above.
+
+A `file://` page cannot read another file, so frame (b) gets the page text from the fixture's file picker (choose `prebuilt/design-sandbox.embedded.html`) or, from a script, `embedHost.loadSrcdoc(text)`. The sample state is inlined in the fixture; `scripts/fixtures/sample-state.json` is the same synthetic state (two locks, an override, notes, a non-default bar), and the verification script checks the two are equal. Two query switches exist for the verification script only: `?sandbox=off` (frame (a) without the sandbox, to check browser storage) and `?frame=full` (one edge-to-edge frame, for the mockup screenshots).
 
 ```sh
 node scripts/build.mjs --out prebuilt --minify --emit-md references   # produces prebuilt/design-sandbox.embedded.html
@@ -131,6 +133,7 @@ Playwright is needed for the scripts (`mkdir -p node_modules && npm install --pr
 node scripts/build.mjs --out prebuilt --minify --emit-md references
 node scripts/build.mjs --check-palettes
 node scripts/verify-fonts.mjs prebuilt/design-sandbox.embedded.html   # each bundled font family measured against a monospace fallback, network blocked
+                                                                       # (it prints to the terminal; tee it to keep a record)
 node scripts/verify-fonts.mjs prebuilt/design-sandbox.html
-node scripts/verify-embedded.mjs                                       # the bridge, read-only, tokens, offline and standalone-regression checks
+node scripts/verify-embedded.mjs                                       # the bridge, read-only, tokens, offline and standalone-regression checks (3–4 minutes); evidence in test-results/
 ```
