@@ -1,0 +1,61 @@
+<!-- Dashboard D — Dark frame, content on a rounded light card; the sidebar opens as the icon rail. Left panel with greeting, big stats and text-link actions; date-first orders table; note + statuses below. Built from Abby's visual 3 (2026-09-11); shared data pool; content genericized. -->
+<div class="screen desktop v-d" data-variant="H" data-mode="light" data-density="comfortable" data-palette="01">
+  <!-- @include sidebar collapsed -->
+  <div class="content-wrap">
+  <main class="content d-layout">
+    <aside class="card d-panel" aria-label="Summary">
+      <div class="d-greet"><h1>Good morning, Jordan</h1><p>Here's what's happening with your orders and projects today.</p></div>
+      <button class="btn btn-primary btn-block" type="button"><svg class="icon icon-sm"><use href="#i-plus"></use></svg>New order</button>
+      <div class="d-stats">
+        <div class="d-stat"><div><b class="stat-num">24</b><span class="label">Open orders</span></div><span class="delta up"><svg class="icon icon-sm"><use href="#i-trend"></use></svg>+3 today</span></div>
+        <div class="d-stat"><div><b class="stat-num">11</b><span class="label">Active projects</span></div><span class="delta flat">2 due today</span></div>
+        <div class="d-stat"><div><b class="stat-num">6</b><span class="label">Pending invoices</span></div><span class="delta up"><svg class="icon icon-sm"><use href="#i-trend"></use></svg>$8,420 total</span></div>
+        <div class="d-stat"><div><b class="stat-num">5</b><span class="label">Assigned to me</span></div><span class="delta down">1 overdue</span></div>
+      </div>
+      <div class="d-quick">
+        <div class="eyebrow">Quick actions</div>
+        <a href="#">Generate weekly report<svg class="icon icon-sm"><use href="#i-arrow-right"></use></svg></a>
+        <a href="#">Create invoice batch<svg class="icon icon-sm"><use href="#i-arrow-right"></use></svg></a>
+      </div>
+    </aside>
+    <div class="d-main">
+      <section class="card table-card" aria-label="Recent orders">
+        <div class="table-head">
+          <div><h2>Recent orders</h2><p class="card-sub">Your latest orders across all locations, by due date.</p></div>
+          <div class="seg" role="tablist"><button class="on" type="button">All</button><button type="button">Open</button><button type="button">Done</button></div>
+        </div>
+        <table class="by-date">
+          <thead class="sr"><tr><th scope="col">Due</th><th scope="col">Order</th><th scope="col">Status</th><th scope="col">Owner</th></tr></thead>
+          <tbody>
+            <tr class="st-complete"><td class="when"><b>Mar 16</b><span>Mon</span></td><td><div class="o-row"><i class="dot"></i><div><div class="o-name">Ridgeline Outfitters <code class="oid">ORD-1028</code></div><div class="o-sub">Bend, OR · Expedited</div></div></div></td><td><span class="st">Complete</span></td><td><span class="avatar owner">RC</span></td></tr>
+            <tr class="st-cancelled"><td class="when"><b>Mar 18</b><span>Wed</span></td><td><div class="o-row"><i class="dot"></i><div><div class="o-name">Cobalt Manufacturing Co. <code class="oid">ORD-1033</code></div><div class="o-sub">Columbus, OH · Standard</div></div></div></td><td><span class="st">Cancelled</span></td><td><span class="avatar owner">MK</span></td></tr>
+            <tr class="st-complete"><td class="when"><b>Mar 19</b><span>Thu</span></td><td><div class="o-row"><i class="dot"></i><div><div class="o-name">Harbor &amp; Finch <code class="oid">ORD-1039</code></div><div class="o-sub">Austin, TX · Standard</div></div></div></td><td><span class="st">Complete</span></td><td><span class="avatar owner">GM</span></td></tr>
+            <tr class="st-progress"><td class="when"><b>Mar 21</b><span>Sat</span></td><td><div class="o-row"><i class="dot"></i><div><div class="o-name">Bluebird Logistics <code class="oid">ORD-1041</code></div><div class="o-sub">Denver, CO · Expedited</div></div></div></td><td><span class="st">In progress</span></td><td><span class="avatar owner">RC</span></td></tr>
+            <tr class="st-pending"><td class="when"><b>Mar 23</b><span>Mon</span></td><td><div class="o-row"><i class="dot"></i><div><div class="o-name">Northwind Traders <code class="oid">ORD-1042</code></div><div class="o-sub">Portland, OR · Standard</div></div></div></td><td><span class="st">Pending</span></td><td><span class="avatar owner">MK</span></td></tr>
+            <tr class="st-invoiced"><td class="when"><b>Mar 25</b><span>Wed</span></td><td><div class="o-row"><i class="dot"></i><div><div class="o-name">Summit Partners Group <code class="oid">ORD-1036</code></div><div class="o-sub">Raleigh, NC · Custom</div></div></div></td><td><span class="st">Invoiced</span></td><td><span class="avatar owner">JS</span></td></tr>
+            <tr class="st-pending"><td class="when"><b>Mar 27</b><span>Fri</span></td><td><div class="o-row"><i class="dot"></i><div><div class="o-name">Meridian Supply Co. <code class="oid">ORD-1031</code></div><div class="o-sub">Boise, ID · Standard</div></div></div></td><td><span class="st">Pending</span></td><td><span class="avatar owner">GM</span></td></tr>
+            <tr class="st-progress"><td class="when"><b>Mar 28</b><span>Sat</span></td><td><div class="o-row"><i class="dot"></i><div><div class="o-name">Larkspur Interiors <code class="oid">ORD-1030</code></div><div class="o-sub">Madison, WI · Custom</div></div></div></td><td><span class="st">In progress</span></td><td><span class="avatar owner">JS</span></td></tr>
+          </tbody>
+        </table>
+        <div class="table-foot"><a class="view-all" href="#">View all orders<svg class="icon icon-sm"><use href="#i-arrow-right"></use></svg></a></div>
+      </section>
+      <div class="d-tools">
+        <div class="card tool">
+          <h3 class="card-title">Add internal note</h3>
+          <p class="card-sub">Attach a note to an order for your team.</p>
+          <div class="note-inline"><input class="input mono" type="text" placeholder="Order ID (e.g. ORD-1042)" aria-label="Order ID"><button class="btn btn-dark" type="button">Attach</button></div>
+        </div>
+        <div class="card tool">
+          <h3 class="card-title">Invoice statuses</h3>
+          <p class="card-sub">Lifecycle badges for the invoice pipeline.</p>
+          <div class="legend-tiles">
+            <div class="ltile"><span class="chip neutral no-dot">Draft</span><span class="muted">Created but not yet sent</span></div>
+            <div class="ltile"><span class="chip progress no-dot">Open</span><span class="muted">Sent, awaiting payment</span></div>
+            <div class="ltile"><span class="chip complete no-dot">Paid</span><span class="muted">Payment received</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  </div>
+</div>

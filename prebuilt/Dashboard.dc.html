@@ -1,0 +1,866 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Public+Sans:wght@400;500;600&family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=Playfair+Display:wght@500;600;700&family=Source+Sans+3:wght@400;500;600&family=Nunito:wght@600;700;800&family=Nunito+Sans:wght@400;500;600&display=swap">
+<style>
+body { margin: 0; background: #ECEDF0; }
+a { color: #1F2329; } a:hover { color: #000; }
+.screen{--font-head:"Manrope",ui-sans-serif,system-ui,sans-serif;--font-body:"Public Sans",ui-sans-serif,system-ui,sans-serif;--bg:#F6F7F9;--surface:#FFFFFF;--surface-2:#F1F2F5;--border:#E6E8EC;--border-strong:#CFD3DA;--text:#16181D;--text-2:#5B6270;--text-3:#616A7E;--input-bg:#FFFFFF;--shadow:0 1px 2px rgba(16,24,40,.04),0 1px 3px rgba(16,24,40,.06);--shadow-lg:0 8px 24px rgba(16,24,40,.10);--ring:0 0 0 2px var(--surface),0 0 0 4px var(--primary);--success:#15803D;--success-soft:#DCFCE7;--info:#1D4ED8;--info-soft:#DBEAFE;--warn:#B45309;--warn-soft:#FEF3C7;--danger:#B91C1C;--danger-soft:#FEE2E2;--violet:#6D28D9;--violet-soft:#EDE9FE;--neutral-chip:#F1F2F5;--neutral-chip-text:#4B5260;--shell-bg:var(--surface);--shell-text:var(--text-2);--shell-strong:var(--text);--shell-muted:var(--text-3);--shell-border:var(--border);--shell-hover-bg:var(--surface-2);--shell-active-bg:var(--primary-soft);--shell-active-text:var(--primary-text);--primary:#1D4ED8;--secondary:#0E7490;--tertiary:#B45309;--on-primary:#FFFFFF;--primary-text:var(--primary);--primary-soft:color-mix(in srgb,var(--primary) 12%,transparent);--primary-hover:color-mix(in srgb,var(--primary) 88%,#000 12%);--primary-tint:color-mix(in srgb,var(--primary) 6%,var(--surface));--pad:24px;--pad-sm:16px;--gap:20px;--gap-sm:12px;--row-h:72px;--control-h:40px;--nav-h:40px;--fs:14px;--fs-sm:12.5px;--fs-lg:16px;--fs-title:28px;--fs-stat:40px;--radius:10px;--radius-sm:8px;--radius-lg:14px;font-family:var(--font-body);font-size:var(--fs);line-height:1.5;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;font-feature-settings:"tnum" 1;box-sizing:border-box;position:relative;overflow:hidden}.screen *,.screen *::before,.screen *::after{box-sizing:inherit}.screen[data-density="compact"]{--pad:16px;--pad-sm:12px;--gap:12px;--gap-sm:8px;--row-h:48px;--control-h:32px;--nav-h:34px;--fs:13px;--fs-sm:12px;--fs-lg:14px;--fs-title:24px;--fs-stat:30px;--radius:8px;--radius-sm:6px;--radius-lg:10px}.screen[data-mode="dark"]{--bg:#0E1116;--surface:#171B22;--surface-2:#1F242D;--border:#2A303A;--border-strong:#3A414D;--text:#EDEFF3;--text-2:#A3ABB8;--text-3:#8B94A3;--input-bg:#12161C;--shadow:0 1px 2px rgba(0,0,0,.4);--shadow-lg:0 12px 32px rgba(0,0,0,.5);--success:#4ADE80;--success-soft:rgba(74,222,128,.14);--info:#7F9CEE;--info-soft:rgba(127,156,238,.16);--warn:#FBBF24;--warn-soft:rgba(251,191,36,.14);--danger:#F87171;--danger-soft:rgba(248,113,113,.16);--violet:#B18CEB;--violet-soft:rgba(177,140,235,.16);--neutral-chip:#262C36;--neutral-chip-text:#C3CAD5;--primary-soft:color-mix(in srgb,var(--primary) 18%,transparent);--primary-hover:color-mix(in srgb,var(--primary) 85%,#fff 15%);--primary-tint:color-mix(in srgb,var(--primary) 10%,var(--surface))}.screen[data-palette="01"]{--primary:#23508F;--secondary:#1F6F73;--tertiary:#8A5A17;--on-primary:#fff}.screen[data-palette="02"]{--primary:#15624A;--secondary:#9A4A26;--tertiary:#7A5C10;--on-primary:#fff}.screen[data-palette="03"]{--primary:#3F4A8C;--secondary:#6B4F8A;--tertiary:#2F6B5E;--on-primary:#fff}.screen[data-palette="04"]{--primary:#1F2328;--secondary:#A34A2A;--tertiary:#2E5C8A;--on-primary:#fff}.screen[data-palette="05"]{--primary:#0F5F63;--secondary:#6E3563;--tertiary:#8A5A00;--on-primary:#fff}.screen[data-palette="06"]{--primary:#1F3A7A;--secondary:#8F5430;--tertiary:#4A6318;--on-primary:#fff}.screen[data-palette="07"]{--primary:#5E2758;--secondary:#964258;--tertiary:#1F6B5C;--on-primary:#fff}.screen[data-palette="08"]{--primary:#1E4A2E;--secondary:#3B4A5E;--tertiary:#5B4E9A;--on-primary:#fff}.screen[data-palette="09"]{--primary:#7A2233;--secondary:#55622A;--tertiary:#2A5C73;--on-primary:#fff}.screen[data-palette="10"]{--primary:#2E2B27;--secondary:#8A5A17;--tertiary:#2F5D8A;--on-primary:#fff}.screen[data-mode="dark"][data-palette="01"]{--primary:#6C9CDF;--secondary:#2BA8AE;--tertiary:#D4881E;--on-primary:#0E1116}.screen[data-mode="dark"][data-palette="02"]{--primary:#22B184;--secondary:#DB865F;--tertiary:#C69415;--on-primary:#0E1116}.screen[data-mode="dark"][data-palette="03"]{--primary:#8C96CE;--secondary:#A891C2;--tertiary:#49AD97;--on-primary:#0E1116}.screen[data-mode="dark"][data-palette="04"]{--primary:#919CAB;--secondary:#DA8263;--tertiary:#6C9ED1;--on-primary:#0E1116}.screen[data-mode="dark"][data-palette="05"]{--primary:#17AFB7;--secondary:#C888BC;--tertiary:#DC8F00;--on-primary:#0E1116}.screen[data-mode="dark"][data-palette="06"]{--primary:#7A99E0;--secondary:#CE8B62;--tertiary:#7CA825;--on-primary:#0E1116}.screen[data-mode="dark"][data-palette="07"]{--primary:#CE83C6;--secondary:#CC8699;--tertiary:#2EAD94;--on-primary:#0E1116}.screen[data-mode="dark"][data-palette="08"]{--primary:#45B26C;--secondary:#879BB5;--tertiary:#A096CC;--on-primary:#0E1116}.screen[data-mode="dark"][data-palette="09"]{--primary:#DE7F92;--secondary:#8EA543;--tertiary:#5BA5C7;--on-primary:#0E1116}.screen[data-mode="dark"][data-palette="10"]{--primary:#D4881E;--secondary:#979DA8;--tertiary:#6D9FD0;--on-primary:#0E1116}.screen.v-a{--shell-bg:color-mix(in srgb,var(--primary) 9%,var(--surface));--shell-border:color-mix(in srgb,var(--primary) 16%,var(--border));--shell-hover-bg:color-mix(in srgb,var(--primary) 14%,var(--surface));--shell-active-bg:color-mix(in srgb,var(--primary) 20%,var(--surface))}.screen[data-mode="dark"].v-a{--shell-bg:color-mix(in srgb,var(--primary) 12%,var(--surface));--shell-hover-bg:color-mix(in srgb,var(--primary) 18%,var(--surface));--shell-active-bg:color-mix(in srgb,var(--primary) 26%,var(--surface))}.screen.v-b,.screen.v-c{--bg:#F4F3EF;--shell-bg:color-mix(in srgb,var(--primary) 74%,#12141B);--shell-text:rgba(255,255,255,.80);--shell-strong:#FFFFFF;--shell-muted:rgba(255,255,255,.68);--shell-border:rgba(255,255,255,.14);--shell-hover-bg:rgba(255,255,255,.09);--shell-active-bg:rgba(255,255,255,.18);--shell-active-text:#FFFFFF}.screen.v-d{--bg:color-mix(in srgb,var(--primary) 74%,#12141B);--shell-bg:color-mix(in srgb,var(--primary) 74%,#12141B);--shell-text:rgba(255,255,255,.80);--shell-strong:#FFFFFF;--shell-muted:rgba(255,255,255,.68);--shell-border:rgba(255,255,255,.14);--shell-hover-bg:rgba(255,255,255,.09);--shell-active-bg:rgba(255,255,255,.18);--shell-active-text:#FFFFFF}.screen[data-mode="dark"].v-b,.screen[data-mode="dark"].v-c{--bg:#0E1116;--shell-bg:color-mix(in srgb,var(--primary) 26%,#0A0C10)}.screen[data-mode="dark"].v-d{--bg:color-mix(in srgb,var(--primary) 22%,#07080B);--shell-bg:color-mix(in srgb,var(--primary) 22%,#07080B)}.screen a{color:var(--primary-text);text-decoration:none}.screen a:hover{color:var(--primary-hover);text-decoration:underline}.screen button,.screen input,.screen textarea{font:inherit;color:inherit}.screen:focus-visible{outline:none;box-shadow:var(--ring)}.screen h1,.screen h2,.screen h3,.screen .display,.screen .stat-num{font-family:var(--font-head);letter-spacing:-0.01em;margin:0}.screen .icon{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex:none}.screen .icon-sm{width:16px;height:16px}.screen .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--control-h);padding:0 16px;border-radius:var(--radius-sm);border:1px solid transparent;font-weight:600;font-size:var(--fs);cursor:pointer;white-space:nowrap;transition:background-color .15s,border-color .15s,box-shadow .15s,transform .15s}.screen .btn-primary{background:var(--primary);color:var(--on-primary);box-shadow:var(--shadow)}.screen .btn-primary:hover{background:var(--primary-hover);box-shadow:var(--shadow-lg)}.screen .btn-primary:active{transform:translateY(1px)}.screen .btn-dark{background:var(--text);color:var(--bg)}.screen .btn-dark:hover{background:color-mix(in srgb,var(--text) 85%,var(--bg))}.screen .btn-outline{background:var(--surface);color:var(--text);border-color:var(--border-strong)}.screen .btn-outline:hover{background:var(--surface-2);border-color:var(--text-3)}.screen .btn-ghost{background:transparent;color:var(--text-2)}.screen .btn-ghost:hover{background:var(--surface-2);color:var(--text)}.screen .btn-icon{width:var(--control-h);padding:0}.screen .btn-block{width:100%}.screen .btn-lg{height:calc(var(--control-h) + 8px);font-size:var(--fs-lg)}.screen .field{display:flex;flex-direction:column;gap:6px}.screen .field label{font-size:var(--fs-sm);font-weight:600;color:var(--text-2)}.screen .input{display:flex;align-items:center;gap:10px;height:var(--control-h);padding:0 12px;background:var(--input-bg);border:1px solid var(--border-strong);border-radius:var(--radius-sm);color:var(--text);width:100%;transition:border-color .15s,box-shadow .15s}.screen .input::placeholder{color:var(--text-3)}.screen .input:hover{border-color:var(--text-3)}.screen .input:focus,.screen .input:focus-within{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}.screen .input-lg{height:calc(var(--control-h) + 8px);font-size:var(--fs-lg)}.screen .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:var(--pad);transition:box-shadow .15s,border-color .15s,transform .15s}.screen .card.is-hover:hover{box-shadow:var(--shadow-lg);border-color:var(--border-strong);transform:translateY(-1px)}.screen .card-title{font-size:var(--fs-lg);font-weight:700;margin:0}.screen .card-sub{color:var(--text-2);margin:2px 0 0;font-size:var(--fs)}.screen .chip{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:999px;font-size:var(--fs-sm);font-weight:600;white-space:nowrap}.screen .chip::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}.screen .chip.pending{background:var(--warn-soft);color:var(--warn)}.screen .chip.progress{background:var(--info-soft);color:var(--info)}.screen .chip.complete{background:var(--success-soft);color:var(--success)}.screen .chip.invoiced{background:var(--violet-soft);color:var(--violet)}.screen .chip.cancelled{background:var(--danger-soft);color:var(--danger)}.screen .chip.neutral{background:var(--neutral-chip);color:var(--neutral-chip-text)}.screen .chip.no-dot::before{display:none}.screen .avatar{width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;letter-spacing:.02em;flex:none;background:var(--primary-soft);color:var(--primary-text)}.screen .avatar-lg{width:40px;height:40px;font-size:13px}.screen .avatar.solid{background:var(--primary);color:var(--on-primary)}.screen .avatar.dark{background:var(--text);color:var(--bg)}.screen .avatar.muted{background:var(--surface-2);color:var(--text-2)}.screen .logo{display:inline-flex;align-items:center;gap:10px;color:var(--shell-strong);font-family:var(--font-head);font-weight:800;font-size:22px;letter-spacing:-0.02em;text-decoration:none}.screen .logo:hover{text-decoration:none;opacity:.9}.screen .logo .mark{width:30px;height:30px;flex:none}.screen .logo img{height:30px;width:auto;max-width:160px;display:block}.screen .logo .mark .m1{fill:var(--primary)}.screen .logo .mark .m2{fill:var(--secondary)}.screen .logo .mark .m3{fill:var(--tertiary)}.screen .content .logo,.screen .auth .logo{color:var(--text)}.screen .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.screen .bottom .card-title .icon{display:none}.screen.v-c .bottom .card-title .icon{display:inline-block}.screen.v-c .bottom .icon-tile{display:none}.screen .muted{color:var(--text-2)}.screen .faint{color:var(--text-3)}.screen .up{color:var(--success)}.screen .down{color:var(--danger)}.screen .row{display:flex;align-items:center;gap:var(--gap-sm)}.screen .between{display:flex;align-items:center;justify-content:space-between;gap:var(--gap)}.screen .eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--primary-text)}.screen .divider{height:1px;background:var(--border)}.screen .seg{display:inline-flex;background:var(--surface-2);border-radius:var(--radius-sm);padding:3px;gap:2px}.screen .seg button{height:calc(var(--control-h) - 10px);padding:0 14px;border:0;border-radius:calc(var(--radius-sm) - 2px);background:transparent;color:var(--text-2);font-weight:600;font-size:var(--fs-sm);cursor:pointer;transition:background-color .15s,color .15s}.screen .seg button:hover{color:var(--text)}.screen .seg button.on{background:var(--surface);color:var(--text);box-shadow:var(--shadow)}.screen .quick{display:flex;align-items:center;gap:10px;height:calc(var(--control-h) + 8px);padding:0 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);font-weight:600;cursor:pointer;width:100%;text-align:left;transition:border-color .15s,background-color .15s}.screen .quick:hover{border-color:var(--primary);background:var(--primary-tint)}.screen .quick .icon{color:var(--primary-text);width:18px;height:18px}.screen .icon-tile{width:44px;height:44px;border-radius:var(--radius-sm);display:inline-flex;align-items:center;justify-content:center;background:var(--primary-soft);color:var(--primary-text)}.screen .icon-tile .icon{width:20px;height:20px}.screen .legend{display:flex;flex-direction:column;gap:10px;margin-top:var(--gap-sm)}.screen .legend .row{gap:12px}.screen .legend .muted{font-size:var(--fs)}.screen.desktop{width:1440px;height:1040px;display:grid;grid-template-columns:264px 1fr}.screen.desktop .sidebar{background:var(--shell-bg);color:var(--shell-text);border-right:1px solid var(--shell-border);display:flex;flex-direction:column;padding:20px 16px 16px;overflow:hidden}.screen.desktop .sidebar .top{display:flex;align-items:center;justify-content:space-between;padding:4px 8px 20px}.screen.desktop .sidebar .collapse{width:28px;height:28px;border-radius:6px;border:0;background:transparent;color:var(--shell-muted);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}.screen.desktop .sidebar .collapse:hover{background:var(--shell-hover-bg);color:var(--shell-strong)}.screen.desktop .nav{display:flex;flex-direction:column;gap:2px}.screen.desktop .nav-group{margin-top:18px}.screen.desktop .nav-group:first-child{margin-top:0}.screen.desktop .nav-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--shell-muted);padding:0 12px 8px}.screen.desktop .nav a{display:flex;align-items:center;gap:12px;height:var(--nav-h);padding:0 12px;border-radius:var(--radius-sm);color:var(--shell-text);font-weight:500;font-size:var(--fs-lg);text-decoration:none;position:relative;transition:background-color .15s,color .15s}.screen.desktop .nav a .icon{color:var(--shell-muted);transition:color .15s}.screen.desktop .nav a:hover{background:var(--shell-hover-bg);color:var(--shell-strong);text-decoration:none}.screen.desktop .nav a:hover .icon{color:var(--shell-strong)}.screen.desktop .nav a.active{background:var(--shell-active-bg);color:var(--shell-active-text);font-weight:600}.screen.desktop .nav a.active .icon{color:var(--shell-active-text)}.screen.desktop .nav a .chev{margin-left:auto;color:var(--shell-muted);width:16px;height:16px}.screen.desktop .sidebar .foot{margin-top:auto;padding-top:14px;border-top:1px solid var(--shell-border);display:flex;flex-direction:column;gap:6px}.screen.desktop .sidebar .user{display:flex;align-items:center;gap:12px;padding:8px 12px;border-radius:var(--radius-sm);cursor:pointer;transition:background-color .15s}.screen.desktop .sidebar .user:hover{background:var(--shell-hover-bg)}.screen.desktop .sidebar .user .name{font-weight:600;color:var(--shell-strong);font-size:var(--fs);line-height:1.2}.screen.desktop .sidebar .user .email{font-size:var(--fs-sm);color:var(--shell-muted)}.screen.desktop .sidebar .user .chev{margin-left:auto;color:var(--shell-muted);width:16px;height:16px}.screen.desktop .collapse .collapse-toggle{position:absolute;opacity:0;width:0;height:0;pointer-events:none}.screen.desktop .collapse .icon{transition:transform .2s}.screen.desktop:has(.collapse-toggle:checked){grid-template-columns:76px 1fr}.screen.desktop:has(.collapse-toggle:checked) .sidebar{padding-left:12px;padding-right:12px}.screen.desktop:has(.collapse-toggle:checked) .sidebar .top{flex-direction:column;align-items:center;gap:10px;padding:4px 0 16px}.screen.desktop:has(.collapse-toggle:checked) .collapse .icon{transform:rotate(180deg)}.screen.desktop:has(.collapse-toggle:checked) .logo .wordmark,.screen.desktop:has(.collapse-toggle:checked) .logo img{display:none}.screen.desktop:has(.collapse-toggle:checked) .nav-label{height:1px;padding:0;margin:6px 8px 8px;background:var(--shell-border);overflow:hidden;color:transparent}.screen.desktop:has(.collapse-toggle:checked) .nav-group:first-child .nav-label{display:none}.screen.desktop:has(.collapse-toggle:checked) .nav-group{margin-top:0}.screen.desktop:has(.collapse-toggle:checked) .nav a{justify-content:center;padding:0;width:52px;margin:0 auto;font-size:0;gap:0}.screen.desktop:has(.collapse-toggle:checked) .nav a .chev{display:none}.screen.desktop:has(.collapse-toggle:checked) .sidebar .user{justify-content:center;padding:8px 0}.screen.desktop:has(.collapse-toggle:checked) .sidebar .user>span:not(.avatar),.screen.desktop:has(.collapse-toggle:checked) .sidebar .user .chev{display:none}.screen.desktop.topnav{grid-template-columns:1fr;grid-template-rows:auto 1fr}.screen.desktop.topnav .topbar{background:var(--shell-bg);color:var(--shell-text);border-bottom:1px solid var(--shell-border);height:68px;padding:0 calc(var(--pad) + 16px);display:flex;align-items:center}.screen.desktop.topnav .topbar-inner{display:flex;align-items:center;gap:20px;width:100%;max-width:1360px;margin:0 auto}.screen.desktop.topnav .topbar .logo{flex:none}.screen.desktop.topnav .topnav-links{display:flex;align-items:center;gap:2px}.screen.desktop.topnav .topnav-links a{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 11px;border-radius:var(--radius-sm);color:var(--shell-text);font-weight:500;font-size:var(--fs-lg);text-decoration:none;white-space:nowrap;transition:background-color .15s,color .15s}.screen.desktop.topnav .topnav-links a:hover{background:var(--shell-hover-bg);color:var(--shell-strong);text-decoration:none}.screen.desktop.topnav .topnav-links a.active{background:var(--shell-active-bg);color:var(--shell-active-text);font-weight:600}.screen.desktop.topnav .topnav-links a .icon{width:16px;height:16px;color:var(--shell-muted)}.screen.desktop.topnav .topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}.screen.desktop.topnav .search-pill{display:inline-flex;align-items:center;gap:10px;height:38px;padding:0 12px 0 12px;border-radius:var(--radius-sm);border:1px solid var(--shell-border);background:var(--shell-hover-bg);color:var(--shell-muted);font-size:var(--fs);cursor:pointer;min-width:150px}.screen.desktop.topnav .search-pill:hover{color:var(--shell-strong);border-color:var(--shell-muted)}.screen.desktop.topnav .search-pill kbd{margin-left:auto;font:inherit;font-size:11.5px;padding:1px 6px;border-radius:5px;border:1px solid var(--shell-border);color:var(--shell-muted)}.screen.desktop.topnav .topbar .icon-btn{width:38px;height:38px;border-radius:var(--radius-sm);border:1px solid transparent;background:transparent;color:var(--shell-text);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}.screen.desktop.topnav .topbar .icon-btn:hover{background:var(--shell-hover-bg);color:var(--shell-strong)}.screen.desktop.topnav .topbar .user{display:flex;align-items:center;gap:8px;padding:4px 6px 4px 4px;border-radius:var(--radius-sm);cursor:pointer;color:var(--shell-muted)}.screen.desktop.topnav .topbar .user:hover{background:var(--shell-hover-bg)}.screen.desktop.topnav .topbar .user .chev{width:16px;height:16px}.screen.desktop.topnav .content{width:100%;max-width:1360px;margin:0 auto}.screen.desktop .content{padding:calc(var(--pad) + 8px) calc(var(--pad) + 16px);overflow:hidden;display:flex;flex-direction:column;gap:var(--gap)}.screen.desktop .content>*{flex:none}.screen.desktop .page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--gap)}.screen.desktop .page-head h1{font-size:var(--fs-title);font-weight:700;line-height:1.15}.screen.desktop .page-head p{margin:6px 0 0;color:var(--text-2);font-size:var(--fs-lg)}.screen.desktop .page-actions{display:flex;align-items:center;gap:10px}.screen.desktop .page-actions .btn-icon{background:var(--surface);border-color:var(--border)}.screen.desktop .page-actions .btn-icon:hover{background:var(--surface-2)}.screen.desktop .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--gap)}.screen.desktop .stat{display:flex;flex-direction:column;gap:14px;cursor:default}.screen.desktop .stat .between .label{color:var(--text-2);font-weight:500;font-size:var(--fs-lg)}.screen.desktop .stat .stat-icon{width:36px;height:36px;border-radius:50%;background:var(--surface-2);color:var(--text-2);display:inline-flex;align-items:center;justify-content:center}.screen.desktop .stat .stat-icon .icon{width:18px;height:18px}.screen.desktop .stat-num{font-size:var(--fs-stat);font-weight:700;line-height:1}.screen.desktop .stat .delta{font-size:var(--fs);font-weight:600;display:flex;align-items:center;gap:4px}.screen.desktop .stat .delta.flat{color:var(--text-2);font-weight:500}.screen.desktop .table-card{padding:0;overflow:hidden}.screen.desktop .table-head{display:flex;align-items:flex-start;justify-content:space-between;padding:var(--pad) var(--pad) var(--pad-sm)}.screen.desktop .table-head h2{font-size:20px;font-weight:700}.screen.desktop table{width:100%;border-collapse:collapse}.screen.desktop th{text-align:left;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);padding:10px var(--pad);border-bottom:1px solid var(--border)}.screen.desktop td{padding:0 var(--pad);height:var(--row-h);border-bottom:1px solid var(--border);vertical-align:middle}.screen.desktop tbody tr{transition:background-color .12s}.screen.desktop tbody tr:hover{background:var(--surface-2)}.screen.desktop tbody tr:hover .more{opacity:1}.screen.desktop td .primary-cell{font-weight:600;color:var(--text);line-height:1.3}.screen.desktop td .sub{color:var(--text-3);font-size:var(--fs-sm);margin-top:3px}.screen.desktop td.num{color:var(--text-2)}.screen.desktop .more{width:28px;height:28px;border:0;border-radius:6px;background:transparent;color:var(--text-3);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;opacity:.6;transition:opacity .12s,background-color .12s}.screen.desktop .more:hover{background:var(--border);color:var(--text)}.screen.desktop .table-foot{padding:var(--pad-sm) var(--pad) var(--pad)}.screen.desktop .view-all{display:inline-flex;align-items:center;gap:6px}.screen.desktop .bottom{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--gap)}.screen.desktop .bottom .card{display:flex;flex-direction:column;gap:10px}.screen.desktop .bottom .card .icon-tile{margin-bottom:8px}.screen.desktop .bottom .card .btn-dark{margin-top:4px}.screen.desktop .bottom .card .quick + .quick{margin-top:0}.screen.desktop .actions{display:flex;flex-direction:column;gap:10px;margin-top:4px}.screen.v-a .table-tools{display:flex;align-items:center;gap:10px}.screen.v-a .table-card{flex:1 0 auto !important;display:flex;flex-direction:column}.screen.v-a .bottom .icon-tile{display:none}.screen.v-a .bottom .card-title{display:flex;align-items:center;gap:10px}.screen.v-a .bottom .card-title .icon{display:inline-block;color:var(--primary-text);width:18px;height:18px}.screen.v-a .table-card table{flex:none}.screen.v-a .table-card tbody tr:last-child td{border-bottom:0}.screen.v-a .nav a.active::before{content:"";position:absolute;left:-16px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--primary)}.screen.v-b .stat.is-hero{background:var(--primary-tint);border-color:color-mix(in srgb,var(--primary) 30%,var(--border))}.screen.v-b .stat.is-hero .stat-num,.screen.v-b .stat.is-hero .delta{color:var(--primary-text)}.screen.v-b .stat.is-hero .stat-icon{background:var(--primary-soft);color:var(--primary-text)}.screen.v-b .nav a.active{box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}.screen.v-b .nav a.active .icon{color:#fff}.screen.v-b .avatar.owner{background:var(--text);color:var(--bg)}.screen.v-b[data-mode="dark"] .avatar.owner{background:var(--text);color:var(--bg)}.screen.v-b .card{box-shadow:0 2px 6px rgba(16,24,40,.05),0 12px 32px -12px rgba(16,24,40,.12)}.screen.v-c .stats{gap:0;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;background:var(--surface);box-shadow:var(--shadow)}.screen.v-c .stat{border:0;border-radius:0;box-shadow:none}.screen.v-c .stat + .stat{border-left:1px solid var(--border)}.screen.v-c .stat.is-hero{background:var(--primary-tint)}.screen.v-c .stat.is-hero .stat-num,.screen.v-c .stat.is-hero .delta,.screen.v-c .stat.is-hero .stat-icon{color:var(--primary-text)}.screen.v-c .stat .stat-icon{background:transparent}.screen.v-c .stat .delta{color:var(--text-2);font-weight:500}.screen.v-c .stat.is-hero .delta{font-weight:600}.screen.v-c .section-head{display:flex;align-items:center;gap:16px}.screen.v-c .section-head h2{font-size:22px;font-weight:700}.screen.v-c .section-head .rule{width:48px;height:2px;background:var(--primary);border-radius:2px}.screen.v-c .section-head .sub{color:var(--text-2)}.screen.v-c .section-head .view-all{margin-left:auto;font-weight:600}.screen.v-c .avatar.owner{background:var(--surface-2);color:var(--text-2)}.screen.v-c .nav a.active .icon{color:#fff}.screen.v-c .bottom .card-title{display:flex;align-items:center;gap:10px}.screen.v-c .bottom .card-title .icon{color:var(--primary-text);width:18px;height:18px}.screen.v-d{grid-template-columns:280px 1fr}.screen.v-d .sidebar{border-right:0;padding-left:24px}.screen.v-d .nav-label{text-transform:none;letter-spacing:0;font-size:12.5px;font-weight:600}.screen.v-d .nav a.active{background:color-mix(in srgb,var(--primary) 22%,transparent);color:#fff}.screen.v-d .nav a.active .icon{color:#fff}.screen.v-d .content-wrap{padding:14px 14px 14px 0;height:100%}.screen.v-d .content{background:var(--surface);border-radius:22px;height:100%;--bg:var(--surface)}.screen.v-d[data-mode="dark"] .content{background:#12151B;--surface:#171B22}.screen.v-d .card{box-shadow:none}.screen.v-d .stat .stat-icon{background:transparent;width:auto;height:auto}.screen.v-d .stat:nth-child(1) .stat-icon{color:var(--info)}.screen.v-d .stat:nth-child(2) .stat-icon{color:var(--primary-text)}.screen.v-d .stat:nth-child(3) .stat-icon{color:var(--success)}.screen.v-d .stat:nth-child(4) .stat-icon{color:var(--danger)}.screen.v-d .stat .delta{color:var(--text-2);font-weight:500}.screen.v-d th{text-transform:none;letter-spacing:0;font-size:var(--fs);font-weight:500}.screen.v-d .chip::before{display:none}.screen.v-d .chip.pending{background:var(--neutral-chip);color:var(--neutral-chip-text)}.screen.v-d .chip.invoiced{background:var(--warn-soft);color:var(--warn)}.screen.v-d .chip.cancelled{background:var(--danger);color:#fff}.screen.v-d[data-mode="dark"] .chip.cancelled{color:#0E1116}.screen.v-d .bottom .icon-tile{display:none}.screen.v-d .btn-outline{border-color:var(--border)}.screen.v-d .sidebar .foot{border-top-color:var(--shell-border)}.screen.desktop[data-navicons="off"] .nav a>.icon:not(.chev),.screen.desktop[data-navicons="off"] .topnav-links a>.icon:not(.chev){display:none}.screen.desktop[data-navicons="off"]:has(.collapse-toggle:checked) .nav a>.icon:not(.chev){display:inline-block}.screen.desktop[data-navicons="off"] .nav a{padding-left:14px}.screen .st-pending{--st:var(--warn)}.screen .st-progress{--st:var(--info)}.screen .st-complete{--st:var(--success)}.screen .st-invoiced{--st:var(--violet)}.screen .st-cancelled{--st:var(--danger)}.screen .st{color:var(--st);font-weight:600}.screen .oid{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:var(--fs-sm);color:var(--text-3);font-weight:500;letter-spacing:.01em}.screen .o-name{font-weight:600;color:var(--text);line-height:1.3;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}.screen .o-sub{color:var(--text-3);font-size:var(--fs-sm);margin-top:3px}.screen .input.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:var(--fs-sm)}.screen .input.ta{height:auto;min-height:56px;align-items:flex-start;padding:10px 12px;resize:none;line-height:1.45}.screen .tabs{display:inline-flex;gap:4px}.screen .tabs button{height:32px;padding:0 10px;border:0;background:transparent;color:var(--text-2);font-weight:500;font-size:var(--fs);cursor:pointer;border-bottom:2px solid transparent;transition:color .15s,border-color .15s}.screen .tabs button:hover{color:var(--text)}.screen .tabs button.on{color:var(--text);font-weight:600;border-bottom-color:var(--text)}.screen .tool{display:flex;flex-direction:column;gap:10px}.screen .tool .card-title{font-size:var(--fs-lg)}.screen .legend-split .row{justify-content:space-between}.screen .legend-split .muted{font-size:var(--fs-sm);text-align:right}.screen .quick-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.screen .quick-row .quick{height:var(--control-h);padding:0 12px;font-size:var(--fs-sm)}.screen.v-b .b-grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:var(--gap);align-items:stretch;flex:1 1 auto !important;min-height:0}.screen.v-b .b-main{display:flex;flex-direction:column;min-height:0}.screen.v-b .order-list{flex:1 1 auto}.screen.v-b .order{flex:1 1 auto;max-height:112px}.screen.v-b .b-listhead{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:var(--gap-sm)}.screen.v-b .b-listhead h2{font-size:20px;font-weight:700}.screen.v-b .order-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}.screen.v-b .order{display:flex;align-items:center;gap:var(--gap-sm);padding:calc(var(--pad-sm) + 6px) var(--pad-sm) calc(var(--pad-sm) + 6px) 0;border-left:4px solid var(--st);overflow:hidden}.screen.v-b .order .o-name{font-size:var(--fs-lg)}.screen.v-b .order .o-main{flex:1;min-width:0;padding-left:var(--pad-sm)}.screen.v-b .order .o-due{display:flex;flex-direction:column;align-items:flex-end;line-height:1.2}.screen.v-b .order .o-duelabel{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3)}.screen.v-b .order .o-date{font-weight:600;color:var(--text);font-size:var(--fs)}.screen.v-b .order .avatar{margin-left:4px}.screen.v-b .tiles{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-sm)}.screen.v-b .tile{display:flex;flex-direction:column;gap:8px;padding:14px var(--pad-sm)}.screen.v-b .tile .label{color:var(--text-2);font-size:var(--fs-sm);font-weight:500}.screen.v-b .tile .stat-num{font-size:calc(var(--fs-stat) - 4px);font-weight:700;line-height:1}.screen.v-b .tile .delta{font-size:var(--fs-sm);font-weight:600;display:inline-flex;align-items:center;gap:4px}.screen.v-b .tile .delta.flat{color:var(--text-2);font-weight:500}.screen.v-b .b-side{display:flex;flex-direction:column;gap:10px;height:100%}.screen.v-b .b-side .tool{flex:1 1 auto}.screen.v-b .b-side .tool .input.ta{flex:1 1 auto}.screen.v-b .b-side .tool .legend{flex:1 1 auto;justify-content:space-evenly;gap:8px;margin-top:0}.screen.v-b .b-side .tool .quick-row{flex:1 1 auto;align-content:space-evenly}.screen.v-b .b-side .tool{padding:14px var(--pad-sm);gap:8px}.screen.v-b .b-side .card-sub{font-size:var(--fs-sm);margin-top:-4px}.screen.v-c .greet-bar{display:flex;align-items:center;justify-content:space-between;gap:var(--gap);padding:var(--pad-sm) var(--pad)}.screen.v-c .greet{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}.screen.v-c .greet h1{font-size:calc(var(--fs-title) - 6px);font-weight:700;line-height:1.2}.screen.v-c .greet p{margin:0;color:var(--text-2);font-size:var(--fs)}.screen.v-c .c-grid{display:grid;grid-template-columns:270px minmax(0,1fr);gap:var(--gap);align-items:start;flex:1 1 auto !important;min-height:0}.screen.v-c .c-main{height:100%}.screen.v-c .board-card{flex:1 1 auto;display:flex;flex-direction:column;min-height:0}.screen.v-c .board{flex:1 1 auto}.screen.v-c .c-side,.screen.v-c .c-main{display:flex;flex-direction:column;gap:var(--gap);min-width:0}.screen.v-c .c-side{height:100%}.screen.v-c .c-side>*{flex:1 1 auto}.screen.v-c .stat-rows{display:flex;flex-direction:column;justify-content:space-around}.screen.v-c .stat-rows .stat-row{flex:1 1 auto;height:auto;min-height:calc(var(--row-h) - 16px)}.screen.v-c .c-side .tool .actions,.screen.v-c .c-side .tool .legend{flex:1 1 auto;justify-content:space-evenly}.screen.v-c .stat-rows{padding:0 var(--pad-sm)}.screen.v-c .stat-row{display:flex;align-items:center;justify-content:space-between;gap:12px;height:calc(var(--row-h) - 16px);border-bottom:1px solid var(--border)}.screen.v-c .stat-row:last-child{border-bottom:0}.screen.v-c .stat-row .label{color:var(--text-2);font-size:var(--fs)}.screen.v-c .stat-row .val{display:inline-flex;align-items:baseline;gap:8px}.screen.v-c .stat-row .stat-num{font-size:22px;font-weight:700;line-height:1}.screen.v-c .stat-row .delta{font-size:var(--fs-sm);font-weight:600}.screen.v-c .stat-row .delta.flat{color:var(--text-2);font-weight:500}.screen.v-c .c-side .tool{padding:var(--pad-sm)}.screen.v-c .c-side .actions{margin-top:0}.screen.v-c .c-side .card-sub{font-size:var(--fs-sm);margin-top:-4px}.screen.v-c .board-head{align-items:flex-start;margin-bottom:var(--gap-sm)}.screen.v-c .board-head h2{font-size:20px;font-weight:700}.screen.v-c .board-head .view-all{font-weight:600;font-size:var(--fs);white-space:nowrap}.screen.v-c .board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--gap-sm)}.screen.v-c .col{background:var(--surface-2);border-radius:var(--radius);padding:10px;display:flex;flex-direction:column;gap:10px;min-height:260px}.screen.v-c[data-mode="dark"] .col{background:var(--bg)}.screen.v-c .col-head{display:flex;align-items:center;justify-content:space-between;padding:4px 6px 2px;font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3)}.screen.v-c .col-head .count{font-weight:600;letter-spacing:0}.screen.v-c .bcard{padding:14px 16px;display:flex;flex-direction:column;gap:6px}.screen.v-c .bcard .o-name{margin-top:2px}.screen.v-c .bcard .bfoot{margin-top:6px}.screen.v-c .bcard .due{color:var(--text-2);font-size:var(--fs-sm);font-weight:500}.screen.v-c .bcard .chip{height:22px;font-size:11.5px}.screen.v-c .note-card{display:flex;flex-direction:column;gap:var(--gap-sm)}.screen.v-c .note-form{display:flex;align-items:center;gap:var(--gap-sm)}.screen.v-c .note-intro{flex:none;width:210px}.screen.v-c .note-intro .card-sub{font-size:var(--fs-sm)}.screen.v-c .note-form .input.mono{width:220px;flex:none}.screen.v-c .note-form .grow{flex:1;min-width:0}.screen.v-c .note-feed{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}.screen.v-c .note-feed li{display:flex;align-items:center;gap:14px;padding:12px 0;border-top:1px solid var(--border)}.screen.v-c .note-feed .avatar{width:28px;height:28px;font-size:10px}.screen.v-c .oid-link{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:var(--fs-sm);font-weight:600;color:var(--primary-text);text-decoration:underline;text-underline-offset:3px;text-decoration-color:color-mix(in srgb,var(--primary) 40%,transparent)}.screen.v-c .note-text{flex:1;min-width:0;color:var(--text);font-size:var(--fs)}.screen.v-c .note-time{color:var(--text-3);font-size:var(--fs-sm);white-space:nowrap}.screen.v-d .content.d-layout{display:grid;grid-template-columns:300px minmax(0,1fr);grid-template-rows:minmax(0,1fr);gap:var(--gap)}.screen.v-d .d-main .table-card{flex:1 1 auto;display:flex;flex-direction:column}.screen.v-d .d-main .table-card table{flex:none}.screen.v-d .d-main .table-foot{margin-top:auto}.screen.v-d .d-panel{display:flex;flex-direction:column;gap:var(--gap);padding:var(--pad);background:var(--surface-2);border-color:transparent}.screen.v-d[data-mode="dark"] .d-panel{background:var(--surface);border-color:var(--border)}.screen.v-d .d-greet h1{font-size:var(--fs-title);font-weight:700;line-height:1.15}.screen.v-d .d-greet p{margin:8px 0 0;color:var(--text-2);font-size:var(--fs)}.screen.v-d .d-stats{display:flex;flex-direction:column}.screen.v-d .d-stat{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:calc(var(--pad-sm) + 2px) 0;border-top:1px solid var(--border)}.screen.v-d .d-stat>div{display:flex;flex-direction:column;gap:2px}.screen.v-d .d-stat .stat-num{font-size:calc(var(--fs-stat) - 6px);font-weight:700;line-height:1}.screen.v-d .d-stat .label{color:var(--text-2);font-size:var(--fs-sm)}.screen.v-d .d-stat .delta{font-size:var(--fs-sm);font-weight:600;display:inline-flex;align-items:center;gap:4px;padding-bottom:2px}.screen.v-d .d-stat .delta.flat{color:var(--text-2);font-weight:500}.screen.v-d .d-quick{display:flex;flex-direction:column;gap:12px;padding-top:var(--pad-sm);border-top:1px solid var(--border);margin-top:auto}.screen.v-d .d-quick .eyebrow{color:var(--text-3);margin-bottom:2px}.screen.v-d .d-quick a{display:flex;align-items:center;justify-content:space-between;color:var(--text);font-size:var(--fs);font-weight:500}.screen.v-d .d-quick a .icon{color:var(--text-3)}.screen.v-d .d-quick a:hover{color:var(--primary-text);text-decoration:none}.screen.v-d .d-quick a:hover .icon{color:var(--primary-text)}.screen.v-d .d-main{display:flex;flex-direction:column;gap:var(--gap);min-width:0}.screen.v-d .by-date td{height:var(--row-h)}.screen.v-d .by-date td.when{width:96px;white-space:nowrap}.screen.v-d .by-date td.when b{display:block;font-weight:600;color:var(--text)}.screen.v-d .by-date td.when span{color:var(--text-3);font-size:var(--fs-sm)}.screen.v-d .o-row{display:flex;align-items:center;gap:14px}.screen.v-d .o-row .dot{width:8px;height:8px;border-radius:50%;background:var(--st);flex:none}.screen.v-d .by-date .st{white-space:nowrap}.screen.v-d .by-date td:last-child{width:56px;text-align:right}.screen.v-d .table-foot .view-all{font-weight:600}.screen.v-d .d-tools{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--gap)}.screen.v-d .d-tools .card-sub{font-size:var(--fs-sm);margin-top:-4px}.screen.v-d .note-inline{display:flex;gap:10px}.screen.v-d .note-inline .input{flex:1;min-width:0}.screen.v-d .legend-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.screen.v-d .ltile{background:var(--surface-2);border-radius:var(--radius-sm);padding:10px 12px;display:flex;flex-direction:column;align-items:flex-start;gap:8px}.screen.v-d[data-mode="dark"] .ltile{background:var(--bg)}.screen.v-d .ltile .muted{font-size:var(--fs-sm);line-height:1.35}.screen.auth{width:1440px;height:1000px}.screen .auth-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:calc(var(--pad) + 12px);display:flex;flex-direction:column;gap:var(--gap)}.screen .auth-title{font-size:26px;font-weight:700;line-height:1.2}.screen .auth-sub{color:var(--text-2);margin:4px 0 0}.screen .form{display:flex;flex-direction:column;gap:var(--gap-sm)}.screen .form-row{display:flex;align-items:center;justify-content:space-between;font-size:var(--fs)}.screen .check{display:inline-flex;align-items:center;gap:8px;color:var(--text-2);cursor:pointer}.screen .check .box{width:16px;height:16px;border-radius:4px;border:1px solid var(--border-strong);background:var(--input-bg)}.screen .check:hover .box{border-color:var(--primary)}.screen .or{display:flex;align-items:center;gap:12px;color:var(--text-3);font-size:var(--fs-sm)}.screen .or::before,.screen .or::after{content:"";flex:1;height:1px;background:var(--border)}.screen .auth-foot{font-size:var(--fs);color:var(--text-2);text-align:center}.screen .legal{display:flex;gap:16px;font-size:var(--fs-sm);color:var(--text-3)}.screen .legal a{color:var(--text-3)}.screen .legal a:hover{color:var(--text)}.screen .brand-panel{background:var(--shell-bg);color:var(--shell-text);position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding:48px}.screen .brand-panel .glow{position:absolute;inset:auto -20% -30% auto;width:70%;aspect-ratio:1;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.22),transparent 70%);pointer-events:none}.screen .brand-panel .glow-2{position:absolute;left:-15%;top:-20%;width:50%;aspect-ratio:1;border-radius:50%;background:radial-gradient(closest-side,color-mix(in srgb,var(--secondary) 55%,transparent),transparent 70%);pointer-events:none}.screen .brand-panel h2{color:#fff;font-size:40px;font-weight:700;line-height:1.15;max-width:14ch}.screen .brand-panel .points{display:flex;flex-direction:column;gap:14px;margin-top:28px;font-size:var(--fs-lg)}.screen .brand-panel .points .row{gap:12px}.screen .brand-panel .points .icon{color:#fff;width:18px;height:18px}.screen .brand-panel .fine{font-size:var(--fs-sm);color:var(--shell-muted)}.screen .sso .icon{width:18px;height:18px;color:var(--text-2)}.screen .password-wrap{position:relative}.screen .password-wrap .eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:var(--text-3);display:inline-flex;padding:4px;border-radius:4px;cursor:pointer}.screen .password-wrap .eye:hover{color:var(--text);background:var(--surface-2)}.screen .preview{background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow-lg);overflow:hidden;display:grid;grid-template-columns:160px 1fr}.screen .preview .p-side{background:var(--shell-bg);padding:16px 12px;display:flex;flex-direction:column;gap:8px}.screen .preview .p-side i{display:block;height:10px;border-radius:5px;background:rgba(255,255,255,.14)}.screen .preview .p-side i.on{background:var(--primary)}.screen .preview .p-main{padding:20px;display:flex;flex-direction:column;gap:14px;background:var(--bg)}.screen .preview .p-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.screen .preview .p-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px}.screen .preview .p-stat b{display:block;font-family:var(--font-head);font-size:22px}.screen .preview .p-stat span{font-size:11px;color:var(--text-3)}.screen .preview .p-rows{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 12px;display:flex;flex-direction:column}.screen .preview .p-row{display:grid;grid-template-columns:1.4fr 1fr .8fr;gap:12px;align-items:center;height:34px;border-bottom:1px solid var(--border)}.screen .preview .p-row:last-child{border-bottom:0}.screen .preview .p-row i{display:block;height:8px;border-radius:4px;background:var(--surface-2)}.screen .preview .p-row .chip{height:18px;font-size:10px;padding:0 8px}.screen .preview .p-row .chip::before{width:5px;height:5px}.screen.mobile{width:390px;height:844px;display:flex;flex-direction:column;--fs:16px;--fs-sm:13px;--fs-lg:17px;--control-h:48px;--pad:20px;--gap:16px;--radius:12px;--radius-sm:10px;--radius-lg:16px}.screen.mobile[data-density="compact"]{--fs:15px;--fs-sm:12.5px;--fs-lg:16px;--control-h:44px;--pad:16px;--gap:12px}.screen.mobile .m-top{display:flex;align-items:center;justify-content:space-between;padding:18px var(--pad) 8px}.screen.mobile .m-top .logo{font-size:20px}.screen.mobile .m-top .logo .mark,.screen.mobile .m-top .logo img{height:26px;width:auto}.screen.mobile .m-body{flex:1;overflow:hidden;padding:8px var(--pad) var(--pad);display:flex;flex-direction:column;gap:var(--gap)}.screen.mobile h1{font-size:26px;font-weight:700;line-height:1.15}.screen.mobile .m-sub{color:var(--text-2);margin:4px 0 0;font-size:15px}.screen.mobile .tabbar{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--border);background:var(--surface);padding:8px 8px 18px}.screen.mobile .tabbar a{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;font-size:11px;font-weight:600;color:var(--text-3);border-radius:10px;text-decoration:none;transition:color .15s,background-color .15s}.screen.mobile .tabbar a:hover{color:var(--text);background:var(--surface-2);text-decoration:none}.screen.mobile .tabbar a.active{color:var(--primary-text)}.screen.mobile .tabbar .icon{width:22px;height:22px}.screen.mobile .m-auth{flex:1;display:flex;flex-direction:column;padding:40px var(--pad) 28px;gap:28px}.screen.mobile .m-auth .logo{align-self:flex-start;color:var(--text)}.screen.la{display:flex;align-items:center;justify-content:center;background:var(--bg)}.screen.la .la-wrap{width:440px;display:flex;flex-direction:column;align-items:center;gap:28px}.screen.la .la-card{width:100%}.screen.la .la-brand .logo{color:var(--text);font-size:26px}.screen.la .la-brand .logo .mark,.screen.la .la-brand .logo img{height:34px;width:auto}.screen.la .la-legal{justify-content:center}.screen.la[data-mode="light"]{background:radial-gradient(80% 60% at 50% 0%,var(--primary-tint),var(--bg) 70%)}.screen.lb{display:grid;grid-template-columns:46% 1fr}.screen.lb .brand-panel .logo{color:#fff}.screen.lb .lb-main{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px;gap:40px;position:relative}.screen.lb .lb-form{width:420px;display:flex;flex-direction:column;gap:var(--gap)}.screen.lb .lb-legal{position:absolute;bottom:32px}.screen.lc{display:grid;grid-template-columns:560px 1fr}.screen.lc .lc-main{display:flex;flex-direction:column;padding:40px 72px;background:var(--surface);border-right:1px solid var(--border)}.screen.lc .lc-top{margin-bottom:auto}.screen.lc .lc-top .logo{color:var(--text)}.screen.lc .lc-form{display:flex;flex-direction:column;gap:var(--gap);margin-bottom:auto}.screen.lc .lc-form .auth-title{font-size:32px}.screen.lc .lc-side{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:64px;background:linear-gradient(160deg,color-mix(in srgb,var(--primary) 22%,var(--bg)),color-mix(in srgb,var(--primary) 6%,var(--bg)) 70%)}.screen.lc .lc-side .preview{width:100%;max-width:640px}.screen.lc .lc-caption{color:var(--text-2);font-size:var(--fs-lg);margin:0}.screen.ld{background:var(--shell-bg);display:flex;align-items:center;justify-content:center}.screen.ld .ld-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(60% 60% at 50% 45%,#000 40%,transparent 100%);-webkit-mask-image:radial-gradient(60% 60% at 50% 45%,#000 40%,transparent 100%);pointer-events:none}.screen.ld::before{content:"";position:absolute;left:50%;top:30%;width:720px;height:720px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.16),transparent 72%);pointer-events:none}.screen.ld .ld-wrap{position:relative;width:420px;display:flex;flex-direction:column;align-items:center;gap:24px}.screen.ld .ld-brand .logo{color:#fff;font-size:26px}.screen.ld .ld-brand .logo .mark,.screen.ld .ld-brand .logo img{height:34px;width:auto}.screen.ld .ld-card{width:100%;border-radius:18px}.screen.ld .ld-foot{color:var(--shell-muted);font-size:var(--fs-sm);text-align:center;margin:0;max-width:36ch}.screen.ld .ld-foot a{color:var(--shell-text)}.screen.ld .ld-legal a{color:var(--shell-muted)}.screen.ld .ld-legal a:hover{color:#fff}.screen.mobile{--tab-h:78px}.screen.mobile .card{box-shadow:none}.screen.mobile .m-top{min-height:60px;padding:12px var(--pad) 10px;gap:10px}.screen.mobile .m-top .logo{font-size:20px}.screen.mobile .m-actions{display:flex;align-items:center;gap:8px}.screen.mobile .m-iconbtn{width:40px;height:40px;border-radius:50%;border:0;background:transparent;color:var(--shell-text);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:background-color .15s,color .15s}.screen.mobile .m-iconbtn:hover{background:var(--shell-hover-bg);color:var(--shell-strong)}.screen.mobile .m-iconbtn .icon{width:22px;height:22px}.screen.mobile .m-body{padding:6px var(--pad) var(--pad);gap:14px;min-height:0}.screen.mobile .m-body>*{flex:none}.screen.mobile .m-greet h1{font-size:24px}.screen.mobile .m-greet .m-sub{font-size:14px;margin-top:2px}.screen.mobile .m-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.screen.mobile .m-head h2{font-size:17px;font-weight:700}.screen.mobile .m-head .card-sub{font-size:12.5px;margin-top:0}.screen.mobile .m-head a{font-size:13.5px;font-weight:600;white-space:nowrap}.screen.mobile .seg.sm{padding:2px}.screen.mobile .seg.sm button{height:28px;padding:0 10px;font-size:12.5px}.screen.mobile .tabs button{height:30px;font-size:14px}.screen.mobile .m-grow{flex:1 1 auto !important;min-height:0}.screen.mobile .m-stack{display:flex;flex-direction:column;gap:8px}.screen.mobile .m-statbar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:0;overflow:hidden}.screen.mobile .m-statbar .m-stat{display:flex;flex-direction:column;gap:3px;padding:12px 10px 11px;border-left:1px solid var(--border)}.screen.mobile .m-statbar .m-stat:first-child{border-left:0}.screen.mobile .m-statbar .stat-num{font-size:22px;font-weight:700;line-height:1}.screen.mobile .m-statbar .label{font-size:11px;line-height:1.25;color:var(--text-2)}.screen.mobile .m-statbar .delta{font-size:11px;font-weight:600;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.screen.mobile .m-statbar .delta.flat{color:var(--text-3);font-weight:500}.screen.mobile .m-row{display:flex;align-items:center;gap:10px;padding:10px 14px;min-height:58px;color:inherit;text-decoration:none;transition:background-color .12s}.screen.mobile .m-row:hover{text-decoration:none;background:var(--surface-2);color:inherit}.screen.mobile .m-row .o-main{flex:1;min-width:0}.screen.mobile .m-row .o-name{font-size:15px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.screen.mobile .m-row .o-sub{font-size:12px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.screen.mobile .m-row .chip{height:22px;font-size:11.5px;padding:0 8px;flex:none}.screen.mobile .m-row .avatar{width:30px;height:30px;font-size:10.5px}.screen.mobile .m-listcard{padding:0;overflow:hidden;display:flex;flex-direction:column}.screen.mobile .m-listcard .m-head{padding:14px 16px 10px}.screen.mobile .m-listcard .m-row{border-top:1px solid var(--border);flex:1 1 auto;max-height:78px}.screen.mobile .m-listcard .m-foot{border-top:1px solid var(--border);padding:11px 16px;display:flex;justify-content:flex-end;font-weight:600;font-size:13.5px}.screen.mobile .m-listcard .m-foot a{display:inline-flex;align-items:center;gap:4px}.screen.mobile .m-strip{display:flex;gap:10px;margin:0 calc(-1 * var(--pad));padding:0 var(--pad);overflow:hidden}.screen.mobile .m-strip .card{flex:0 0 272px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}.screen.mobile .m-strip .card-title{font-size:14.5px}.screen.mobile .m-strip .m-inline{display:flex;gap:8px}.screen.mobile .m-strip .m-inline .input{flex:1;min-width:0;--control-h:38px;font-size:13px}.screen.mobile .m-strip .m-inline .btn{--control-h:38px;padding:0 12px;font-size:13px}.screen.mobile .m-strip .legend{flex-direction:row;flex-wrap:wrap;gap:6px;margin-top:0}.screen.mobile .m-strip .quick-row .quick{--control-h:38px;font-size:12.5px;padding:0 10px}.screen.mobile .tabbar{min-height:var(--tab-h);padding:6px 6px 16px;align-items:start}.screen.mobile .tabbar a{font-size:10.5px;gap:3px;padding:6px 0 4px}.screen.mobile .tabbar.dark{background:var(--shell-bg);border-top-color:var(--shell-border)}.screen.mobile .tabbar.dark a{color:var(--shell-muted)}.screen.mobile .tabbar.dark a:hover{color:var(--shell-strong);background:var(--shell-hover-bg)}.screen.mobile .tabbar.dark a.active{color:var(--shell-active-text)}.screen.mobile .tabbar .m-dock{justify-self:center;width:54px;height:54px;margin-top:-26px;border-radius:50%;border:0;padding:0;background:var(--primary);color:var(--on-primary);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 0 4px var(--shell-bg);transition:background-color .15s,transform .15s}.screen.mobile .tabbar .m-dock:hover{background:var(--primary-hover)}.screen.mobile .tabbar .m-dock:active{transform:translateY(1px)}.screen.mobile .tabbar .m-dock .icon{width:24px;height:24px}.screen.mobile .m-pill{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:4px;padding:6px;border-radius:999px;background:var(--shell-bg);box-shadow:0 12px 32px -8px rgba(0,0,0,.45),0 0 0 1px var(--shell-border)}.screen.mobile .m-pill a{width:48px;height:44px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:6px;color:var(--shell-muted);font-size:12.5px;font-weight:600;text-decoration:none;transition:background-color .15s,color .15s}.screen.mobile .m-pill a:hover{color:var(--shell-strong);background:var(--shell-hover-bg);text-decoration:none}.screen.mobile .m-pill a.active{color:var(--shell-active-text);background:var(--shell-active-bg)}.screen.mobile .m-pill a span{display:none}.screen.mobile .m-pill .icon{width:22px;height:22px}.screen.mobile[data-navicons="off"] .tabbar a>.icon,.screen.mobile[data-navicons="off"] .m-pill a>.icon{display:none}.screen.mobile[data-navicons="off"] .tabbar a{font-size:12px;padding:12px 0 8px}.screen.mobile[data-navicons="off"] .m-pill a{width:auto;padding:0 9px;font-size:11.5px}.screen.mobile[data-navicons="off"] .m-pill a span{display:inline}.screen.mobile.v-a .m-top{background:var(--shell-bg);border-bottom:1px solid var(--shell-border)}.screen.mobile.v-a .m-top .logo{color:var(--text)}.screen.mobile.v-a .m-iconbtn{color:var(--text-2)}.screen.mobile.v-a .m-body{padding-top:16px}.screen.mobile.v-a .m-row .chip::before{display:none}.screen.mobile.v-a .tabbar a.active{color:var(--primary-text);background:var(--shell-active-bg)}.screen.mobile.v-b .m-hero{background:var(--shell-bg);color:var(--shell-text);padding:0 var(--pad) 40px}.screen.mobile.v-b .m-hero .m-top{padding-left:0;padding-right:0}.screen.mobile.v-b .m-hero h1{color:var(--shell-strong);font-size:24px}.screen.mobile.v-b .m-hero .m-sub{color:var(--shell-muted);font-size:14px}.screen.mobile.v-b .m-body{padding-top:0;margin-top:-30px;gap:14px}.screen.mobile.v-b .tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}.screen.mobile.v-b .tile{padding:12px 14px;gap:3px;display:flex;flex-direction:column}.screen.mobile.v-b .tile .label{color:var(--text-2);font-size:12px;font-weight:500}.screen.mobile.v-b .tile .stat-num{font-size:24px;font-weight:700;line-height:1}.screen.mobile.v-b .tile .delta{font-size:12px;font-weight:600}.screen.mobile.v-b .tile .delta.flat{color:var(--text-3);font-weight:500}.screen.mobile.v-b .order-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}.screen.mobile.v-b .order{display:flex;align-items:center;gap:12px;padding:10px 14px 10px 0;border-left:4px solid var(--st);flex:1 1 auto;max-height:88px;min-height:60px}.screen.mobile.v-b .order .o-main{flex:1;min-width:0;padding-left:12px}.screen.mobile.v-b .order .o-name{font-size:15px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.screen.mobile.v-b .order .o-sub{font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.screen.mobile.v-b .order .o-date{font-size:12.5px;color:var(--text-2);white-space:nowrap}.screen.mobile.v-b .order .avatar{width:30px;height:30px;font-size:10.5px}.screen.mobile.v-b .m-chips{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.screen.mobile.v-b .m-chip{display:flex;flex-direction:column;align-items:center;gap:8px;padding:6px 2px;border:0;background:transparent;font-size:11.5px;font-weight:600;color:var(--text-2);text-align:center;line-height:1.2;cursor:pointer;border-radius:var(--radius);transition:color .15s}.screen.mobile.v-b .m-chip:hover{color:var(--text)}.screen.mobile.v-b .m-chip:hover .icon-tile{background:var(--primary);color:var(--on-primary)}.screen.mobile.v-b .m-chip .icon-tile{width:44px;height:44px;border-radius:50%;transition:background-color .15s,color .15s}.screen.mobile.v-b .m-chip .icon-tile .icon{width:20px;height:20px}.screen.mobile.v-c .m-top{background:var(--shell-bg);color:var(--shell-text);border-bottom:1px solid var(--shell-border);padding:10px 12px;position:relative}.screen.mobile.v-c .m-top .logo{position:absolute;left:50%;transform:translateX(-50%);font-size:19px}.screen.mobile.v-c .m-top .logo .mark,.screen.mobile.v-c .m-top .logo img{height:24px}.screen.mobile.v-c .m-body{padding-top:14px}.screen.mobile.v-c .greet-card{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px}.screen.mobile.v-c .greet-card h1{font-size:19px}.screen.mobile.v-c .greet-card .m-sub{font-size:13px;margin-top:2px}.screen.mobile.v-c .greet-card .btn{--control-h:40px;flex:none}.screen.mobile.v-c .stat-grid{display:grid;grid-template-columns:1fr 1fr;padding:0;overflow:hidden}.screen.mobile.v-c .stat-cell{padding:10px 16px;display:flex;flex-direction:column;gap:4px}.screen.mobile.v-c .stat-cell:nth-child(even){border-left:1px solid var(--border)}.screen.mobile.v-c .stat-cell:nth-child(n+3){border-top:1px solid var(--border)}.screen.mobile.v-c .stat-cell .label{color:var(--text-2);font-size:12.5px}.screen.mobile.v-c .stat-cell .val{display:inline-flex;align-items:baseline;gap:8px}.screen.mobile.v-c .stat-cell .stat-num{font-size:22px;font-weight:700;line-height:1}.screen.mobile.v-c .stat-cell .delta{font-size:12px;font-weight:600}.screen.mobile.v-c .stat-cell .delta.flat{color:var(--text-3);font-weight:500}.screen.mobile.v-c .board-card{padding:14px 16px;display:flex;flex-direction:column;gap:10px}.screen.mobile.v-c .board-card .seg{display:grid;grid-template-columns:repeat(3,1fr)}.screen.mobile.v-c .board-card .seg button{padding:0 6px}.screen.mobile.v-c .board-card .seg .count{font-weight:500;color:var(--text-3);margin-left:4px}.screen.mobile.v-c .m-col{display:flex;flex-direction:column;gap:8px}.screen.mobile.v-c .m-col .m-row{background:var(--surface-2);border-radius:var(--radius);padding:10px 12px;flex:1 1 auto;max-height:76px}.screen.mobile.v-c[data-mode="dark"] .m-col .m-row{background:var(--bg)}.screen.mobile.v-c .m-col .m-row:hover{background:var(--primary-tint)}.screen.mobile.v-c .note-card{padding:14px 16px;gap:12px}.screen.mobile.v-c .note-card .card-title{font-size:14.5px}.screen.mobile.v-c .note-card .note-form{gap:8px}.screen.mobile.v-c .note-card .note-form .input{--control-h:40px}.screen.mobile.v-c .note-card .note-form .input.mono{width:108px;flex:none}.screen.mobile.v-c .note-card .note-form .btn-icon{--control-h:40px;flex:none}.screen.mobile.v-c .note-card .note-feed li{gap:10px;padding:12px 0 0;align-items:flex-start;border-top-color:var(--border)}.screen.mobile.v-c .note-card .note-feed .avatar{width:28px;height:28px;margin-top:1px}.screen.mobile.v-c .note-card .note-text{font-size:13px;line-height:1.4}.screen.mobile.v-c .note-card .note-text .oid-link{margin-right:6px}.screen.mobile.v-c .note-card .note-time{font-size:12px}.screen.mobile.v-d{color:var(--shell-text)}.screen.mobile.v-d .m-top{padding:12px 16px 6px}.screen.mobile.v-d .m-frame{padding:4px var(--pad) 0;display:flex;flex-direction:column;gap:14px}.screen.mobile.v-d .m-frame h1{color:var(--shell-strong);font-size:24px}.screen.mobile.v-d .m-frame .m-sub{color:var(--shell-muted);font-size:14px}.screen.mobile.v-d .m-frame .btn-primary{--control-h:44px}.screen.mobile.v-d .d-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:2px 0 4px}.screen.mobile.v-d .d-strip .d-stat{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:3px;padding:0;border:0}.screen.mobile.v-d .d-strip .stat-num{font-size:24px;font-weight:700;line-height:1;color:var(--shell-strong)}.screen.mobile.v-d .d-strip .label{font-size:11px;color:var(--shell-muted);line-height:1.25}.screen.mobile.v-d .d-strip .delta{font-size:11px;font-weight:600;color:var(--shell-text);margin-top:1px}.screen.mobile.v-d .d-strip .delta.flat{color:var(--shell-muted);font-weight:500}.screen.mobile.v-d .m-sheet{flex:1 1 auto;min-height:0;margin:0 10px 10px;--bg:var(--surface);background:var(--surface);color:var(--text);border-radius:22px;padding:16px 16px 90px;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}.screen.mobile.v-d[data-mode="dark"] .m-sheet{background:#12151B;--surface:#171B22}.screen.mobile.v-d .m-sheet .m-head h2{font-size:17px}.screen.mobile.v-d .m-sheet .m-head .card-sub{font-size:12.5px}.screen.mobile.v-d .by-date{display:flex;flex-direction:column;flex:1 1 auto;min-height:0}.screen.mobile.v-d .by-date .m-row{padding:8px 0;border-top:1px solid var(--border);flex:1 1 auto;max-height:68px;min-height:52px;gap:12px}.screen.mobile.v-d .by-date .when{width:52px;flex:none;line-height:1.2}.screen.mobile.v-d .by-date .when b{display:block;font-weight:600;font-size:13px;color:var(--text)}.screen.mobile.v-d .by-date .when span{color:var(--text-3);font-size:11.5px}.screen.mobile.v-d .by-date .dot{width:8px;height:8px;border-radius:50%;background:var(--st);flex:none}.screen.mobile.v-d .by-date .st{font-size:12px;white-space:nowrap}.screen.mobile.v-d .by-date .o-name{font-size:14.5px}.screen.mobile.v-d .by-date .o-sub{font-size:12px}.screen.mobile.v-d .m-sheet .m-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--border);padding-top:10px;font-size:13px;font-weight:600}.screen.mobile.v-d .m-sheet .m-foot a{display:inline-flex;align-items:center;gap:4px}.screen.mobile.v-d .m-sheet .m-foot .d-links{display:flex;gap:12px}.screen.mobile.v-d .m-sheet .m-foot .d-links a{color:var(--text-2);font-weight:500}.screen.mobile.v-d .m-sheet .m-foot .d-links a:hover{color:var(--primary-text)}.screen.mobile.v-d .m-pill{bottom:24px}.screen.mobile .m-auth{padding:40px var(--pad) 32px;gap:28px}.screen.mobile .m-auth .auth-sub{font-size:15px}.screen.mobile .m-auth .form,.screen.mobile .lmb-sheet .form,.screen.mobile .lmc-main .form{gap:14px}.screen.mobile .m-links{display:flex;align-items:center;justify-content:center;gap:22px;font-size:14px;font-weight:600}.screen.mobile .auth-card{padding:24px 20px;gap:20px}.screen.mobile .auth-card .auth-title{font-size:24px}.screen.mobile .auth-card .auth-sub{font-size:14px}.screen.mobile.lma[data-mode="light"]{background:radial-gradient(90% 50% at 50% 0%,var(--primary-tint),var(--bg) 70%)}.screen.mobile.lma .m-auth{justify-content:center;gap:24px}.screen.mobile.lma .m-auth .logo{align-self:center;font-size:24px}.screen.mobile.lma .m-auth .logo .mark,.screen.mobile.lma .m-auth .logo img{height:32px;width:auto}.screen.mobile.lmb .brand-panel{padding:28px var(--pad) 56px;gap:28px;justify-content:flex-start;flex:none}.screen.mobile.lmb .brand-panel .logo{color:#fff}.screen.mobile.lmb .brand-panel h2{font-size:28px;max-width:14ch}.screen.mobile.lmb .brand-panel .glow{inset:auto -30% -50% auto;width:90%}.screen.mobile.lmb .lmb-sheet{flex:1;margin-top:-28px;background:var(--bg);border-radius:28px 28px 0 0;padding:32px var(--pad) 24px;display:flex;flex-direction:column;gap:24px;position:relative}.screen.mobile.lmb .lmb-sheet .auth-title{font-size:26px}.screen.mobile.lmb .lmb-sheet .auth-sub{font-size:15px}.screen.mobile.lmc{background:var(--surface)}.screen.mobile.lmc .lmc-main{padding:40px var(--pad) 32px;display:flex;flex-direction:column;gap:24px;flex:none}.screen.mobile.lmc .lmc-main .logo{color:var(--text);align-self:flex-start}.screen.mobile.lmc .lmc-main .auth-title{font-size:26px}.screen.mobile.lmc .lmc-main .auth-sub{font-size:15px}.screen.mobile.lmc .lmc-band{flex:1;min-height:0;position:relative;overflow:hidden;background:linear-gradient(160deg,color-mix(in srgb,var(--primary) 22%,var(--bg)),color-mix(in srgb,var(--primary) 6%,var(--bg)) 70%);border-top:1px solid var(--border);padding:22px 36px 0;display:flex;flex-direction:column;gap:14px;align-items:center}.screen.mobile.lmc .lmc-band .lc-caption{font-size:13.5px;text-align:center}.screen.mobile.lmc .lmc-band .preview{grid-template-columns:1fr;width:100%;border-radius:14px 14px 0 0;border-bottom:0;flex:1;min-height:0;box-shadow:0 -8px 24px rgba(16,24,40,.08)}.screen.mobile.lmc .lmc-band .preview .p-main{padding:14px;gap:10px}.screen.mobile.lmc .lmc-band .preview .p-stat{padding:8px 10px}.screen.mobile.lmc .lmc-band .preview .p-stat b{font-size:18px}.screen.mobile.lmc .lmc-band .preview .p-stat span{font-size:10px}.screen.mobile.lmc .lmc-band .preview .p-row{grid-template-columns:1.2fr 1fr .6fr;height:30px;gap:8px}.screen.mobile.lmd{background:var(--shell-bg)}.screen.mobile.lmd::before{content:"";position:absolute;left:50%;top:34%;width:560px;height:560px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.14),transparent 72%);pointer-events:none}.screen.mobile.lmd .m-auth{position:relative;justify-content:center;align-items:stretch;gap:24px}.screen.mobile.lmd .m-auth .logo{align-self:center;color:#fff;font-size:24px}.screen.mobile.lmd .m-auth .logo .mark,.screen.mobile.lmd .m-auth .logo img{height:32px;width:auto}.screen.mobile.lmd .auth-card{border-radius:18px;color:var(--text)}.screen.mobile.lmd .m-links a{color:var(--shell-text)}.screen.mobile.lmd .m-links a:hover{color:#fff}
+.ds-set{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:#ECEDF0;color:#1F2329;padding:36px 40px 40px;min-height:100%;box-sizing:border-box}.ds-set *,.ds-set *::before,.ds-set *::after{box-sizing:inherit}.ds-head{display:flex;align-items:baseline;gap:18px;margin-bottom:22px}.ds-head h1{margin:0;font-size:22px;font-weight:700;letter-spacing:-.01em}.ds-head p{margin:0;color:#5F6672;font-size:13px}.ds-row{display:flex;align-items:flex-start;gap:40px}.ds-variant{display:flex;flex-direction:column;gap:10px;flex:none}.ds-label{display:flex;align-items:center;gap:12px;height:34px}.ds-label .ds-pick{display:inline-flex;align-items:center;gap:10px;height:34px;padding:0 12px 0 6px;border-radius:8px;border:1px solid transparent;background:transparent;font:inherit;font-size:13.5px;font-weight:600;color:#1F2329;cursor:pointer}.ds-label .ds-pick .ds-badge{width:24px;height:24px;border-radius:6px;background:#1F2329;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}.ds-label .ds-pick .ds-badge.wide{width:auto;padding:0 8px}.ds-label .ds-pick:hover{background:#fff;border-color:#D7DAE0}.ds-variant.is-selected .ds-pick{background:#fff;border-color:#1F2329;box-shadow:0 0 0 2px #1F2329}.ds-variant.is-selected .ds-frame{outline:3px solid #1F2329;outline-offset:6px;border-radius:6px}.ds-label .ds-name{color:#5F6672;font-weight:500}.ds-strip{display:none;align-items:center;gap:6px;margin-left:6px}.ds-variant:hover .ds-strip,.ds-variant:focus-within .ds-strip,.ds-variant.is-overridden .ds-strip{display:inline-flex}.ds-strip button{height:26px;padding:0 10px;border-radius:6px;border:1px solid #D7DAE0;background:#fff;color:#1F2329;font:inherit;font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap}.ds-strip button:hover{border-color:#1F2329}.ds-strip button.on{background:#1F2329;color:#fff;border-color:#1F2329}.ds-strip .ds-reset{color:#8A5A00;border-color:#E8D9B5;background:#FFF8E6}.ds-strip select{height:26px;padding:0 8px;border-radius:6px;border:1px solid #D7DAE0;background:#fff;color:#1F2329;font:inherit;font-size:12px;font-weight:500;cursor:pointer;max-width:240px}.ds-strip select:hover{border-color:#1F2329}.ds-strip select.is-ov{border-color:#1F2329;font-weight:600}.ds-frame{box-shadow:0 1px 2px rgba(0,0,0,.08),0 12px 32px -8px rgba(0,0,0,.18);border-radius:4px;overflow:hidden}.ds-variant-m{margin-left:-20px}.ds-frame-m{border-radius:12px}.ds-bar{position:sticky;top:0;z-index:10;display:flex;flex-wrap:wrap;align-items:center;gap:22px;padding:12px 24px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid #D7DAE0;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:13px;color:#1F2329}.ds-bar .ds-title{font-weight:700;font-size:15px;margin-right:8px}.ds-bar .ds-group{display:inline-flex;align-items:center;gap:8px}.ds-bar .ds-group>span{color:#5F6672;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.06em}.ds-bar .ds-seg{display:inline-flex;background:#ECEDF0;border-radius:8px;padding:3px;gap:2px}.ds-bar .ds-seg button{height:28px;padding:0 12px;border:0;border-radius:6px;background:transparent;color:#5F6672;font:inherit;font-size:13px;font-weight:600;cursor:pointer}.ds-bar .ds-seg button:hover{color:#1F2329}.ds-bar .ds-seg button.on{background:#fff;color:#1F2329;box-shadow:0 1px 2px rgba(0,0,0,.1)}.ds-bar .ds-swatches{display:inline-flex;gap:6px}.ds-bar .ds-swatch{width:28px;height:28px;border-radius:50%;border:2px solid transparent;padding:2px;background:transparent;cursor:pointer;position:relative}.ds-bar .ds-swatch i{display:block;width:100%;height:100%;border-radius:50%;background:conic-gradient(var(--p) 0 60%,var(--s) 60% 85%,var(--t) 85%)}.ds-bar .ds-swatch:hover{border-color:#A0A6B1}.ds-bar .ds-swatch.on{border-color:#1F2329}.ds-bar select{height:30px;border-radius:6px;border:1px solid #D7DAE0;background:#fff;font:inherit;font-size:13px;padding:0 8px}.ds-bar .ds-copy{margin-left:auto;height:30px;padding:0 14px;border-radius:6px;border:1px solid #1F2329;background:#1F2329;color:#fff;font:inherit;font-size:13px;font-weight:600;cursor:pointer}.ds-bar .ds-copy:hover{background:#000}.ds-page{background:#ECEDF0;min-height:100vh}.ds-page .ds-set{padding-top:28px}.ds-page .ds-set + .ds-set{border-top:1px solid #D7DAE0}
+</style>
+</helmet>
+<div class="ds-set">
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+<symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></symbol>
+<symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"></path><path d="M19 16l.7 2.3L22 19l-2.3.7L19 22l-.7-2.3L16 19l2.3-.7z"></path></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></symbol>
+<symbol id="i-clipboard" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"></rect><path d="M9 4.5V3h6v1.5"></path><path d="M9 11h6M9 15h4"></path></symbol>
+<symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"></path></symbol>
+<symbol id="i-box" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"></path><path d="M4 7.5l8 4.5 8-4.5M12 12v9"></path></symbol>
+<symbol id="i-pie" viewBox="0 0 24 24"><path d="M21 12A9 9 0 1 1 12 3v9z"></path><path d="M21 8a9 9 0 0 0-6-5v6h6z"></path></symbol>
+<symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5M9 13h6M9 17h6"></path></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6.5 0 0 1 13 0"></path><path d="M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20a6.5 6.5 0 0 0-5-6.3"></path></symbol>
+<symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6z"></path></symbol>
+<symbol id="i-building" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1.5"></rect><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2M10 21v-3h4v3"></path></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6-5.3-6-10.5a6 6 0 0 1 12 0C18 15.7 12 21 12 21z"></path><circle cx="12" cy="10.5" r="2.2"></circle></symbol>
+<symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7"></path><circle cx="12" cy="17" r=".6" fill="currentColor"></circle></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"></path><path d="M10 20a2 2 0 0 0 4 0"></path></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></symbol>
+<symbol id="i-chev-right" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"></path></symbol>
+<symbol id="i-chev-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></symbol>
+<symbol id="i-chev-up" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"></path></symbol>
+<symbol id="i-chevs-left" viewBox="0 0 24 24"><path d="M11 7l-5 5 5 5M18 7l-5 5 5 5"></path></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
+<symbol id="i-more" viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.2" fill="currentColor"></circle><circle cx="12" cy="12" r="1.2" fill="currentColor"></circle><circle cx="18" cy="12" r="1.2" fill="currentColor"></circle></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4l9 16H3z"></path><path d="M12 10v4"></path><circle cx="12" cy="17" r=".6" fill="currentColor"></circle></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4l10-10-4-4L4 16z"></path><path d="M12.5 7.5l4 4"></path></symbol>
+<symbol id="i-trend" viewBox="0 0 24 24"><path d="M7 17l10-10M9 7h8v8"></path></symbol>
+<symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></symbol>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"></path></symbol>
+<symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"></rect><path d="M3 10h18M16 15h2"></path></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></symbol>
+<symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"></circle><path d="M10.8 12.2L20 3M15 8l3 3M17 6l3 3"></path></symbol>
+<symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"></path><path d="M3 12l9 5 9-5M3 16l9 5 9-5"></path></symbol>
+</svg>
+<div class="ds-head"><h1>Dashboard</h1><p>One theme across every layout. The chips above the artboard change every screen; hover a label to override density, color, font or mode on just that one.</p></div>
+<div class="ds-row">
+<div class="ds-variant {{a.cls}}">
+<div class="ds-label">
+<button class="ds-pick" type="button" onClick="{{a.select}}"><span class="ds-badge wide">E1</span><span class="ds-name">Light sidebar</span></button>
+<div class="ds-strip">
+<button type="button" onClick="{{a.cycleDensity}}">{{a.densityLabel}}</button>
+<select aria-label="Color for this screen" value="{{a.palette}}" onChange="{{a.setPalette}}"><sc-for list="{{a.paletteOptions}}" as="o" hint-placeholder-count="3"><option value="{{o.id}}">{{o.label}}</option></sc-for></select>
+<select aria-label="Font for this screen" value="{{a.font}}" onChange="{{a.setFont}}"><sc-for list="{{a.fontOptions}}" as="o" hint-placeholder-count="3"><option value="{{o.id}}">{{o.label}}</option></sc-for></select>
+<button type="button" onClick="{{a.cycleMode}}">{{a.modeLabel}}</button>
+<button type="button" class="ds-reset" onClick="{{a.reset}}">Reset</button>
+</div>
+</div>
+<div class="ds-frame"><div class="screen desktop v-a" data-variant="E" data-mode="{{a.mode}}" data-density="{{a.density}}" data-palette="{{a.palette}}" style="--font-head: {{a.fontHead}}; --font-body: {{a.fontBody}}">
+<aside class="sidebar">
+<div class="top">
+<a class="logo" href="#" aria-label="Acme home"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><path class="m1" d="M16 2l6 10H10z"></path><path class="m2" d="M4 30l6-10 6 10z"></path><path class="m3" d="M16 30l6-10 6 10z"></path><path class="m1" d="M10 20h12l-6-8z" opacity=".55"></path></svg><span class="wordmark">Acme</span></a>
+<label class="collapse" title="Collapse sidebar"><input class="collapse-toggle" type="checkbox" aria-label="Collapse sidebar"><svg class="icon icon-sm"><use href="#i-chevs-left"></use></svg></label>
+</div>
+<nav class="nav" aria-label="Main">
+<div class="nav-group">
+<div class="nav-label">For me</div>
+<a href="#" class="active" aria-current="page"><svg class="icon"><use href="#i-grid"></use></svg>Dashboard</a>
+<a href="#"><svg class="icon"><use href="#i-sparkle"></use></svg>Assigned to me</a>
+</div>
+<div class="nav-group">
+<div class="nav-label">Workspace</div>
+<a href="#"><svg class="icon"><use href="#i-layers"></use></svg>Projects<svg class="icon chev"><use href="#i-chev-right"></use></svg></a>
+<a href="#"><svg class="icon"><use href="#i-clipboard"></use></svg>Orders<svg class="icon chev"><use href="#i-chev-right"></use></svg></a>
+<a href="#"><svg class="icon"><use href="#i-search"></use></svg>Search</a>
+</div>
+<div class="nav-group">
+<div class="nav-label">Tools</div>
+<a href="#"><svg class="icon"><use href="#i-pie"></use></svg>Reports</a>
+<a href="#"><svg class="icon"><use href="#i-file"></use></svg>Invoices</a>
+<a href="#"><svg class="icon"><use href="#i-user"></use></svg>Customers</a>
+</div>
+<div class="nav-group">
+<div class="nav-label">Administration</div>
+<a href="#"><svg class="icon"><use href="#i-settings"></use></svg>Settings</a>
+<a href="#"><svg class="icon"><use href="#i-users"></use></svg>Users</a>
+<a href="#"><svg class="icon"><use href="#i-shield"></use></svg>Roles</a>
+<a href="#"><svg class="icon"><use href="#i-building"></use></svg>Vendors</a>
+<a href="#"><svg class="icon"><use href="#i-pin"></use></svg>Locations</a>
+</div>
+</nav>
+<div class="foot">
+<nav class="nav" aria-label="Support"><a href="#"><svg class="icon"><use href="#i-help"></use></svg>Help docs</a></nav>
+<div class="user" role="button" tabindex="0">
+<span class="avatar solid">JL</span>
+<span><div class="name">Jordan Lee</div><div class="email">jordan@acme.co</div></span>
+<svg class="icon chev"><use href="#i-chev-down"></use></svg>
+</div>
+</div>
+</aside>
+<main class="content">
+<header class="page-head">
+<div><h1>Good morning, Jordan</h1><p>Here's what's happening with your orders and projects today.</p></div>
+<div class="page-actions">
+<button class="btn btn-outline btn-icon" type="button" aria-label="Notifications"><svg class="icon"><use href="#i-bell"></use></svg></button>
+<button class="btn btn-primary" type="button"><svg class="icon icon-sm"><use href="#i-plus"></use></svg>New order</button>
+</div>
+</header>
+<section class="stats" aria-label="Summary">
+<div class="card stat is-hero is-hover">
+<div class="between"><span class="label">Open orders</span><span class="stat-icon"><svg class="icon"><use href="#i-box"></use></svg></span></div>
+<div class="stat-num">24</div>
+<div class="delta up"><svg class="icon icon-sm"><use href="#i-trend"></use></svg>+3 today</div>
+</div>
+<div class="card stat is-hover">
+<div class="between"><span class="label">Active projects</span><span class="stat-icon"><svg class="icon"><use href="#i-layers"></use></svg></span></div>
+<div class="stat-num">11</div>
+<div class="delta flat">2 due today</div>
+</div>
+<div class="card stat is-hover">
+<div class="between"><span class="label">Pending invoices</span><span class="stat-icon"><svg class="icon"><use href="#i-file"></use></svg></span></div>
+<div class="stat-num">6</div>
+<div class="delta up"><svg class="icon icon-sm"><use href="#i-trend"></use></svg>$8,420 total</div>
+</div>
+<div class="card stat is-hover">
+<div class="between"><span class="label">Assigned to me</span><span class="stat-icon"><svg class="icon"><use href="#i-alert"></use></svg></span></div>
+<div class="stat-num">5</div>
+<div class="delta down">1 overdue</div>
+</div>
+</section>
+<section class="card table-card" aria-label="Recent orders">
+<div class="table-head">
+<div><h2>Recent orders</h2><p class="card-sub">Your latest orders across all locations.</p></div>
+<div class="table-tools"><div class="seg" role="tablist"><button class="on" type="button">All</button><button type="button">Open</button><button type="button">Done</button></div><a class="btn btn-outline view-all" href="#">View all orders<svg class="icon icon-sm"><use href="#i-chev-right"></use></svg></a></div>
+</div>
+<table>
+<thead>
+<tr><th scope="col">Order</th><th scope="col">Customer</th><th scope="col">Type</th><th scope="col">Status</th><th scope="col">Owner</th><th scope="col">Due</th><th scope="col"><span class="sr">Actions</span></th></tr>
+</thead>
+<tbody>
+<tr>
+<td class="num">ORD-1042</td>
+<td><div class="primary-cell">Northwind Traders</div><div class="sub">Portland, OR</div></td>
+<td>Standard</td>
+<td><span class="chip pending">Pending</span></td>
+<td><span class="avatar owner">MK</span></td>
+<td class="num">Mar 23</td>
+<td><button class="more" type="button" aria-label="More actions"><svg class="icon icon-sm"><use href="#i-more"></use></svg></button></td>
+</tr>
+<tr>
+<td class="num">ORD-1041</td>
+<td><div class="primary-cell">Bluebird Logistics</div><div class="sub">Denver, CO</div></td>
+<td>Expedited</td>
+<td><span class="chip progress">In progress</span></td>
+<td><span class="avatar owner">RC</span></td>
+<td class="num">Mar 21</td>
+<td><button class="more" type="button" aria-label="More actions"><svg class="icon icon-sm"><use href="#i-more"></use></svg></button></td>
+</tr>
+<tr>
+<td class="num">ORD-1039</td>
+<td><div class="primary-cell">Harbor &amp; Finch</div><div class="sub">Austin, TX</div></td>
+<td>Standard</td>
+<td><span class="chip complete">Complete</span></td>
+<td><span class="avatar owner">GM</span></td>
+<td class="num">Mar 19</td>
+<td><button class="more" type="button" aria-label="More actions"><svg class="icon icon-sm"><use href="#i-more"></use></svg></button></td>
+</tr>
+<tr>
+<td class="num">ORD-1036</td>
+<td><div class="primary-cell">Summit Partners Group</div><div class="sub">Raleigh, NC</div></td>
+<td>Custom</td>
+<td><span class="chip invoiced">Invoiced</span></td>
+<td><span class="avatar owner">JS</span></td>
+<td class="num">Mar 25</td>
+<td><button class="more" type="button" aria-label="More actions"><svg class="icon icon-sm"><use href="#i-more"></use></svg></button></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section class="bottom" aria-label="Tools">
+<div class="card">
+<span class="icon-tile"><svg class="icon"><use href="#i-edit"></use></svg></span>
+<h3 class="card-title"><svg class="icon"><use href="#i-edit"></use></svg>Add internal note</h3>
+<p class="card-sub">Attach a note to an order for your team.</p>
+<input class="input" type="text" placeholder="Order ID (e.g. ORD-1042)" aria-label="Order ID">
+<button class="btn btn-dark btn-block" type="button">Attach note</button>
+</div>
+<div class="card">
+<span class="icon-tile"><svg class="icon"><use href="#i-file"></use></svg></span>
+<h3 class="card-title"><svg class="icon"><use href="#i-file"></use></svg>Invoice statuses</h3>
+<p class="card-sub">Lifecycle badges for the invoice pipeline.</p>
+<div class="legend">
+<div class="row"><span class="chip neutral no-dot">Draft</span><span class="muted">Created but not yet sent</span></div>
+<div class="row"><span class="chip progress no-dot">Open</span><span class="muted">Sent, awaiting payment</span></div>
+<div class="row"><span class="chip complete no-dot">Paid</span><span class="muted">Payment received</span></div>
+</div>
+</div>
+<div class="card">
+<span class="icon-tile"><svg class="icon"><use href="#i-sparkle"></use></svg></span>
+<h3 class="card-title"><svg class="icon"><use href="#i-sparkle"></use></svg>Quick actions</h3>
+<p class="card-sub">Common tasks available from the dashboard.</p>
+<div class="actions">
+<button class="quick" type="button"><svg class="icon"><use href="#i-pie"></use></svg>Generate weekly report</button>
+<button class="quick" type="button"><svg class="icon"><use href="#i-file"></use></svg>Create invoice batch</button>
+</div>
+</div>
+</section>
+</main>
+</div></div>
+</div>
+<div class="ds-variant ds-variant-m {{am.cls}}">
+<div class="ds-label">
+<button class="ds-pick" type="button" onClick="{{am.select}}"><span class="ds-badge wide">E2</span><span class="ds-name">Light sidebar · mobile</span></button>
+<div class="ds-strip">
+<button type="button" onClick="{{am.cycleDensity}}">{{am.densityLabel}}</button>
+<select aria-label="Color for this screen" value="{{am.palette}}" onChange="{{am.setPalette}}"><sc-for list="{{am.paletteOptions}}" as="o" hint-placeholder-count="3"><option value="{{o.id}}">{{o.label}}</option></sc-for></select>
+<select aria-label="Font for this screen" value="{{am.font}}" onChange="{{am.setFont}}"><sc-for list="{{am.fontOptions}}" as="o" hint-placeholder-count="3"><option value="{{o.id}}">{{o.label}}</option></sc-for></select>
+<button type="button" onClick="{{am.cycleMode}}">{{am.modeLabel}}</button>
+<button type="button" class="ds-reset" onClick="{{am.reset}}">Reset</button>
+</div>
+</div>
+<div class="ds-frame ds-frame-m"><div class="screen mobile v-a" data-variant="E" data-mode="{{am.mode}}" data-density="{{am.density}}" data-palette="{{am.palette}}" style="--font-head: {{am.fontHead}}; --font-body: {{am.fontBody}}">
+<header class="m-top">
+<a class="logo" href="#" aria-label="Acme home"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><path class="m1" d="M16 2l6 10H10z"></path><path class="m2" d="M4 30l6-10 6 10z"></path><path class="m3" d="M16 30l6-10 6 10z"></path><path class="m1" d="M10 20h12l-6-8z" opacity=".55"></path></svg><span class="wordmark">Acme</span></a>
+<div class="m-actions">
+<button class="m-iconbtn" type="button" aria-label="Notifications"><svg class="icon"><use href="#i-bell"></use></svg></button>
+<span class="avatar solid">JL</span>
+</div>
+</header>
+<main class="m-body">
+<div class="m-greet"><h1>Good morning, Jordan</h1><p class="m-sub">Here's what's happening with your orders and projects today.</p></div>
+<section class="card m-statbar" aria-label="Summary">
+<div class="m-stat"><span class="stat-num">24</span><span class="label">Open orders</span><span class="delta up">+3 today</span></div>
+<div class="m-stat"><span class="stat-num">11</span><span class="label">Active projects</span><span class="delta flat">2 due</span></div>
+<div class="m-stat"><span class="stat-num">6</span><span class="label">Pending invoices</span><span class="delta up">$8,420</span></div>
+<div class="m-stat"><span class="stat-num">5</span><span class="label">Assigned to me</span><span class="delta down">1 overdue</span></div>
+</section>
+<section class="card m-listcard m-grow" aria-label="Recent orders">
+<div class="m-head"><h2>Recent orders</h2><div class="seg sm" role="tablist"><button class="on" type="button">All</button><button type="button">Open</button><button type="button">Done</button></div></div>
+<a class="m-row" href="#"><span class="avatar owner">MK</span><div class="o-main"><div class="o-name">Northwind Traders</div><div class="o-sub">ORD-1042 · Standard · Mar 23</div></div><span class="chip pending">Pending</span></a>
+<a class="m-row" href="#"><span class="avatar owner">RC</span><div class="o-main"><div class="o-name">Bluebird Logistics</div><div class="o-sub">ORD-1041 · Expedited · Mar 21</div></div><span class="chip progress">In progress</span></a>
+<a class="m-row" href="#"><span class="avatar owner">GM</span><div class="o-main"><div class="o-name">Harbor &amp; Finch</div><div class="o-sub">ORD-1039 · Standard · Mar 19</div></div><span class="chip complete">Complete</span></a>
+<a class="m-row" href="#"><span class="avatar owner">JS</span><div class="o-main"><div class="o-name">Summit Partners Group</div><div class="o-sub">ORD-1036 · Custom · Mar 25</div></div><span class="chip invoiced">Invoiced</span></a>
+<div class="m-foot"><a href="#">View all orders<svg class="icon icon-sm"><use href="#i-chev-right"></use></svg></a></div>
+</section>
+<section class="m-strip" aria-label="Tools">
+<div class="card">
+<h3 class="card-title">Add internal note</h3>
+<div class="m-inline"><input class="input" type="text" placeholder="Order ID (e.g. ORD-1042)" aria-label="Order ID"><button class="btn btn-dark" type="button">Attach</button></div>
+</div>
+<div class="card">
+<h3 class="card-title">Invoice statuses</h3>
+<div class="legend"><span class="chip neutral no-dot">Draft</span><span class="chip progress no-dot">Open</span><span class="chip complete no-dot">Paid</span></div>
+</div>
+<div class="card">
+<h3 class="card-title">Quick actions</h3>
+<div class="quick-row"><button class="quick" type="button"><svg class="icon"><use href="#i-pie"></use></svg>Weekly report</button><button class="quick" type="button"><svg class="icon"><use href="#i-file"></use></svg>Invoice batch</button></div>
+</div>
+</section>
+</main>
+<nav class="tabbar" aria-label="Main">
+<a href="#" class="active" aria-current="page"><svg class="icon"><use href="#i-grid"></use></svg>Dashboard</a>
+<a href="#"><svg class="icon"><use href="#i-sparkle"></use></svg>Assigned</a>
+<a href="#"><svg class="icon"><use href="#i-clipboard"></use></svg>Orders</a>
+<a href="#"><svg class="icon"><use href="#i-file"></use></svg>Invoices</a>
+<a href="#"><svg class="icon"><use href="#i-more"></use></svg>More</a>
+</nav>
+</div></div>
+</div>
+<div class="ds-variant {{b.cls}}">
+<div class="ds-label">
+<button class="ds-pick" type="button" onClick="{{b.select}}"><span class="ds-badge wide">F1</span><span class="ds-name">Dark sidebar, order list</span></button>
+<div class="ds-strip">
+<button type="button" onClick="{{b.cycleDensity}}">{{b.densityLabel}}</button>
+<select aria-label="Color for this screen" value="{{b.palette}}" onChange="{{b.setPalette}}"><sc-for list="{{b.paletteOptions}}" as="o" hint-placeholder-count="3"><option value="{{o.id}}">{{o.label}}</option></sc-for></select>
+<select aria-label="Font for this screen" value="{{b.font}}" onChange="{{b.setFont}}"><sc-for list="{{b.fontOptions}}" as="o" hint-placeholder-count="3"><option value="{{o.id}}">{{o.label}}</option></sc-for></select>
+<button type="button" onClick="{{b.cycleMode}}">{{b.modeLabel}}</button>
+<button type="button" class="ds-reset" onClick="{{b.reset}}">Reset</button>
+</div>
+</div>
+<div class="ds-frame"><div class="screen desktop v-b" data-variant="F" data-mode="{{b.mode}}" data-density="{{b.density}}" data-palette="{{b.palette}}" style="--font-head: {{b.fontHead}}; --font-body: {{b.fontBody}}">
+<aside class="sidebar">
+<div class="top">
+<a class="logo" href="#" aria-label="Acme home"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><path class="m1" d="M16 2l6 10H10z"></path><path class="m2" d="M4 30l6-10 6 10z"></path><path class="m3" d="M16 30l6-10 6 10z"></path><path class="m1" d="M10 20h12l-6-8z" opacity=".55"></path></svg><span class="wordmark">Acme</span></a>
+<label class="collapse" title="Collapse sidebar"><input class="collapse-toggle" type="checkbox" aria-label="Collapse sidebar"><svg class="icon icon-sm"><use href="#i-chevs-left"></use></svg></label>
+</div>
+<nav class="nav" aria-label="Main">
+<div class="nav-group">
+<div class="nav-label">For me</div>
+<a href="#" class="active" aria-current="page"><svg class="icon"><use href="#i-grid"></use></svg>Dashboard</a>
+<a href="#"><svg class="icon"><use href="#i-sparkle"></use></svg>Assigned to me</a>
+</div>
+<div class="nav-group">
+<div class="nav-label">Workspace</div>
+<a href="#"><svg class="icon"><use href="#i-layers"></use></svg>Projects<svg class="icon chev"><use href="#i-chev-right"></use></svg></a>
+<a href="#"><svg class="icon"><use href="#i-clipboard"></use></svg>Orders<svg class="icon chev"><use href="#i-chev-right"></use></svg></a>
+<a href="#"><svg class="icon"><use href="#i-search"></use></svg>Search</a>
+</div>
+<div class="nav-group">
+<div class="nav-label">Tools</div>
+<a href="#"><svg class="icon"><use href="#i-pie"></use></svg>Reports</a>
+<a href="#"><svg class="icon"><use href="#i-file"></use></svg>Invoices</a>
+<a href="#"><svg class="icon"><use href="#i-user"></use></svg>Customers</a>
+</div>
+<div class="nav-group">
+<div class="nav-label">Administration</div>
+<a href="#"><svg class="icon"><use href="#i-settings"></use></svg>Settings</a>
+<a href="#"><svg class="icon"><use href="#i-users"></use></svg>Users</a>
+<a href="#"><svg class="icon"><use href="#i-shield"></use></svg>Roles</a>
+<a href="#"><svg class="icon"><use href="#i-building"></use></svg>Vendors</a>
+<a href="#"><svg class="icon"><use href="#i-pin"></use></svg>Locations</a>
+</div>
+</nav>
+<div class="foot">
+<nav class="nav" aria-label="Support"><a href="#"><svg class="icon"><use href="#i-help"></use></svg>Help docs</a></nav>
+<div class="user" role="button" tabindex="0">
+<span class="avatar solid">JL</span>
+<span><div class="name">Jordan Lee</div><div class="email">jordan@acme.co</div></span>
+<svg class="icon chev"><use href="#i-chev-down"></use></svg>
+</div>
+</div>
+</aside>
+<main class="content">
+<header class="page-head">
+<div><h1>Good morning, Jordan</h1><p>Here's what's happening with your orders and projects today.</p></div>
+<div class="page-actions">
+<button class="btn btn-primary" type="button"><svg class="icon icon-sm"><use href="#i-plus"></use></svg>New order</button>
+</div>
+</header>
+<div class="b-grid">
+<section class="b-main" aria-label="Recent orders">
+<div class="b-listhead">
+<div><h2>Recent orders</h2><p class="card-sub">Your latest orders across all locations.</p></div>
+<div class="tabs" role="tablist"><button class="on" type="button" role="tab" aria-selected="true">All</button><button type="button" role="tab">Open</button><button type="button" role="tab">Done</button></div>
+</div>
+<ul class="order-list">
+<li class="card order is-hover st-pending">
+<div class="o-main"><div class="o-name">Northwind Traders <code class="oid">ORD-1042</code></div><div class="o-sub">Portland, OR · Standard · <span class="st">Pending</span></div></div>
+<div class="o-due"><span class="o-duelabel">Due</span><span class="o-date">Mar 23</span></div>
+<span class="avatar owner">MK</span>
+</li>
+<li class="card order is-hover st-progress">
+<div class="o-main"><div class="o-name">Bluebird Logistics <code class="oid">ORD-1041</code></div><div class="o-sub">Denver, CO · Expedited · <span class="st">In progress</span></div></div>
+<div class="o-due"><span class="o-duelabel">Due</span><span class="o-date">Mar 21</span></div>
+<span class="avatar owner">RC</span>
+</li>
+<li class="card order is-hover st-complete">
+<div class="o-main"><div class="o-name">Harbor &amp; Finch <code class="oid">ORD-1039</code></div><div class="o-sub">Austin, TX · Standard · <span class="st">Complete</span></div></div>
+<div class="o-due"><span class="o-duelabel">Due</span><span class="o-date">Mar 19</span></div>
+<span class="avatar owner">GM</span>
+</li>
+<li class="card order is-hover st-invoiced">
+<div class="o-main"><div class="o-name">Summit Partners Group <code class="oid">ORD-1036</code></div><div class="o-sub">Raleigh, NC · Custom · <span class="st">Invoiced</span></div></div>
+<div class="o-due"><span class="o-duelabel">Due</span><span class="o-date">Mar 25</span></div>
+<span class="avatar owner">JS</span>
+</li>
+<li class="card order is-hover st-cancelled">
+<div class="o-main"><div class="o-name">Cobalt Manufacturing Co. <code class="oid">ORD-1033</code></div><div class="o-sub">Columbus, OH · Standard · <span class="st">Cancelled</span></div></div>
+<div class="o-due"><span class="o-duelabel">Due</span><span class="o-date">Mar 18</span></div>
+<span class="avatar owner">MK</span>
+</li>
+<li class="card order is-hover st-pending">
+<div class="o-main"><div class="o-name">Meridian Supply Co. <code class="oid">ORD-1031</code></div><div class="o-sub">Boise, ID · Standard · <span class="st">Pending</span></div></div>
+<div class="o-due"><span class="o-duelabel">Due</span><span class="o-date">Mar 27</span></div>
+<span class="avatar owner">GM</span>
+</li>
+<li class="card order is-hover st-progress">
+<div class="o-main"><div class="o-name">Larkspur Interiors <code class="oid">ORD-1030</code></div><div class="o-sub">Madison, WI · Custom · <span class="st">In progress</span></div></div>
+<div class="o-due"><span class="o-duelabel">Due</span><span class="o-date">Mar 28</span></div>
+<span class="avatar owner">JS</span>
+</li>
+<li class="card order is-hover st-complete">
+<div class="o-main"><div class="o-name">Ridgeline Outfitters <code class="oid">ORD-1028</code></div><div class="o-sub">Bend, OR · Expedited · <span class="st">Complete</span></div></div>
+<div class="o-due"><span class="o-duelabel">Due</span><span class="o-date">Mar 16</span></div>
+<span class="avatar owner">RC</span>
+</li>
+</ul>
+</section>
+<aside class="b-side" aria-label="Summary and tools">
+<div class="tiles">
+<div class="card tile is-hover"><span class="label">Open orders</span><span class="stat-num">24</span><span class="delta up"><svg class="icon icon-sm"><use href="#i-trend"></use></svg>+3 today</span></div>
+<div class="card tile is-hover"><span class="label">Active projects</span><span class="stat-num">11</span><span class="delta flat">2 due today</span></div>
+<div class="card tile is-hover"><span class="label">Pending invoices</span><span class="stat-num">6</span><span class="delta up"><svg class="icon icon-sm"><use href="#i-trend"></use></svg>$8,420 total</span></div>
+<div class="card tile is-hover"><span class="label">Assigned to me</span><span class="stat-num">5</span><span class="delta down">1 overdue</span></div>
+</div>
+<div class="card tool">
+<h3 class="card-title">Quick actions</h3>
+<div class="quick-row">
+<button class="quick" type="button"><svg class="icon"><use href="#i-pie"></use></svg>Weekly report</button>
+<button class="quick" type="button"><svg class="icon"><use href="#i-file"></use></svg>Invoice batch</button>
+<button class="quick" type="button"><svg class="icon"><use href="#i-clipboard"></use></svg>Export orders</button>
+<button class="quick" type="button"><svg class="icon"><use href="#i-user"></use></svg>Add customer</button>
+</div>
+</div>
+<div class="card tool">
+<h3 class="card-title">Add internal note</h3>
+<p class="card-sub">Attach a note to an order for your team.</p>
+<input class="input mono" type="text" placeholder="Order ID (e.g. ORD-1042)" aria-label="Order ID">
+<textarea class="input ta" placeholder="Write a note for your team…" aria-label="Note"></textarea>
+<button class="btn btn-dark btn-block" type="button">Attach note</button>
+</div>
+<div class="card tool">
+<h3 class="card-title">Invoice statuses</h3>
+<p class="card-sub">Lifecycle badges for the invoice pipeline.</p>
+<div class="legend legend-split">
+<div class="row"><span class="chip neutral no-dot">Draft</span><span class="muted">Created but not yet sent</span></div>
+<div class="row"><span class="chip progress no-dot">Open</span><span class="muted">Sent, awaiting payment</span></div>
+<div class="row"><span class="chip complete no-dot">Paid</span><span class="muted">Payment received</span></div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+</div></div>
+</div>
+<div class="ds-variant ds-variant-m {{bm.cls}}">
+<div class="ds-label">
+<button class="ds-pick" type="button" onClick="{{bm.select}}"><span class="ds-badge wide">F2</span><span class="ds-name">Dark sidebar, order list · mobile</span></button>
+<div class="ds-strip">
+<button type="button" onClick="{{bm.cycleDensity}}">{{bm.densityLabel}}</button>
+<select aria-label="Color for this screen" value="{{bm.palette}}" onChange="{{bm.setPalette}}"><sc-for list="{{bm.paletteOptions}}" as="o" hint-placeholder-count="3"><option value="{{o.id}}">{{o.label}}</option></sc-for></select>
+<select aria-label="Font for this screen" value="{{bm.font}}" onChange="{{bm.setFont}}"><sc-for list="{{bm.fontOptions}}" as="o" hint-placeholder-count="3"><option value="{{o.id}}">{{o.label}}</option></sc-for></select>
+<button type="button" onClick="{{bm.cycleMode}}">{{bm.modeLabel}}</button>
+<button type="button" class="ds-reset" onClick="{{bm.reset}}">Reset</button>
+</div>
+</div>
+<div class="ds-frame ds-frame-m"><div class="screen mobile v-b" data-variant="F" data-mode="{{bm.mode}}" data-density="{{bm.density}}" data-palette="{{bm.palette}}" style="--font-head: {{bm.fontHead}}; --font-body: {{bm.fontBody}}">
+<header class="m-hero">
+<div class="m-top">
+<a class="logo" href="#" aria-label="Acme home"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><path class="m1" d="M16 2l6 10H10z"></path><path class="m2" d="M4 30l6-10 6 10z"></path><path class="m3" d="M16 30l6-10 6 10z"></path><path class="m1" d="M10 20h12l-6-8z" opacity=".55"></path></svg><span class="wordmark">Acme</span></a>
+<div class="m-actions">
+<button class="m-iconbtn" type="button" aria-label="Notifications"><svg class="icon"><use href="#i-bell"></use></svg></button>
+<span class="avatar solid">JL</span>
+</div>
+</div>
+<div class="m-greet"><h1>Good morning, Jordan</h1><p class="m-sub">Here's what's happening with your orders and projects today.</p></div>
+</header>
+<main class="m-body">
+<section class="tiles" aria-label="Summary">
+<div class="card tile"><span class="label">Open orders</span><span class="stat-num">24</span><span class="delta up">+3 today</span></div>
+<div class="card tile"><span class="label">Active projects</span><span class="stat-num">11</span><span class="delta flat">2 due today</span></div>
+<div class="card tile"><span class="label">Pending invoices</span><span class="stat-num">6</span><span class="delta up">$8,420 total</span></div>
+<div class="card tile"><span class="label">Assigned to me</span><span class="stat-num">5</span><span class="delta down">1 overdue</span></div>
+</section>
+<section class="m-stack m-grow" aria-label="Recent orders">
+<div class="m-head"><h2>Recent orders</h2><div class="tabs" role="tablist"><button class="on" type="button" role="tab" aria-selected="true">All</button><button type="button" role="tab">Open</button><button type="button" role="tab">Done</button></div></div>
+<ul class="order-list m-grow">
+<li class="card order st-pending">
+<div class="o-main"><div class="o-name">Northwind Traders</div><div class="o-sub">ORD-1042 · <span class="st">Pending</span></div></div>
+<span class="o-date">Mar 23</span>
+<span class="avatar owner">MK</span>
+</li>
+<li class="card order st-progress">
+<div class="o-main"><div class="o-name">Bluebird Logistics</div><div class="o-sub">ORD-1041 · <span class="st">In progress</span></div></div>
+<span class="o-date">Mar 21</span>
+<span class="avatar owner">RC</span>
+</li>
+<li class="card order st-complete">
+<div class="o-main"><div class="o-name">Harbor &amp; Finch</div><div class="o-sub">ORD-1039 · <span class="st">Complete</span></div></div>
+<span class="o-date">Mar 19</span>
+<span class="avatar owner">GM</span>
+</li>
+</ul>
+</section>
+<section class="m-chips" aria-label="Quick actions">
+<button class="m-chip" type="button"><span class="icon-tile"><svg class="icon"><use href="#i-pie"></use></svg></span>Weekly report</button>
+<button class="m-chip" type="button"><span class="icon-tile"><svg class="icon"><use href="#i-file"></use></svg></span>Invoice batch</button>
+<button class="m-chip" type="button"><span class="icon-tile"><svg class="icon"><use href="#i-clipboard"></use></svg></span>Export orders</button>
+<button class="m-chip" type="button"><span class="icon-tile"><svg class="icon"><use href="#i-user"></use></svg></span>Add customer</button>
+</section>
+</main>
+<nav class="tabbar dark" aria-label="Main">
+<a href="#" class="active" aria-current="page"><svg class="icon"><use href="#i-grid"></use></svg>Dashboard</a>
+<a href="#"><svg class="icon"><use href="#i-clipboard"></use></svg>Orders</a>
+<button class="m-dock" type="button" aria-label="New order"><svg class="icon"><use href="#i-plus"></use></svg></button>
+<a href="#"><svg class="icon"><use href="#i-file"></use></svg>Invoices</a>
+<a href="#"><svg class="icon"><use href="#i-more"></use></svg>More</a>
+</nav>
+</div></div>
+</div>
+<div class="ds-variant {{c.cls}}">
+<div class="ds-label">
+<button class="ds-pick" type="button" onClick="{{c.select}}"><span class="ds-badge wide">G1</span><span class="ds-name">Top nav, order board</span></button>
+<div class="ds-strip">
+<button type="button" onClick="{{c.cycleDensity}}">{{c.densityLabel}}</button>
+<select aria-label="Color for this screen" value="{{c.palette}}" onChange="{{c.setPalette}}"><sc-for list="{{c.paletteOptions}}" as="o" hint-placeholder-count="3"><option value="{{o.id}}">{{o.label}}</option></sc-for></select>
+<select aria-label="Font for this screen" value="{{c.font}}" onChange="{{c.setFont}}"><sc-for list="{{c.fontOptions}}" as="o" hint-placeholder-count="3"><option value="{{o.id}}">{{o.label}}</option></sc-for></select>
+<button type="button" onClick="{{c.cycleMode}}">{{c.modeLabel}}</button>
+<button type="button" class="ds-reset" onClick="{{c.reset}}">Reset</button>
+</div>
+</div>
+<div class="ds-frame"><div class="screen desktop v-c topnav" data-variant="G" data-mode="{{c.mode}}" data-density="{{c.density}}" data-palette="{{c.palette}}" style="--font-head: {{c.fontHead}}; --font-body: {{c.fontBody}}">
+<header class="topbar">
+<div class="topbar-inner">
+<a class="logo" href="#" aria-label="Acme home"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><path class="m1" d="M16 2l6 10H10z"></path><path class="m2" d="M4 30l6-10 6 10z"></path><path class="m3" d="M16 30l6-10 6 10z"></path><path class="m1" d="M10 20h12l-6-8z" opacity=".55"></path></svg><span class="wordmark">Acme</span></a>
+<nav class="topnav-links" aria-label="Main">
+<a href="#" class="active" aria-current="page"><svg class="icon"><use href="#i-grid"></use></svg>Dashboard</a>
+<a href="#"><svg class="icon"><use href="#i-sparkle"></use></svg>Assigned to me</a>
+<a href="#"><svg class="icon"><use href="#i-layers"></use></svg>Projects</a>
+<a href="#"><svg class="icon"><use href="#i-clipboard"></use></svg>Orders</a>
+<a href="#"><svg class="icon"><use href="#i-pie"></use></svg>Reports</a>
+<a href="#"><svg class="icon"><use href="#i-file"></use></svg>Invoices</a>
+<a href="#"><svg class="icon"><use href="#i-user"></use></svg>Customers</a>
+<a href="#">More<svg class="icon"><use href="#i-chev-down"></use></svg></a>
+</nav>
+<div class="topbar-right">
+<button class="search-pill" type="button"><svg class="icon icon-sm"><use href="#i-search"></use></svg>Search<kbd>⌘K</kbd></button>
+<button class="icon-btn" type="button" aria-label="Notifications"><svg class="icon"><use href="#i-bell"></use></svg></button>
+<div class="user" role="button" tabindex="0" aria-label="Jordan Lee, account menu"><span class="avatar solid">JL</span><svg class="icon chev"><use href="#i-chev-down"></use></svg></div>
+</div>
+</div>
+</header>
+<main class="content">
+<header class="card greet-bar">
+<div class="greet"><h1>Good morning, Jordan</h1><p>Here's what's happening with your orders and projects today.</p></div>
+<div class="page-actions">
+<button class="btn btn-primary" type="button"><svg class="icon icon-sm"><use href="#i-plus"></use></svg>New order</button>
+</div>
+</header>
+<div class="c-grid">
+<aside class="c-side" aria-label="Summary and tools">
+<div class="card stat-rows">
+<div class="stat-row"><span class="label">Open orders</span><span class="val"><b class="stat-num">24</b><span class="delta up">+3</span></span></div>
+<div class="stat-row"><span class="label">Active projects</span><span class="val"><b class="stat-num">11</b><span class="delta flat">2 due</span></span></div>
+<div class="stat-row"><span class="label">Pending invoices</span><span class="val"><b class="stat-num">6</b><span class="delta up">$8,420</span></span></div>
+<div class="stat-row"><span class="label">Assigned to me</span><span class="val"><b class="stat-num">5</b><span class="delta down">1 overdue</span></span></div>
+</div>
+<div class="card tool">
+<h3 class="card-title">Quick actions</h3>
+<div class="actions">
+<button class="quick" type="button"><svg class="icon"><use href="#i-pie"></use></svg>Generate weekly report</button>
+<button class="quick" type="button"><svg class="icon"><use href="#i-file"></use></svg>Create invoice batch</button>
+<button class="quick" type="button"><svg class="icon"><use href="#i-clipboard"></use></svg>Export orders</button>
+</div>
+</div>
+<div class="card tool">
+<h3 class="card-title">Invoice statuses</h3>
+<p class="card-sub">Lifecycle badges for the invoice pipeline.</p>
+<div class="legend legend-split">
+<div class="row"><span class="chip neutral no-dot">Draft</span><span class="muted">Created but not yet sent</span></div>
+<div class="row"><span class="chip progress no-dot">Open</span><span class="muted">Sent, awaiting payment</span></div>
+<div class="row"><span class="chip complete no-dot">Paid</span><span class="muted">Payment received</span></div>
+<div class="row"><span class="chip cancelled no-dot">Overdue</span><span class="muted">Past due, unpaid</span></div>
+<div class="row"><span class="chip neutral no-dot">Void</span><span class="muted">Cancelled before payment</span></div>
+</div>
+</div>
+</aside>
+<div class="c-main">
+<section class="card board-card" aria-label="Recent orders">
+<div class="between board-head">
+<div><h2>Recent orders</h2><p class="card-sub">Your latest orders across all locations.</p></div>
+<a class="view-all" href="#">View all orders<svg class="icon icon-sm"><use href="#i-chev-right"></use></svg></a>
+</div>
+<div class="board">
+<div class="col">
+<div class="col-head"><span>Open</span><span class="count">2</span></div>
+<div class="card bcard is-hover st-pending"><div class="between"><code class="oid">ORD-1042</code><span class="chip pending no-dot">Pending</span></div><div class="o-name">Northwind Traders</div><div class="o-sub">Portland, OR · Standard</div><div class="between bfoot"><span class="due">Due Mar 23</span><span class="avatar owner">MK</span></div></div>
+<div class="card bcard is-hover st-progress"><div class="between"><code class="oid">ORD-1041</code><span class="chip progress no-dot">In progress</span></div><div class="o-name">Bluebird Logistics</div><div class="o-sub">Denver, CO · Expedited</div><div class="between bfoot"><span class="due">Due Mar 21</span><span class="avatar owner">RC</span></div></div>
+</div>
+<div class="col">
+<div class="col-head"><span>Done</span><span class="count">2</span></div>
+<div class="card bcard is-hover st-complete"><div class="between"><code class="oid">ORD-1039</code><span class="chip complete no-dot">Complete</span></div><div class="o-name">Harbor &amp; Finch</div><div class="o-sub">Austin, TX · Standard</div><div class="between bfoot"><span class="due">Due Mar 19</span><span class="avatar owner">GM</span></div></div>
+<div class="card bcard is-hover st-invoiced"><div class="between"><code class="oid">ORD-1036</code><span class="chip invoiced no-dot">Invoiced</span></div><div class="o-name">Summit Partners Group</div><div class="o-sub">Raleigh, NC · Custom</div><div class="between bfoot"><span class="due">Due Mar 25</span><span class="avatar owner">JS</span></div></div>
+</div>
+<div class="col">
+<div class="col-head"><span>Cancelled</span><span class="count">1</span></div>
+<div class="card bcard is-hover st-cancelled"><div class="between"><code class="oid">ORD-1033</code><span class="chip cancelled no-dot">Cancelled</span></div><div class="o-name">Cobalt Manufacturing Co.</div><div class="o-sub">Columbus, OH · Standard</div><div class="between bfoot"><span class="due">Due Mar 18</span><span class="avatar owner">MK</span></div></div>
+</div>
+</div>
+</section>
+<section class="card note-card" aria-label="Add internal note">
+<div class="note-form">
+<div class="note-intro"><h3 class="card-title">Add internal note</h3><p class="card-sub">Attach a note to an order for your team.</p></div>
+<input class="input mono" type="text" placeholder="Order ID (e.g. ORD-1042)" aria-label="Order ID">
+<input class="input grow" type="text" placeholder="Write a note…" aria-label="Note">
+<button class="btn btn-dark" type="button">Attach note</button>
+</div>
+<ul class="note-feed">
+<li><span class="avatar owner">RC</span><a class="oid-link" href="#">ORD-1041</a><span class="note-text">Customer approved expedited freight; ship Thursday.</span><span class="note-time">2h ago</span></li>
+<li><span class="avatar owner">MK</span><a class="oid-link" href="#">ORD-1042</a><span class="note-text">Waiting on PO number from Northwind before invoicing.</span><span class="note-time">Yesterday</span></li>
+</ul>
+</section>
+</div>
+</div>
+</main>
+</div></div>
+</div>
+<div class="ds-variant ds-variant-m {{cm.cls}}">
+<div class="ds-label">
+<button class="ds-pick" type="button" onClick="{{cm.select}}"><span class="ds-badge wide">G2</span><span class="ds-name">Top nav, order board · mobile</span></button>
+<div class="ds-strip">
+<button type="button" onClick="{{cm.cycleDensity}}">{{cm.densityLabel}}</button>
+<select aria-label="Color for this screen" value="{{cm.palette}}" onChange="{{cm.setPalette}}"><sc-for list="{{cm.paletteOptions}}" as="o" hint-placeholder-count="3"><option value="{{o.id}}">{{o.label}}</option></sc-for></select>
+<select aria-label="Font for this screen" value="{{cm.font}}" onChange="{{cm.setFont}}"><sc-for list="{{cm.fontOptions}}" as="o" hint-placeholder-count="3"><option value="{{o.id}}">{{o.label}}</option></sc-for></select>
+<button type="button" onClick="{{cm.cycleMode}}">{{cm.modeLabel}}</button>
+<button type="button" class="ds-reset" onClick="{{cm.reset}}">Reset</button>
+</div>
+</div>
+<div class="ds-frame ds-frame-m"><div class="screen mobile v-c" data-variant="G" data-mode="{{cm.mode}}" data-density="{{cm.density}}" data-palette="{{cm.palette}}" style="--font-head: {{cm.fontHead}}; --font-body: {{cm.fontBody}}">
+<header class="m-top">
+<button class="m-iconbtn" type="button" aria-label="Menu"><svg class="icon"><use href="#i-menu"></use></svg></button>
+<a class="logo" href="#" aria-label="Acme home"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><path class="m1" d="M16 2l6 10H10z"></path><path class="m2" d="M4 30l6-10 6 10z"></path><path class="m3" d="M16 30l6-10 6 10z"></path><path class="m1" d="M10 20h12l-6-8z" opacity=".55"></path></svg><span class="wordmark">Acme</span></a>
+<div class="m-actions">
+<button class="m-iconbtn" type="button" aria-label="Search"><svg class="icon"><use href="#i-search"></use></svg></button>
+<span class="avatar solid">JL</span>
+</div>
+</header>
+<main class="m-body">
+<header class="card greet-card">
+<div class="m-greet"><h1>Good morning, Jordan</h1><p class="m-sub">3 orders need your attention today.</p></div>
+<button class="btn btn-primary btn-icon" type="button" aria-label="New order" title="New order"><svg class="icon"><use href="#i-plus"></use></svg></button>
+</header>
+<section class="card stat-grid" aria-label="Summary">
+<div class="stat-cell"><span class="label">Open orders</span><span class="val"><b class="stat-num">24</b><span class="delta up">+3</span></span></div>
+<div class="stat-cell"><span class="label">Active projects</span><span class="val"><b class="stat-num">11</b><span class="delta flat">2 due</span></span></div>
+<div class="stat-cell"><span class="label">Pending invoices</span><span class="val"><b class="stat-num">6</b><span class="delta up">$8,420</span></span></div>
+<div class="stat-cell"><span class="label">Assigned to me</span><span class="val"><b class="stat-num">5</b><span class="delta down">1 overdue</span></span></div>
+</section>
+<section class="card board-card m-grow" aria-label="Recent orders">
+<div class="m-head"><div><h2>Recent orders</h2><p class="card-sub">Your latest orders across all locations.</p></div><a href="#">View all</a></div>
+<div class="seg" role="tablist"><button class="on" type="button">Open<span class="count">2</span></button><button type="button">Done<span class="count">2</span></button><button type="button">Cancelled<span class="count">1</span></button></div>
+<div class="m-col m-grow">
+<a class="m-row st-pending" href="#"><span class="avatar owner">MK</span><div class="o-main"><div class="o-name">Northwind Traders</div><div class="o-sub">ORD-1042 · Due Mar 23</div></div><span class="chip pending no-dot">Pending</span></a>
+<a class="m-row st-progress" href="#"><span class="avatar owner">RC</span><div class="o-main"><div class="o-name">Bluebird Logistics</div><div class="o-sub">ORD-1041 · Due Mar 21</div></div><span class="chip progress no-dot">In progress</span></a>
+</div>
+</section>
+<section class="card note-card" aria-label="Add internal note">
+<h3 class="card-title">Add internal note</h3>
+<div class="note-form"><input class="input mono" type="text" placeholder="ORD-1042" aria-label="Order ID"><input class="input grow" type="text" placeholder="Write a note…" aria-label="Note"><button class="btn btn-dark btn-icon" type="button" aria-label="Attach note"><svg class="icon"><use href="#i-arrow-right"></use></svg></button></div>
+<ul class="note-feed">
+<li><span class="avatar owner">RC</span><span class="note-text"><a class="oid-link" href="#">ORD-1041</a>Customer approved expedited freight; ship Thursday.</span><span class="note-time">2h ago</span></li>
+</ul>
+</section>
+</main>
+</div></div>
+</div>
+<div class="ds-variant {{d.cls}}">
+<div class="ds-label">
+<button class="ds-pick" type="button" onClick="{{d.select}}"><span class="ds-badge wide">H1</span><span class="ds-name">Dark frame, panel + table</span></button>
+<div class="ds-strip">
+<button type="button" onClick="{{d.cycleDensity}}">{{d.densityLabel}}</button>
+<select aria-label="Color for this screen" value="{{d.palette}}" onChange="{{d.setPalette}}"><sc-for list="{{d.paletteOptions}}" as="o" hint-placeholder-count="3"><option value="{{o.id}}">{{o.label}}</option></sc-for></select>
+<select aria-label="Font for this screen" value="{{d.font}}" onChange="{{d.setFont}}"><sc-for list="{{d.fontOptions}}" as="o" hint-placeholder-count="3"><option value="{{o.id}}">{{o.label}}</option></sc-for></select>
+<button type="button" onClick="{{d.cycleMode}}">{{d.modeLabel}}</button>
+<button type="button" class="ds-reset" onClick="{{d.reset}}">Reset</button>
+</div>
+</div>
+<div class="ds-frame"><div class="screen desktop v-d" data-variant="H" data-mode="{{d.mode}}" data-density="{{d.density}}" data-palette="{{d.palette}}" style="--font-head: {{d.fontHead}}; --font-body: {{d.fontBody}}">
+<aside class="sidebar">
+<div class="top">
+<a class="logo" href="#" aria-label="Acme home"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><path class="m1" d="M16 2l6 10H10z"></path><path class="m2" d="M4 30l6-10 6 10z"></path><path class="m3" d="M16 30l6-10 6 10z"></path><path class="m1" d="M10 20h12l-6-8z" opacity=".55"></path></svg><span class="wordmark">Acme</span></a>
+<label class="collapse" title="Collapse sidebar"><input class="collapse-toggle" type="checkbox" checked aria-label="Collapse sidebar"><svg class="icon icon-sm"><use href="#i-chevs-left"></use></svg></label>
+</div>
+<nav class="nav" aria-label="Main">
+<div class="nav-group">
+<div class="nav-label">For me</div>
+<a href="#" class="active" aria-current="page"><svg class="icon"><use href="#i-grid"></use></svg>Dashboard</a>
+<a href="#"><svg class="icon"><use href="#i-sparkle"></use></svg>Assigned to me</a>
+</div>
+<div class="nav-group">
+<div class="nav-label">Workspace</div>
+<a href="#"><svg class="icon"><use href="#i-layers"></use></svg>Projects<svg class="icon chev"><use href="#i-chev-right"></use></svg></a>
+<a href="#"><svg class="icon"><use href="#i-clipboard"></use></svg>Orders<svg class="icon chev"><use href="#i-chev-right"></use></svg></a>
+<a href="#"><svg class="icon"><use href="#i-search"></use></svg>Search</a>
+</div>
+<div class="nav-group">
+<div class="nav-label">Tools</div>
+<a href="#"><svg class="icon"><use href="#i-pie"></use></svg>Reports</a>
+<a href="#"><svg class="icon"><use href="#i-file"></use></svg>Invoices</a>
+<a href="#"><svg class="icon"><use href="#i-user"></use></svg>Customers</a>
+</div>
+<div class="nav-group">
+<div class="nav-label">Administration</div>
+<a href="#"><svg class="icon"><use href="#i-settings"></use></svg>Settings</a>
+<a href="#"><svg class="icon"><use href="#i-users"></use></svg>Users</a>
+<a href="#"><svg class="icon"><use href="#i-shield"></use></svg>Roles</a>
+<a href="#"><svg class="icon"><use href="#i-building"></use></svg>Vendors</a>
+<a href="#"><svg class="icon"><use href="#i-pin"></use></svg>Locations</a>
+</div>
+</nav>
+<div class="foot">
+<nav class="nav" aria-label="Support"><a href="#"><svg class="icon"><use href="#i-help"></use></svg>Help docs</a></nav>
+<div class="user" role="button" tabindex="0">
+<span class="avatar solid">JL</span>
+<span><div class="name">Jordan Lee</div><div class="email">jordan@acme.co</div></span>
+<svg class="icon chev"><use href="#i-chev-down"></use></svg>
+</div>
+</div>
+</aside>
+<div class="content-wrap">
+<main class="content d-layout">
+<aside class="card d-panel" aria-label="Summary">
+<div class="d-greet"><h1>Good morning, Jordan</h1><p>Here's what's happening with your orders and projects today.</p></div>
+<button class="btn btn-primary btn-block" type="button"><svg class="icon icon-sm"><use href="#i-plus"></use></svg>New order</button>
+<div class="d-stats">
+<div class="d-stat"><div><b class="stat-num">24</b><span class="label">Open orders</span></div><span class="delta up"><svg class="icon icon-sm"><use href="#i-trend"></use></svg>+3 today</span></div>
+<div class="d-stat"><div><b class="stat-num">11</b><span class="label">Active projects</span></div><span class="delta flat">2 due today</span></div>
+<div class="d-stat"><div><b class="stat-num">6</b><span class="label">Pending invoices</span></div><span class="delta up"><svg class="icon icon-sm"><use href="#i-trend"></use></svg>$8,420 total</span></div>
+<div class="d-stat"><div><b class="stat-num">5</b><span class="label">Assigned to me</span></div><span class="delta down">1 overdue</span></div>
+</div>
+<div class="d-quick">
+<div class="eyebrow">Quick actions</div>
+<a href="#">Generate weekly report<svg class="icon icon-sm"><use href="#i-arrow-right"></use></svg></a>
+<a href="#">Create invoice batch<svg class="icon icon-sm"><use href="#i-arrow-right"></use></svg></a>
+</div>
+</aside>
+<div class="d-main">
+<section class="card table-card" aria-label="Recent orders">
+<div class="table-head">
+<div><h2>Recent orders</h2><p class="card-sub">Your latest orders across all locations, by due date.</p></div>
+<div class="seg" role="tablist"><button class="on" type="button">All</button><button type="button">Open</button><button type="button">Done</button></div>
+</div>
+<table class="by-date">
+<thead class="sr"><tr><th scope="col">Due</th><th scope="col">Order</th><th scope="col">Status</th><th scope="col">Owner</th></tr></thead>
+<tbody>
+<tr class="st-complete"><td class="when"><b>Mar 16</b><span>Mon</span></td><td><div class="o-row"><i class="dot"></i><div><div class="o-name">Ridgeline Outfitters <code class="oid">ORD-1028</code></div><div class="o-sub">Bend, OR · Expedited</div></div></div></td><td><span class="st">Complete</span></td><td><span class="avatar owner">RC</span></td></tr>
+<tr class="st-cancelled"><td class="when"><b>Mar 18</b><span>Wed</span></td><td><div class="o-row"><i class="dot"></i><div><div class="o-name">Cobalt Manufacturing Co. <code class="oid">ORD-1033</code></div><div class="o-sub">Columbus, OH · Standard</div></div></div></td><td><span class="st">Cancelled</span></td><td><span class="avatar owner">MK</span></td></tr>
+<tr class="st-complete"><td class="when"><b>Mar 19</b><span>Thu</span></td><td><div class="o-row"><i class="dot"></i><div><div class="o-name">Harbor &amp; Finch <code class="oid">ORD-1039</code></div><div class="o-sub">Austin, TX · Standard</div></div></div></td><td><span class="st">Complete</span></td><td><span class="avatar owner">GM</span></td></tr>
+<tr class="st-progress"><td class="when"><b>Mar 21</b><span>Sat</span></td><td><div class="o-row"><i class="dot"></i><div><div class="o-name">Bluebird Logistics <code class="oid">ORD-1041</code></div><div class="o-sub">Denver, CO · Expedited</div></div></div></td><td><span class="st">In progress</span></td><td><span class="avatar owner">RC</span></td></tr>
+<tr class="st-pending"><td class="when"><b>Mar 23</b><span>Mon</span></td><td><div class="o-row"><i class="dot"></i><div><div class="o-name">Northwind Traders <code class="oid">ORD-1042</code></div><div class="o-sub">Portland, OR · Standard</div></div></div></td><td><span class="st">Pending</span></td><td><span class="avatar owner">MK</span></td></tr>
+<tr class="st-invoiced"><td class="when"><b>Mar 25</b><span>Wed</span></td><td><div class="o-row"><i class="dot"></i><div><div class="o-name">Summit Partners Group <code class="oid">ORD-1036</code></div><div class="o-sub">Raleigh, NC · Custom</div></div></div></td><td><span class="st">Invoiced</span></td><td><span class="avatar owner">JS</span></td></tr>
+<tr class="st-pending"><td class="when"><b>Mar 27</b><span>Fri</span></td><td><div class="o-row"><i class="dot"></i><div><div class="o-name">Meridian Supply Co. <code class="oid">ORD-1031</code></div><div class="o-sub">Boise, ID · Standard</div></div></div></td><td><span class="st">Pending</span></td><td><span class="avatar owner">GM</span></td></tr>
+<tr class="st-progress"><td class="when"><b>Mar 28</b><span>Sat</span></td><td><div class="o-row"><i class="dot"></i><div><div class="o-name">Larkspur Interiors <code class="oid">ORD-1030</code></div><div class="o-sub">Madison, WI · Custom</div></div></div></td><td><span class="st">In progress</span></td><td><span class="avatar owner">JS</span></td></tr>
+</tbody>
+</table>
+<div class="table-foot"><a class="view-all" href="#">View all orders<svg class="icon icon-sm"><use href="#i-arrow-right"></use></svg></a></div>
+</section>
+<div class="d-tools">
+<div class="card tool">
+<h3 class="card-title">Add internal note</h3>
+<p class="card-sub">Attach a note to an order for your team.</p>
+<div class="note-inline"><input class="input mono" type="text" placeholder="Order ID (e.g. ORD-1042)" aria-label="Order ID"><button class="btn btn-dark" type="button">Attach</button></div>
+</div>
+<div class="card tool">
+<h3 class="card-title">Invoice statuses</h3>
+<p class="card-sub">Lifecycle badges for the invoice pipeline.</p>
+<div class="legend-tiles">
+<div class="ltile"><span class="chip neutral no-dot">Draft</span><span class="muted">Created but not yet sent</span></div>
+<div class="ltile"><span class="chip progress no-dot">Open</span><span class="muted">Sent, awaiting payment</span></div>
+<div class="ltile"><span class="chip complete no-dot">Paid</span><span class="muted">Payment received</span></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div></div>
+</div>
+<div class="ds-variant ds-variant-m {{dm.cls}}">
+<div class="ds-label">
+<button class="ds-pick" type="button" onClick="{{dm.select}}"><span class="ds-badge wide">H2</span><span class="ds-name">Dark frame, panel + table · mobile</span></button>
+<div class="ds-strip">
+<button type="button" onClick="{{dm.cycleDensity}}">{{dm.densityLabel}}</button>
+<select aria-label="Color for this screen" value="{{dm.palette}}" onChange="{{dm.setPalette}}"><sc-for list="{{dm.paletteOptions}}" as="o" hint-placeholder-count="3"><option value="{{o.id}}">{{o.label}}</option></sc-for></select>
+<select aria-label="Font for this screen" value="{{dm.font}}" onChange="{{dm.setFont}}"><sc-for list="{{dm.fontOptions}}" as="o" hint-placeholder-count="3"><option value="{{o.id}}">{{o.label}}</option></sc-for></select>
+<button type="button" onClick="{{dm.cycleMode}}">{{dm.modeLabel}}</button>
+<button type="button" class="ds-reset" onClick="{{dm.reset}}">Reset</button>
+</div>
+</div>
+<div class="ds-frame ds-frame-m"><div class="screen mobile v-d" data-variant="H" data-mode="{{dm.mode}}" data-density="{{dm.density}}" data-palette="{{dm.palette}}" style="--font-head: {{dm.fontHead}}; --font-body: {{dm.fontBody}}">
+<header class="m-top">
+<a class="logo" href="#" aria-label="Acme home"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><path class="m1" d="M16 2l6 10H10z"></path><path class="m2" d="M4 30l6-10 6 10z"></path><path class="m3" d="M16 30l6-10 6 10z"></path><path class="m1" d="M10 20h12l-6-8z" opacity=".55"></path></svg><span class="wordmark">Acme</span></a>
+<div class="m-actions">
+<button class="m-iconbtn" type="button" aria-label="Notifications"><svg class="icon"><use href="#i-bell"></use></svg></button>
+<span class="avatar solid">JL</span>
+</div>
+</header>
+<section class="m-frame" aria-label="Summary">
+<div class="m-greet"><h1>Good morning, Jordan</h1><p class="m-sub">Here's what's happening with your orders and projects today.</p></div>
+<button class="btn btn-primary btn-block" type="button"><svg class="icon icon-sm"><use href="#i-plus"></use></svg>New order</button>
+<div class="d-strip">
+<div class="d-stat"><b class="stat-num">24</b><span class="label">Open orders</span><span class="delta up">+3 today</span></div>
+<div class="d-stat"><b class="stat-num">11</b><span class="label">Active projects</span><span class="delta flat">2 due today</span></div>
+<div class="d-stat"><b class="stat-num">6</b><span class="label">Pending invoices</span><span class="delta up">$8,420</span></div>
+<div class="d-stat"><b class="stat-num">5</b><span class="label">Assigned to me</span><span class="delta down">1 overdue</span></div>
+</div>
+</section>
+<main class="m-sheet">
+<div class="m-head"><div><h2>Recent orders</h2><p class="card-sub">By due date, across all locations.</p></div><div class="seg sm" role="tablist"><button class="on" type="button">All</button><button type="button">Open</button><button type="button">Done</button></div></div>
+<div class="by-date" role="table" aria-label="Recent orders by due date">
+<a class="m-row st-complete" href="#"><div class="when"><b>Mar 16</b><span>Mon</span></div><i class="dot"></i><div class="o-main"><div class="o-name">Ridgeline Outfitters</div><div class="o-sub"><code class="oid">ORD-1028</code> · Expedited</div></div><span class="st">Complete</span></a>
+<a class="m-row st-cancelled" href="#"><div class="when"><b>Mar 18</b><span>Wed</span></div><i class="dot"></i><div class="o-main"><div class="o-name">Cobalt Manufacturing Co.</div><div class="o-sub"><code class="oid">ORD-1033</code> · Standard</div></div><span class="st">Cancelled</span></a>
+<a class="m-row st-complete" href="#"><div class="when"><b>Mar 19</b><span>Thu</span></div><i class="dot"></i><div class="o-main"><div class="o-name">Harbor &amp; Finch</div><div class="o-sub"><code class="oid">ORD-1039</code> · Standard</div></div><span class="st">Complete</span></a>
+<a class="m-row st-progress" href="#"><div class="when"><b>Mar 21</b><span>Sat</span></div><i class="dot"></i><div class="o-main"><div class="o-name">Bluebird Logistics</div><div class="o-sub"><code class="oid">ORD-1041</code> · Expedited</div></div><span class="st">In progress</span></a>
+<a class="m-row st-pending" href="#"><div class="when"><b>Mar 23</b><span>Mon</span></div><i class="dot"></i><div class="o-main"><div class="o-name">Northwind Traders</div><div class="o-sub"><code class="oid">ORD-1042</code> · Standard</div></div><span class="st">Pending</span></a>
+<a class="m-row st-invoiced" href="#"><div class="when"><b>Mar 25</b><span>Wed</span></div><i class="dot"></i><div class="o-main"><div class="o-name">Summit Partners Group</div><div class="o-sub"><code class="oid">ORD-1036</code> · Custom</div></div><span class="st">Invoiced</span></a>
+</div>
+<div class="m-foot">
+<a href="#">View all orders<svg class="icon icon-sm"><use href="#i-arrow-right"></use></svg></a>
+<div class="d-links"><a href="#">Weekly report</a><a href="#">Invoice batch</a></div>
+</div>
+</main>
+<nav class="m-pill" aria-label="Main">
+<a href="#" class="active" aria-current="page" title="Dashboard"><svg class="icon"><use href="#i-grid"></use></svg><span>Dashboard</span></a>
+<a href="#" title="Assigned to me"><svg class="icon"><use href="#i-sparkle"></use></svg><span>Assigned</span></a>
+<a href="#" title="Orders"><svg class="icon"><use href="#i-clipboard"></use></svg><span>Orders</span></a>
+<a href="#" title="Invoices"><svg class="icon"><use href="#i-file"></use></svg><span>Invoices</span></a>
+<a href="#" title="More"><svg class="icon"><use href="#i-more"></use></svg><span>More</span></a>
+</nav>
+</div></div>
+</div>
+</div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"density":{"editor":"enum","default":"comfortable","options":["comfortable","compact"],"section":"Tweaks"},"palette":{"editor":"enum","default":"Harbor Blue","options":["Harbor Blue","Evergreen &amp; Clay","Indigo Slate","Ink &amp; Rust","Deep Teal &amp; Plum","Navy &amp; Copper","Aubergine &amp; Rose","Forest &amp; Slate","Burgundy &amp; Olive","Amber &amp; Graphite"],"section":"Tweaks"},"font":{"editor":"enum","default":"Manrope + Public Sans","options":["Manrope + Public Sans","DM Serif Display + DM Sans","Space Grotesk + IBM Plex Sans","Playfair Display + Source Sans","Nunito + Nunito Sans"],"section":"Tweaks"},"mode":{"editor":"enum","default":"light","options":["light","dark"],"section":"Tweaks"}}'>
+const PALETTES = [{"id":"01","name":"Harbor Blue"},{"id":"02","name":"Evergreen & Clay"},{"id":"03","name":"Indigo Slate"},{"id":"04","name":"Ink & Rust"},{"id":"05","name":"Deep Teal & Plum"},{"id":"06","name":"Navy & Copper"},{"id":"07","name":"Aubergine & Rose"},{"id":"08","name":"Forest & Slate"},{"id":"09","name":"Burgundy & Olive"},{"id":"10","name":"Amber & Graphite"}];
+const FONTS = [{"id":"f1","name":"Manrope + Public Sans","head":"\"Manrope\"","body":"\"Public Sans\""},{"id":"f2","name":"DM Serif Display + DM Sans","head":"\"DM Serif Display\"","body":"\"DM Sans\""},{"id":"f3","name":"Space Grotesk + IBM Plex Sans","head":"\"Space Grotesk\"","body":"\"IBM Plex Sans\""},{"id":"f4","name":"Playfair Display + Source Sans","head":"\"Playfair Display\"","body":"\"Source Sans 3\""},{"id":"f5","name":"Nunito + Nunito Sans","head":"\"Nunito\"","body":"\"Nunito Sans\""}];
+const DENSITIES = ['comfortable', 'compact'];
+const MODES = ['light', 'dark'];
+const VARIANTS = ["a","am","b","bm","c","cm","d","dm"];
+const FB_HEAD = "ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif";
+const FB_BODY = "ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif";
+const next = (list, cur) => list[(list.indexOf(cur) + 1) % list.length];
+const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+class Component extends DCLogic {
+state = { selected: null, ov: {} };
+setOv(key, patch) { const ov = { ...this.state.ov, [key]: { ...(this.state.ov[key] || {}), ...patch } }; this.setState({ ov }); }
+renderVals() {
+const P = this.props || {};
+const base = {
+density: DENSITIES.includes(P.density) ? P.density : 'comfortable',
+palette: (PALETTES.find(p => p.name === P.palette) || PALETTES[0]).id,
+font: (FONTS.find(f => f.name === P.font) || FONTS[0]).id,
+mode: MODES.includes(P.mode) ? P.mode : 'light',
+};
+const out = {};
+for (const key of VARIANTS) {
+const ov = this.state.ov[key] || {};
+const eff = { ...base, ...ov };
+const pal = PALETTES.find(p => p.id === eff.palette) || PALETTES[0];
+const font = FONTS.find(f => f.id === eff.font) || FONTS[0];
+const overridden = Object.keys(ov).length > 0;
+const dot = (k) => (ov[k] !== undefined ? ' •' : '');
+out[key] = {
+mode: eff.mode, density: eff.density, palette: pal.id,
+fontHead: font.head + ', ' + FB_HEAD, fontBody: font.body + ', ' + FB_BODY,
+cls: (this.state.selected === key ? 'is-selected' : '') + (overridden ? ' is-overridden' : ''),
+densityLabel: 'Density: ' + cap(eff.density) + dot('density'),
+font: font.id,
+paletteOptions: PALETTES.map(p => ({ id: p.id, label: 'Color: ' + p.name + (p.id === eff.palette ? dot('palette') : '') })),
+fontOptions: FONTS.map(f => ({ id: f.id, label: 'Font: ' + f.name + (f.id === eff.font ? dot('font') : '') })),
+modeLabel: 'Mode: ' + cap(eff.mode) + dot('mode'),
+select: () => this.setState({ selected: this.state.selected === key ? null : key }),
+cycleDensity: () => this.setOv(key, { density: next(DENSITIES, eff.density) }),
+setPalette: (e) => this.setOv(key, { palette: e.target.value }),
+setFont: (e) => this.setOv(key, { font: e.target.value }),
+cycleMode: () => this.setOv(key, { mode: next(MODES, eff.mode) }),
+reset: () => { const ov = { ...this.state.ov }; delete ov[key]; this.setState({ ov }); },
+};
+}
+return out;
+}
+}
+</script>
+</body>
+</html>

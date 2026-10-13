@@ -1,0 +1,42 @@
+<!-- Dashboard D — Mobile counterpart (390 × 844). Mirrors D: greeting, New order, four large stats and the quick-action links on the dark frame; the by-date orders table on a rounded content sheet (quick-action links in its footer). Icon-only floating pill = D's collapsed rail. -->
+<div class="screen mobile v-d" data-variant="H" data-mode="light" data-density="comfortable" data-palette="01">
+  <header class="m-top">
+    <!-- @include logo -->
+    <div class="m-actions">
+      <button class="m-iconbtn" type="button" aria-label="Notifications"><svg class="icon"><use href="#i-bell"></use></svg></button>
+      <span class="avatar solid">JL</span>
+    </div>
+  </header>
+  <section class="m-frame" aria-label="Summary">
+    <div class="m-greet"><h1>Good morning, Jordan</h1><p class="m-sub">Here's what's happening with your orders and projects today.</p></div>
+    <button class="btn btn-primary btn-block" type="button"><svg class="icon icon-sm"><use href="#i-plus"></use></svg>New order</button>
+    <div class="d-strip">
+      <div class="d-stat"><b class="stat-num">24</b><span class="label">Open orders</span><span class="delta up">+3 today</span></div>
+      <div class="d-stat"><b class="stat-num">11</b><span class="label">Active projects</span><span class="delta flat">2 due today</span></div>
+      <div class="d-stat"><b class="stat-num">6</b><span class="label">Pending invoices</span><span class="delta up">$8,420</span></div>
+      <div class="d-stat"><b class="stat-num">5</b><span class="label">Assigned to me</span><span class="delta down">1 overdue</span></div>
+    </div>
+  </section>
+  <main class="m-sheet">
+    <div class="m-head"><div><h2>Recent orders</h2><p class="card-sub">By due date, across all locations.</p></div><div class="seg sm" role="tablist"><button class="on" type="button">All</button><button type="button">Open</button><button type="button">Done</button></div></div>
+    <div class="by-date" role="table" aria-label="Recent orders by due date">
+      <a class="m-row st-complete" href="#"><div class="when"><b>Mar 16</b><span>Mon</span></div><i class="dot"></i><div class="o-main"><div class="o-name">Ridgeline Outfitters</div><div class="o-sub"><code class="oid">ORD-1028</code> · Expedited</div></div><span class="st">Complete</span></a>
+      <a class="m-row st-cancelled" href="#"><div class="when"><b>Mar 18</b><span>Wed</span></div><i class="dot"></i><div class="o-main"><div class="o-name">Cobalt Manufacturing Co.</div><div class="o-sub"><code class="oid">ORD-1033</code> · Standard</div></div><span class="st">Cancelled</span></a>
+      <a class="m-row st-complete" href="#"><div class="when"><b>Mar 19</b><span>Thu</span></div><i class="dot"></i><div class="o-main"><div class="o-name">Harbor &amp; Finch</div><div class="o-sub"><code class="oid">ORD-1039</code> · Standard</div></div><span class="st">Complete</span></a>
+      <a class="m-row st-progress" href="#"><div class="when"><b>Mar 21</b><span>Sat</span></div><i class="dot"></i><div class="o-main"><div class="o-name">Bluebird Logistics</div><div class="o-sub"><code class="oid">ORD-1041</code> · Expedited</div></div><span class="st">In progress</span></a>
+      <a class="m-row st-pending" href="#"><div class="when"><b>Mar 23</b><span>Mon</span></div><i class="dot"></i><div class="o-main"><div class="o-name">Northwind Traders</div><div class="o-sub"><code class="oid">ORD-1042</code> · Standard</div></div><span class="st">Pending</span></a>
+      <a class="m-row st-invoiced" href="#"><div class="when"><b>Mar 25</b><span>Wed</span></div><i class="dot"></i><div class="o-main"><div class="o-name">Summit Partners Group</div><div class="o-sub"><code class="oid">ORD-1036</code> · Custom</div></div><span class="st">Invoiced</span></a>
+    </div>
+    <div class="m-foot">
+      <a href="#">View all orders<svg class="icon icon-sm"><use href="#i-arrow-right"></use></svg></a>
+      <div class="d-links"><a href="#">Weekly report</a><a href="#">Invoice batch</a></div>
+    </div>
+  </main>
+  <nav class="m-pill" aria-label="Main">
+    <a href="#" class="active" aria-current="page" title="Dashboard"><svg class="icon"><use href="#i-grid"></use></svg><span>Dashboard</span></a>
+    <a href="#" title="Assigned to me"><svg class="icon"><use href="#i-sparkle"></use></svg><span>Assigned</span></a>
+    <a href="#" title="Orders"><svg class="icon"><use href="#i-clipboard"></use></svg><span>Orders</span></a>
+    <a href="#" title="Invoices"><svg class="icon"><use href="#i-file"></use></svg><span>Invoices</span></a>
+    <a href="#" title="More"><svg class="icon"><use href="#i-more"></use></svg><span>More</span></a>
+  </nav>
+</div>

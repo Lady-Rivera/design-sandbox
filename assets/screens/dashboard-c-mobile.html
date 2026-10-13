@@ -1,0 +1,38 @@
+<!-- Dashboard C — Mobile counterpart (390 × 844). Mirrors C: greeting card with New order, the four compact stats, the Open / Done / Cancelled board as a segmented control, internal note with its feed. Dark top bar with a menu button (C's top nav) — no tab bar. -->
+<div class="screen mobile v-c" data-variant="G" data-mode="light" data-density="comfortable" data-palette="01">
+  <header class="m-top">
+    <button class="m-iconbtn" type="button" aria-label="Menu"><svg class="icon"><use href="#i-menu"></use></svg></button>
+    <!-- @include logo -->
+    <div class="m-actions">
+      <button class="m-iconbtn" type="button" aria-label="Search"><svg class="icon"><use href="#i-search"></use></svg></button>
+      <span class="avatar solid">JL</span>
+    </div>
+  </header>
+  <main class="m-body">
+    <header class="card greet-card">
+      <div class="m-greet"><h1>Good morning, Jordan</h1><p class="m-sub">3 orders need your attention today.</p></div>
+      <button class="btn btn-primary btn-icon" type="button" aria-label="New order" title="New order"><svg class="icon"><use href="#i-plus"></use></svg></button>
+    </header>
+    <section class="card stat-grid" aria-label="Summary">
+      <div class="stat-cell"><span class="label">Open orders</span><span class="val"><b class="stat-num">24</b><span class="delta up">+3</span></span></div>
+      <div class="stat-cell"><span class="label">Active projects</span><span class="val"><b class="stat-num">11</b><span class="delta flat">2 due</span></span></div>
+      <div class="stat-cell"><span class="label">Pending invoices</span><span class="val"><b class="stat-num">6</b><span class="delta up">$8,420</span></span></div>
+      <div class="stat-cell"><span class="label">Assigned to me</span><span class="val"><b class="stat-num">5</b><span class="delta down">1 overdue</span></span></div>
+    </section>
+    <section class="card board-card m-grow" aria-label="Recent orders">
+      <div class="m-head"><div><h2>Recent orders</h2><p class="card-sub">Your latest orders across all locations.</p></div><a href="#">View all</a></div>
+      <div class="seg" role="tablist"><button class="on" type="button">Open<span class="count">2</span></button><button type="button">Done<span class="count">2</span></button><button type="button">Cancelled<span class="count">1</span></button></div>
+      <div class="m-col m-grow">
+        <a class="m-row st-pending" href="#"><span class="avatar owner">MK</span><div class="o-main"><div class="o-name">Northwind Traders</div><div class="o-sub">ORD-1042 · Due Mar 23</div></div><span class="chip pending no-dot">Pending</span></a>
+        <a class="m-row st-progress" href="#"><span class="avatar owner">RC</span><div class="o-main"><div class="o-name">Bluebird Logistics</div><div class="o-sub">ORD-1041 · Due Mar 21</div></div><span class="chip progress no-dot">In progress</span></a>
+      </div>
+    </section>
+    <section class="card note-card" aria-label="Add internal note">
+      <h3 class="card-title">Add internal note</h3>
+      <div class="note-form"><input class="input mono" type="text" placeholder="ORD-1042" aria-label="Order ID"><input class="input grow" type="text" placeholder="Write a note…" aria-label="Note"><button class="btn btn-dark btn-icon" type="button" aria-label="Attach note"><svg class="icon"><use href="#i-arrow-right"></use></svg></button></div>
+      <ul class="note-feed">
+        <li><span class="avatar owner">RC</span><span class="note-text"><a class="oid-link" href="#">ORD-1041</a>Customer approved expedited freight; ship Thursday.</span><span class="note-time">2h ago</span></li>
+      </ul>
+    </section>
+  </main>
+</div>

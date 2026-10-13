@@ -1,0 +1,22 @@
+<!-- Dashboard A — Light sidebar. Recreated from screenshot 1; content genericized. -->
+<div class="screen desktop v-a" data-variant="E" data-mode="light" data-density="comfortable" data-palette="01">
+  <!-- @include sidebar -->
+  <main class="content">
+    <header class="page-head">
+      <div><h1>Good morning, Jordan</h1><p>Here's what's happening with your orders and projects today.</p></div>
+      <div class="page-actions">
+        <button class="btn btn-outline btn-icon" type="button" aria-label="Notifications"><svg class="icon"><use href="#i-bell"></use></svg></button>
+        <button class="btn btn-primary" type="button"><svg class="icon icon-sm"><use href="#i-plus"></use></svg>New order</button>
+      </div>
+    </header>
+    <!-- @include stats -->
+    <section class="card table-card" aria-label="Recent orders">
+      <div class="table-head">
+        <div><h2>Recent orders</h2><p class="card-sub">Your latest orders across all locations.</p></div>
+        <div class="table-tools"><div class="seg" role="tablist"><button class="on" type="button">All</button><button type="button">Open</button><button type="button">Done</button></div><a class="btn btn-outline view-all" href="#">View all orders<svg class="icon icon-sm"><use href="#i-chev-right"></use></svg></a></div>
+      </div>
+      <!-- @include table -->
+    </section>
+    <!-- @include bottom-cards -->
+  </main>
+</div>

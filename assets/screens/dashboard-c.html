@@ -1,0 +1,96 @@
+<!-- Dashboard C — Top nav (the only template without a sidebar); greeting bar, compact stat column, Open / Done / Cancelled board, note block with a feed. Built from Abby's visual 2 (2026-09-11); shared data pool; content genericized. -->
+<div class="screen desktop v-c topnav" data-variant="G" data-mode="light" data-density="comfortable" data-palette="01">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <!-- @include logo -->
+      <nav class="topnav-links" aria-label="Main">
+        <a href="#" class="active" aria-current="page"><svg class="icon"><use href="#i-grid"></use></svg>Dashboard</a>
+        <a href="#"><svg class="icon"><use href="#i-sparkle"></use></svg>Assigned to me</a>
+        <a href="#"><svg class="icon"><use href="#i-layers"></use></svg>Projects</a>
+        <a href="#"><svg class="icon"><use href="#i-clipboard"></use></svg>Orders</a>
+        <a href="#"><svg class="icon"><use href="#i-pie"></use></svg>Reports</a>
+        <a href="#"><svg class="icon"><use href="#i-file"></use></svg>Invoices</a>
+        <a href="#"><svg class="icon"><use href="#i-user"></use></svg>Customers</a>
+        <a href="#">More<svg class="icon"><use href="#i-chev-down"></use></svg></a>
+      </nav>
+      <div class="topbar-right">
+        <button class="search-pill" type="button"><svg class="icon icon-sm"><use href="#i-search"></use></svg>Search<kbd>⌘K</kbd></button>
+        <button class="icon-btn" type="button" aria-label="Notifications"><svg class="icon"><use href="#i-bell"></use></svg></button>
+        <div class="user" role="button" tabindex="0" aria-label="Jordan Lee, account menu"><span class="avatar solid">JL</span><svg class="icon chev"><use href="#i-chev-down"></use></svg></div>
+      </div>
+    </div>
+  </header>
+  <main class="content">
+    <header class="card greet-bar">
+      <div class="greet"><h1>Good morning, Jordan</h1><p>Here's what's happening with your orders and projects today.</p></div>
+      <div class="page-actions">
+        <button class="btn btn-primary" type="button"><svg class="icon icon-sm"><use href="#i-plus"></use></svg>New order</button>
+      </div>
+    </header>
+    <div class="c-grid">
+      <aside class="c-side" aria-label="Summary and tools">
+        <div class="card stat-rows">
+          <div class="stat-row"><span class="label">Open orders</span><span class="val"><b class="stat-num">24</b><span class="delta up">+3</span></span></div>
+          <div class="stat-row"><span class="label">Active projects</span><span class="val"><b class="stat-num">11</b><span class="delta flat">2 due</span></span></div>
+          <div class="stat-row"><span class="label">Pending invoices</span><span class="val"><b class="stat-num">6</b><span class="delta up">$8,420</span></span></div>
+          <div class="stat-row"><span class="label">Assigned to me</span><span class="val"><b class="stat-num">5</b><span class="delta down">1 overdue</span></span></div>
+        </div>
+        <div class="card tool">
+          <h3 class="card-title">Quick actions</h3>
+          <div class="actions">
+            <button class="quick" type="button"><svg class="icon"><use href="#i-pie"></use></svg>Generate weekly report</button>
+            <button class="quick" type="button"><svg class="icon"><use href="#i-file"></use></svg>Create invoice batch</button>
+            <button class="quick" type="button"><svg class="icon"><use href="#i-clipboard"></use></svg>Export orders</button>
+          </div>
+        </div>
+        <div class="card tool">
+          <h3 class="card-title">Invoice statuses</h3>
+          <p class="card-sub">Lifecycle badges for the invoice pipeline.</p>
+          <div class="legend legend-split">
+            <div class="row"><span class="chip neutral no-dot">Draft</span><span class="muted">Created but not yet sent</span></div>
+            <div class="row"><span class="chip progress no-dot">Open</span><span class="muted">Sent, awaiting payment</span></div>
+            <div class="row"><span class="chip complete no-dot">Paid</span><span class="muted">Payment received</span></div>
+            <div class="row"><span class="chip cancelled no-dot">Overdue</span><span class="muted">Past due, unpaid</span></div>
+            <div class="row"><span class="chip neutral no-dot">Void</span><span class="muted">Cancelled before payment</span></div>
+          </div>
+        </div>
+      </aside>
+      <div class="c-main">
+        <section class="card board-card" aria-label="Recent orders">
+          <div class="between board-head">
+            <div><h2>Recent orders</h2><p class="card-sub">Your latest orders across all locations.</p></div>
+            <a class="view-all" href="#">View all orders<svg class="icon icon-sm"><use href="#i-chev-right"></use></svg></a>
+          </div>
+          <div class="board">
+            <div class="col">
+              <div class="col-head"><span>Open</span><span class="count">2</span></div>
+              <div class="card bcard is-hover st-pending"><div class="between"><code class="oid">ORD-1042</code><span class="chip pending no-dot">Pending</span></div><div class="o-name">Northwind Traders</div><div class="o-sub">Portland, OR · Standard</div><div class="between bfoot"><span class="due">Due Mar 23</span><span class="avatar owner">MK</span></div></div>
+              <div class="card bcard is-hover st-progress"><div class="between"><code class="oid">ORD-1041</code><span class="chip progress no-dot">In progress</span></div><div class="o-name">Bluebird Logistics</div><div class="o-sub">Denver, CO · Expedited</div><div class="between bfoot"><span class="due">Due Mar 21</span><span class="avatar owner">RC</span></div></div>
+            </div>
+            <div class="col">
+              <div class="col-head"><span>Done</span><span class="count">2</span></div>
+              <div class="card bcard is-hover st-complete"><div class="between"><code class="oid">ORD-1039</code><span class="chip complete no-dot">Complete</span></div><div class="o-name">Harbor &amp; Finch</div><div class="o-sub">Austin, TX · Standard</div><div class="between bfoot"><span class="due">Due Mar 19</span><span class="avatar owner">GM</span></div></div>
+              <div class="card bcard is-hover st-invoiced"><div class="between"><code class="oid">ORD-1036</code><span class="chip invoiced no-dot">Invoiced</span></div><div class="o-name">Summit Partners Group</div><div class="o-sub">Raleigh, NC · Custom</div><div class="between bfoot"><span class="due">Due Mar 25</span><span class="avatar owner">JS</span></div></div>
+            </div>
+            <div class="col">
+              <div class="col-head"><span>Cancelled</span><span class="count">1</span></div>
+              <div class="card bcard is-hover st-cancelled"><div class="between"><code class="oid">ORD-1033</code><span class="chip cancelled no-dot">Cancelled</span></div><div class="o-name">Cobalt Manufacturing Co.</div><div class="o-sub">Columbus, OH · Standard</div><div class="between bfoot"><span class="due">Due Mar 18</span><span class="avatar owner">MK</span></div></div>
+            </div>
+          </div>
+        </section>
+        <section class="card note-card" aria-label="Add internal note">
+          <div class="note-form">
+            <div class="note-intro"><h3 class="card-title">Add internal note</h3><p class="card-sub">Attach a note to an order for your team.</p></div>
+            <input class="input mono" type="text" placeholder="Order ID (e.g. ORD-1042)" aria-label="Order ID">
+            <input class="input grow" type="text" placeholder="Write a note…" aria-label="Note">
+            <button class="btn btn-dark" type="button">Attach note</button>
+          </div>
+          <ul class="note-feed">
+            <li><span class="avatar owner">RC</span><a class="oid-link" href="#">ORD-1041</a><span class="note-text">Customer approved expedited freight; ship Thursday.</span><span class="note-time">2h ago</span></li>
+            <li><span class="avatar owner">MK</span><a class="oid-link" href="#">ORD-1042</a><span class="note-text">Waiting on PO number from Northwind before invoicing.</span><span class="note-time">Yesterday</span></li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>

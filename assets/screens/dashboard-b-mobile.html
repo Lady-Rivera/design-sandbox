@@ -1,0 +1,54 @@
+<!-- Dashboard B — Mobile counterpart (390 × 844). Mirrors B: greeting, 2×2 stat tiles, edge-bar order list with All/Open/Done tabs, quick actions. Dark header (B's dark sidebar) with the tiles straddling its edge; dark tab bar with a docked New order button. -->
+<div class="screen mobile v-b" data-variant="F" data-mode="light" data-density="comfortable" data-palette="01">
+  <header class="m-hero">
+    <div class="m-top">
+      <!-- @include logo -->
+      <div class="m-actions">
+        <button class="m-iconbtn" type="button" aria-label="Notifications"><svg class="icon"><use href="#i-bell"></use></svg></button>
+        <span class="avatar solid">JL</span>
+      </div>
+    </div>
+    <div class="m-greet"><h1>Good morning, Jordan</h1><p class="m-sub">Here's what's happening with your orders and projects today.</p></div>
+  </header>
+  <main class="m-body">
+    <section class="tiles" aria-label="Summary">
+      <div class="card tile"><span class="label">Open orders</span><span class="stat-num">24</span><span class="delta up">+3 today</span></div>
+      <div class="card tile"><span class="label">Active projects</span><span class="stat-num">11</span><span class="delta flat">2 due today</span></div>
+      <div class="card tile"><span class="label">Pending invoices</span><span class="stat-num">6</span><span class="delta up">$8,420 total</span></div>
+      <div class="card tile"><span class="label">Assigned to me</span><span class="stat-num">5</span><span class="delta down">1 overdue</span></div>
+    </section>
+    <section class="m-stack m-grow" aria-label="Recent orders">
+      <div class="m-head"><h2>Recent orders</h2><div class="tabs" role="tablist"><button class="on" type="button" role="tab" aria-selected="true">All</button><button type="button" role="tab">Open</button><button type="button" role="tab">Done</button></div></div>
+      <ul class="order-list m-grow">
+        <li class="card order st-pending">
+          <div class="o-main"><div class="o-name">Northwind Traders</div><div class="o-sub">ORD-1042 · <span class="st">Pending</span></div></div>
+          <span class="o-date">Mar 23</span>
+          <span class="avatar owner">MK</span>
+        </li>
+        <li class="card order st-progress">
+          <div class="o-main"><div class="o-name">Bluebird Logistics</div><div class="o-sub">ORD-1041 · <span class="st">In progress</span></div></div>
+          <span class="o-date">Mar 21</span>
+          <span class="avatar owner">RC</span>
+        </li>
+        <li class="card order st-complete">
+          <div class="o-main"><div class="o-name">Harbor &amp; Finch</div><div class="o-sub">ORD-1039 · <span class="st">Complete</span></div></div>
+          <span class="o-date">Mar 19</span>
+          <span class="avatar owner">GM</span>
+        </li>
+      </ul>
+    </section>
+    <section class="m-chips" aria-label="Quick actions">
+      <button class="m-chip" type="button"><span class="icon-tile"><svg class="icon"><use href="#i-pie"></use></svg></span>Weekly report</button>
+      <button class="m-chip" type="button"><span class="icon-tile"><svg class="icon"><use href="#i-file"></use></svg></span>Invoice batch</button>
+      <button class="m-chip" type="button"><span class="icon-tile"><svg class="icon"><use href="#i-clipboard"></use></svg></span>Export orders</button>
+      <button class="m-chip" type="button"><span class="icon-tile"><svg class="icon"><use href="#i-user"></use></svg></span>Add customer</button>
+    </section>
+  </main>
+  <nav class="tabbar dark" aria-label="Main">
+    <a href="#" class="active" aria-current="page"><svg class="icon"><use href="#i-grid"></use></svg>Dashboard</a>
+    <a href="#"><svg class="icon"><use href="#i-clipboard"></use></svg>Orders</a>
+    <button class="m-dock" type="button" aria-label="New order"><svg class="icon"><use href="#i-plus"></use></svg></button>
+    <a href="#"><svg class="icon"><use href="#i-file"></use></svg>Invoices</a>
+    <a href="#"><svg class="icon"><use href="#i-more"></use></svg>More</a>
+  </nav>
+</div>

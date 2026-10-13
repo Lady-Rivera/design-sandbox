@@ -1,0 +1,97 @@
+{
+  "fetchedAt": "2026-09-10T14:57:21Z",
+  "license": "SIL Open Font License 1.1 (all Google Fonts used here)",
+  "faces": [
+    {
+      "family": "Manrope",
+      "style": "normal",
+      "weight": "500 800",
+      "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
+      "file": "manrope-500_800.woff2",
+      "bytes": 24576,
+      "query": "Manrope:wght@500..800"
+    },
+    {
+      "family": "Public Sans",
+      "style": "normal",
+      "weight": "400 600",
+      "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
+      "file": "public-sans-400_600.woff2",
+      "bytes": 26636,
+      "query": "Public+Sans:wght@400..600"
+    },
+    {
+      "family": "DM Serif Display",
+      "style": "normal",
+      "weight": "400",
+      "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
+      "file": "dm-serif-display-400.woff2",
+      "bytes": 17844,
+      "query": "DM+Serif+Display"
+    },
+    {
+      "family": "DM Sans",
+      "style": "normal",
+      "weight": "400 700",
+      "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
+      "file": "dm-sans-400_700.woff2",
+      "bytes": 36980,
+      "query": "DM+Sans:wght@400..700"
+    },
+    {
+      "family": "Space Grotesk",
+      "style": "normal",
+      "weight": "500 700",
+      "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
+      "file": "space-grotesk-500_700.woff2",
+      "bytes": 22320,
+      "query": "Space+Grotesk:wght@500..700"
+    },
+    {
+      "family": "IBM Plex Sans",
+      "style": "normal",
+      "weight": "400 600",
+      "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
+      "file": "ibm-plex-sans-400_600.woff2",
+      "bytes": 40240,
+      "query": "IBM+Plex+Sans:wght@400..600"
+    },
+    {
+      "family": "Playfair Display",
+      "style": "normal",
+      "weight": "500 700",
+      "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
+      "file": "playfair-display-500_700.woff2",
+      "bytes": 38460,
+      "query": "Playfair+Display:wght@500..700"
+    },
+    {
+      "family": "Source Sans 3",
+      "style": "normal",
+      "weight": "400 600",
+      "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
+      "file": "source-sans-3-400_600.woff2",
+      "bytes": 28792,
+      "query": "Source+Sans+3:wght@400..600"
+    },
+    {
+      "family": "Nunito",
+      "style": "normal",
+      "weight": "600 800",
+      "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
+      "file": "nunito-600_800.woff2",
+      "bytes": 39152,
+      "query": "Nunito:wght@600..800"
+    },
+    {
+      "family": "Nunito Sans",
+      "style": "normal",
+      "weight": "400 600",
+      "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
+      "file": "nunito-sans-400_600.woff2",
+      "bytes": 30948,
+      "query": "Nunito+Sans:wght@400..600"
+    }
+  ],
+  "note": "latin subset only; variable-weight files where Google serves one. Fetched on the maintainer's Mac with scripts/fetch-fonts.sh."
+}

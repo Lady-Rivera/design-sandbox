@@ -1,0 +1,154 @@
+{
+  "_readme": [
+    "The ten approved palettes \u2014 the ONE place they are defined. build.mjs reads this file, writes the matching",
+    "rules into theme.css (between the @PALETTES markers) and the swatches on the page, and checks contrast.",
+    "Each palette: id (two digits, keep stable \u2014 saved meetings point at it), name, light = [primary, secondary, tertiary]",
+    "as hex for a white surface, and optional dark = the same three for the dark surface. Leave dark out and the build",
+    "derives it by lifting the light values (hue and saturation kept). The build fails loudly if a light value falls",
+    "below 4.5:1 as text on #F1F2F5 or a dark value below 6:1 on #171B22 \u2014 fix the hex, or say --allow-low-contrast.",
+    "After editing: node scripts/build.mjs --out prebuilt --minify --emit-md references  (then delete prebuilt/build-info.json),",
+    "update the table in references/palettes.md, and republish."
+  ],
+  "palettes": [
+    {
+      "id": "01",
+      "name": "Harbor Blue",
+      "light": [
+        "#23508F",
+        "#1F6F73",
+        "#8A5A17"
+      ],
+      "dark": [
+        "#6C9CDF",
+        "#2BA8AE",
+        "#D4881E"
+      ]
+    },
+    {
+      "id": "02",
+      "name": "Evergreen & Clay",
+      "light": [
+        "#15624A",
+        "#9A4A26",
+        "#7A5C10"
+      ],
+      "dark": [
+        "#22B184",
+        "#DB865F",
+        "#C69415"
+      ]
+    },
+    {
+      "id": "03",
+      "name": "Indigo Slate",
+      "light": [
+        "#3F4A8C",
+        "#6B4F8A",
+        "#2F6B5E"
+      ],
+      "dark": [
+        "#8C96CE",
+        "#A891C2",
+        "#49AD97"
+      ]
+    },
+    {
+      "id": "04",
+      "name": "Ink & Rust",
+      "light": [
+        "#1F2328",
+        "#A34A2A",
+        "#2E5C8A"
+      ],
+      "dark": [
+        "#919CAB",
+        "#DA8263",
+        "#6C9ED1"
+      ]
+    },
+    {
+      "id": "05",
+      "name": "Deep Teal & Plum",
+      "light": [
+        "#0F5F63",
+        "#6E3563",
+        "#8A5A00"
+      ],
+      "dark": [
+        "#17AFB7",
+        "#C888BC",
+        "#DC8F00"
+      ]
+    },
+    {
+      "id": "06",
+      "name": "Navy & Copper",
+      "light": [
+        "#1F3A7A",
+        "#8F5430",
+        "#4A6318"
+      ],
+      "dark": [
+        "#7A99E0",
+        "#CE8B62",
+        "#7CA825"
+      ]
+    },
+    {
+      "id": "07",
+      "name": "Aubergine & Rose",
+      "light": [
+        "#5E2758",
+        "#964258",
+        "#1F6B5C"
+      ],
+      "dark": [
+        "#CE83C6",
+        "#CC8699",
+        "#2EAD94"
+      ]
+    },
+    {
+      "id": "08",
+      "name": "Forest & Slate",
+      "light": [
+        "#1E4A2E",
+        "#3B4A5E",
+        "#5B4E9A"
+      ],
+      "dark": [
+        "#45B26C",
+        "#879BB5",
+        "#A096CC"
+      ]
+    },
+    {
+      "id": "09",
+      "name": "Burgundy & Olive",
+      "light": [
+        "#7A2233",
+        "#55622A",
+        "#2A5C73"
+      ],
+      "dark": [
+        "#DE7F92",
+        "#8EA543",
+        "#5BA5C7"
+      ]
+    },
+    {
+      "id": "10",
+      "name": "Amber & Graphite",
+      "light": [
+        "#2E2B27",
+        "#8A5A17",
+        "#2F5D8A"
+      ],
+      "dark": [
+        "#D4881E",
+        "#979DA8",
+        "#6D9FD0"
+      ]
+    }
+  ]
+}
