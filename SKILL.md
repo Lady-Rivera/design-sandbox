@@ -50,6 +50,7 @@ Anything else in a rep's message — a URL, a note about the client, "they hate 
 
 - **`design-sandbox.artifact.html`** — the sandbox page, ready for the Artifact tool (it has no doctype/html/head/body of its own; the tool adds them).
 - **`design-sandbox.html`** — the same page as a complete file that opens in any browser.
+- **`design-sandbox.embedded.html`** — the same page for a host that frames it (postMessage bridge, read-only mode, host-styled chrome); not for publishing, see `references/embedding.md`.
 - **`Main.dc.html`, `Dashboard.dc.html`, `canvas.json`** — the two sets as Claude Design artboards, kept for sessions that want a canvas instead (also as code blocks in `references/artboard-*.md`).
 
 Whichever you use, the content is used **byte for byte**. Never retype it from memory, never summarize it, never "assemble the templates directly", never write a version of the sandbox from the description in this file. A run that cannot read either form **stops and says exactly that**. The tells that something was written rather than copied: density options that are not exactly *comfortable · compact*; a palette list that is not the ten names in `references/palettes.md` (Harbor Blue, Evergreen & Clay, Indigo Slate, Ink & Rust, Deep Teal & Plum, Navy & Copper, Aubergine & Rose, Forest & Slate, Burgundy & Olive, Amber & Graphite); font options that are not the five pairs in `references/font-pairs.md`; layouts that differ from `references/running-the-sandbox.md` § What is on the page. Any of those means the client would be shown something nobody reviewed.
