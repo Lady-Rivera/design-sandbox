@@ -1,0 +1,17 @@
+{
+  "themeSentMsAfterTyping": 53,
+  "messagesAfterTyping": [
+    {
+      "reason": "general",
+      "general": "Typed just before a theme change"
+    }
+  ],
+  "textarea": {
+    "value": "Typed just before a theme change",
+    "dark": true
+  },
+  "clientSent": "Round Trip Co (synthetic)",
+  "clientPosted": [
+    "Round Trip Co (synthetic)"
+  ]
+}

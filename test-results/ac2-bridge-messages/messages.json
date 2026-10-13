@@ -1,0 +1,802 @@
+{
+  "sandboxed": {
+    "steps": [
+      {
+        "reason": "lock",
+        "got": 1
+      },
+      {
+        "reason": "unlock",
+        "got": 1
+      },
+      {
+        "reason": "override",
+        "got": 1
+      },
+      {
+        "reason": "note",
+        "got": 1
+      },
+      {
+        "reason": "general",
+        "got": 1
+      }
+    ],
+    "messages": [
+      {
+        "frame": "src",
+        "dir": "in",
+        "msg": {
+          "type": "design-sandbox:state",
+          "state": {
+            "v": 2,
+            "client": null,
+            "bar": {
+              "density": "compact",
+              "palette": "03",
+              "font": "f3",
+              "mode": "dark",
+              "navicons": "off",
+              "at": 1760000000000
+            },
+            "ov": {
+              "login/a": {
+                "palette": "02",
+                "density": "comfortable",
+                "at": 1760000100000
+              },
+              "dashboard/a": {
+                "_del": true,
+                "at": 1791924640805
+              }
+            },
+            "locks": {
+              "login/c": {
+                "density": "comfortable",
+                "palette": "05",
+                "font": "f2",
+                "mode": "light",
+                "navicons": "on",
+                "at": 1760000200000
+              },
+              "dashboard/b~m": {
+                "density": "compact",
+                "palette": "07",
+                "font": "f4",
+                "mode": "dark",
+                "navicons": "on",
+                "at": 1760000300000
+              },
+              "dashboard/a": {
+                "navicons": "off",
+                "density": "compact",
+                "palette": "03",
+                "font": "f3",
+                "mode": "dark",
+                "at": 1791924640805
+              }
+            },
+            "notes": {
+              "login/c": {
+                "text": "Client prefers this split layout for the sign-in page.",
+                "at": 1760000400000
+              },
+              "dashboard/a": {
+                "text": "Show the KPI cards above the fold.",
+                "at": 1760000500000
+              }
+            },
+            "general": {
+              "text": "Synthetic sample state for the embed fixture — no client data.",
+              "at": 1760000600000
+            },
+            "savedAt": "2026-10-13T20:50:40.805Z"
+          },
+          "reason": "lock",
+          "v": 1
+        },
+        "t": 1791924640811
+      },
+      {
+        "frame": "src",
+        "dir": "in",
+        "msg": {
+          "type": "design-sandbox:state",
+          "state": {
+            "v": 2,
+            "client": null,
+            "bar": {
+              "density": "compact",
+              "palette": "03",
+              "font": "f3",
+              "mode": "dark",
+              "navicons": "off",
+              "at": 1760000000000
+            },
+            "ov": {
+              "login/a": {
+                "palette": "02",
+                "density": "comfortable",
+                "at": 1760000100000
+              },
+              "dashboard/a": {
+                "_del": true,
+                "at": 1791924640841
+              }
+            },
+            "locks": {
+              "login/c": {
+                "density": "comfortable",
+                "palette": "05",
+                "font": "f2",
+                "mode": "light",
+                "navicons": "on",
+                "at": 1760000200000
+              },
+              "dashboard/b~m": {
+                "density": "compact",
+                "palette": "07",
+                "font": "f4",
+                "mode": "dark",
+                "navicons": "on",
+                "at": 1760000300000
+              },
+              "dashboard/a": {
+                "_del": true,
+                "at": 1791924640841
+              }
+            },
+            "notes": {
+              "login/c": {
+                "text": "Client prefers this split layout for the sign-in page.",
+                "at": 1760000400000
+              },
+              "dashboard/a": {
+                "text": "Show the KPI cards above the fold.",
+                "at": 1760000500000
+              }
+            },
+            "general": {
+              "text": "Synthetic sample state for the embed fixture — no client data.",
+              "at": 1760000600000
+            },
+            "savedAt": "2026-10-13T20:50:40.841Z"
+          },
+          "reason": "unlock",
+          "v": 1
+        },
+        "t": 1791924640845
+      },
+      {
+        "frame": "src",
+        "dir": "in",
+        "msg": {
+          "type": "design-sandbox:state",
+          "state": {
+            "v": 2,
+            "client": null,
+            "bar": {
+              "density": "compact",
+              "palette": "03",
+              "font": "f3",
+              "mode": "dark",
+              "navicons": "off",
+              "at": 1760000000000
+            },
+            "ov": {
+              "login/a": {
+                "palette": "02",
+                "density": "comfortable",
+                "at": 1760000100000
+              },
+              "dashboard/a": {
+                "_del": true,
+                "at": 1791924640841
+              },
+              "login/b": {
+                "density": "comfortable",
+                "at": 1791924640919
+              }
+            },
+            "locks": {
+              "login/c": {
+                "density": "comfortable",
+                "palette": "05",
+                "font": "f2",
+                "mode": "light",
+                "navicons": "on",
+                "at": 1760000200000
+              },
+              "dashboard/b~m": {
+                "density": "compact",
+                "palette": "07",
+                "font": "f4",
+                "mode": "dark",
+                "navicons": "on",
+                "at": 1760000300000
+              },
+              "dashboard/a": {
+                "_del": true,
+                "at": 1791924640841
+              }
+            },
+            "notes": {
+              "login/c": {
+                "text": "Client prefers this split layout for the sign-in page.",
+                "at": 1760000400000
+              },
+              "dashboard/a": {
+                "text": "Show the KPI cards above the fold.",
+                "at": 1760000500000
+              }
+            },
+            "general": {
+              "text": "Synthetic sample state for the embed fixture — no client data.",
+              "at": 1760000600000
+            },
+            "savedAt": "2026-10-13T20:50:40.919Z"
+          },
+          "reason": "override",
+          "v": 1
+        },
+        "t": 1791924640924
+      },
+      {
+        "frame": "src",
+        "dir": "in",
+        "msg": {
+          "type": "design-sandbox:state",
+          "state": {
+            "v": 2,
+            "client": null,
+            "bar": {
+              "density": "compact",
+              "palette": "03",
+              "font": "f3",
+              "mode": "dark",
+              "navicons": "off",
+              "at": 1760000000000
+            },
+            "ov": {
+              "login/a": {
+                "palette": "02",
+                "density": "comfortable",
+                "at": 1760000100000
+              },
+              "dashboard/a": {
+                "_del": true,
+                "at": 1791924640841
+              },
+              "login/b": {
+                "density": "comfortable",
+                "at": 1791924640919
+              }
+            },
+            "locks": {
+              "login/c": {
+                "density": "comfortable",
+                "palette": "05",
+                "font": "f2",
+                "mode": "light",
+                "navicons": "on",
+                "at": 1760000200000
+              },
+              "dashboard/b~m": {
+                "density": "compact",
+                "palette": "07",
+                "font": "f4",
+                "mode": "dark",
+                "navicons": "on",
+                "at": 1760000300000
+              },
+              "dashboard/a": {
+                "_del": true,
+                "at": 1791924640841
+              }
+            },
+            "notes": {
+              "login/c": {
+                "text": "Client prefers this split layout for the sign-in page.",
+                "at": 1760000400000
+              },
+              "dashboard/a": {
+                "text": "Show the KPI cards above the fold.",
+                "at": 1760000500000
+              },
+              "login/b": {
+                "text": "AC2 per-screen note on login/b",
+                "at": 1791924641429
+              }
+            },
+            "general": {
+              "text": "Synthetic sample state for the embed fixture — no client data.",
+              "at": 1760000600000
+            },
+            "savedAt": "2026-10-13T20:50:41.430Z"
+          },
+          "reason": "note",
+          "v": 1
+        },
+        "t": 1791924641437
+      },
+      {
+        "frame": "src",
+        "dir": "in",
+        "msg": {
+          "type": "design-sandbox:state",
+          "state": {
+            "v": 2,
+            "client": null,
+            "bar": {
+              "density": "compact",
+              "palette": "03",
+              "font": "f3",
+              "mode": "dark",
+              "navicons": "off",
+              "at": 1760000000000
+            },
+            "ov": {
+              "login/a": {
+                "palette": "02",
+                "density": "comfortable",
+                "at": 1760000100000
+              },
+              "dashboard/a": {
+                "_del": true,
+                "at": 1791924640841
+              },
+              "login/b": {
+                "density": "comfortable",
+                "at": 1791924640919
+              }
+            },
+            "locks": {
+              "login/c": {
+                "density": "comfortable",
+                "palette": "05",
+                "font": "f2",
+                "mode": "light",
+                "navicons": "on",
+                "at": 1760000200000
+              },
+              "dashboard/b~m": {
+                "density": "compact",
+                "palette": "07",
+                "font": "f4",
+                "mode": "dark",
+                "navicons": "on",
+                "at": 1760000300000
+              },
+              "dashboard/a": {
+                "_del": true,
+                "at": 1791924640841
+              }
+            },
+            "notes": {
+              "login/c": {
+                "text": "Client prefers this split layout for the sign-in page.",
+                "at": 1760000400000
+              },
+              "dashboard/a": {
+                "text": "Show the KPI cards above the fold.",
+                "at": 1760000500000
+              },
+              "login/b": {
+                "text": "AC2 per-screen note on login/b",
+                "at": 1791924641429
+              }
+            },
+            "general": {
+              "text": "AC2 general note",
+              "at": 1791924641871
+            },
+            "savedAt": "2026-10-13T20:50:41.871Z"
+          },
+          "reason": "general",
+          "v": 1
+        },
+        "t": 1791924641872
+      }
+    ]
+  },
+  "unsandboxed": {
+    "steps": [
+      {
+        "reason": "lock",
+        "got": 1
+      },
+      {
+        "reason": "unlock",
+        "got": 1
+      },
+      {
+        "reason": "override",
+        "got": 1
+      },
+      {
+        "reason": "note",
+        "got": 1
+      },
+      {
+        "reason": "general",
+        "got": 1
+      }
+    ],
+    "messages": [
+      {
+        "frame": "src",
+        "dir": "in",
+        "msg": {
+          "type": "design-sandbox:state",
+          "state": {
+            "v": 2,
+            "client": null,
+            "bar": {
+              "density": "compact",
+              "palette": "03",
+              "font": "f3",
+              "mode": "dark",
+              "navicons": "off",
+              "at": 1760000000000
+            },
+            "ov": {
+              "login/a": {
+                "palette": "02",
+                "density": "comfortable",
+                "at": 1760000100000
+              },
+              "dashboard/a": {
+                "_del": true,
+                "at": 1791924644275
+              }
+            },
+            "locks": {
+              "login/c": {
+                "density": "comfortable",
+                "palette": "05",
+                "font": "f2",
+                "mode": "light",
+                "navicons": "on",
+                "at": 1760000200000
+              },
+              "dashboard/b~m": {
+                "density": "compact",
+                "palette": "07",
+                "font": "f4",
+                "mode": "dark",
+                "navicons": "on",
+                "at": 1760000300000
+              },
+              "dashboard/a": {
+                "navicons": "off",
+                "density": "compact",
+                "palette": "03",
+                "font": "f3",
+                "mode": "dark",
+                "at": 1791924644275
+              }
+            },
+            "notes": {
+              "login/c": {
+                "text": "Client prefers this split layout for the sign-in page.",
+                "at": 1760000400000
+              },
+              "dashboard/a": {
+                "text": "Show the KPI cards above the fold.",
+                "at": 1760000500000
+              }
+            },
+            "general": {
+              "text": "Synthetic sample state for the embed fixture — no client data.",
+              "at": 1760000600000
+            },
+            "savedAt": "2026-10-13T20:50:44.275Z"
+          },
+          "reason": "lock",
+          "v": 1
+        },
+        "t": 1791924644288
+      },
+      {
+        "frame": "src",
+        "dir": "in",
+        "msg": {
+          "type": "design-sandbox:state",
+          "state": {
+            "v": 2,
+            "client": null,
+            "bar": {
+              "density": "compact",
+              "palette": "03",
+              "font": "f3",
+              "mode": "dark",
+              "navicons": "off",
+              "at": 1760000000000
+            },
+            "ov": {
+              "login/a": {
+                "palette": "02",
+                "density": "comfortable",
+                "at": 1760000100000
+              },
+              "dashboard/a": {
+                "_del": true,
+                "at": 1791924644306
+              }
+            },
+            "locks": {
+              "login/c": {
+                "density": "comfortable",
+                "palette": "05",
+                "font": "f2",
+                "mode": "light",
+                "navicons": "on",
+                "at": 1760000200000
+              },
+              "dashboard/b~m": {
+                "density": "compact",
+                "palette": "07",
+                "font": "f4",
+                "mode": "dark",
+                "navicons": "on",
+                "at": 1760000300000
+              },
+              "dashboard/a": {
+                "_del": true,
+                "at": 1791924644306
+              }
+            },
+            "notes": {
+              "login/c": {
+                "text": "Client prefers this split layout for the sign-in page.",
+                "at": 1760000400000
+              },
+              "dashboard/a": {
+                "text": "Show the KPI cards above the fold.",
+                "at": 1760000500000
+              }
+            },
+            "general": {
+              "text": "Synthetic sample state for the embed fixture — no client data.",
+              "at": 1760000600000
+            },
+            "savedAt": "2026-10-13T20:50:44.306Z"
+          },
+          "reason": "unlock",
+          "v": 1
+        },
+        "t": 1791924644310
+      },
+      {
+        "frame": "src",
+        "dir": "in",
+        "msg": {
+          "type": "design-sandbox:state",
+          "state": {
+            "v": 2,
+            "client": null,
+            "bar": {
+              "density": "compact",
+              "palette": "03",
+              "font": "f3",
+              "mode": "dark",
+              "navicons": "off",
+              "at": 1760000000000
+            },
+            "ov": {
+              "login/a": {
+                "palette": "02",
+                "density": "comfortable",
+                "at": 1760000100000
+              },
+              "dashboard/a": {
+                "_del": true,
+                "at": 1791924644306
+              },
+              "login/b": {
+                "density": "comfortable",
+                "at": 1791924644387
+              }
+            },
+            "locks": {
+              "login/c": {
+                "density": "comfortable",
+                "palette": "05",
+                "font": "f2",
+                "mode": "light",
+                "navicons": "on",
+                "at": 1760000200000
+              },
+              "dashboard/b~m": {
+                "density": "compact",
+                "palette": "07",
+                "font": "f4",
+                "mode": "dark",
+                "navicons": "on",
+                "at": 1760000300000
+              },
+              "dashboard/a": {
+                "_del": true,
+                "at": 1791924644306
+              }
+            },
+            "notes": {
+              "login/c": {
+                "text": "Client prefers this split layout for the sign-in page.",
+                "at": 1760000400000
+              },
+              "dashboard/a": {
+                "text": "Show the KPI cards above the fold.",
+                "at": 1760000500000
+              }
+            },
+            "general": {
+              "text": "Synthetic sample state for the embed fixture — no client data.",
+              "at": 1760000600000
+            },
+            "savedAt": "2026-10-13T20:50:44.387Z"
+          },
+          "reason": "override",
+          "v": 1
+        },
+        "t": 1791924644391
+      },
+      {
+        "frame": "src",
+        "dir": "in",
+        "msg": {
+          "type": "design-sandbox:state",
+          "state": {
+            "v": 2,
+            "client": null,
+            "bar": {
+              "density": "compact",
+              "palette": "03",
+              "font": "f3",
+              "mode": "dark",
+              "navicons": "off",
+              "at": 1760000000000
+            },
+            "ov": {
+              "login/a": {
+                "palette": "02",
+                "density": "comfortable",
+                "at": 1760000100000
+              },
+              "dashboard/a": {
+                "_del": true,
+                "at": 1791924644306
+              },
+              "login/b": {
+                "density": "comfortable",
+                "at": 1791924644387
+              }
+            },
+            "locks": {
+              "login/c": {
+                "density": "comfortable",
+                "palette": "05",
+                "font": "f2",
+                "mode": "light",
+                "navicons": "on",
+                "at": 1760000200000
+              },
+              "dashboard/b~m": {
+                "density": "compact",
+                "palette": "07",
+                "font": "f4",
+                "mode": "dark",
+                "navicons": "on",
+                "at": 1760000300000
+              },
+              "dashboard/a": {
+                "_del": true,
+                "at": 1791924644306
+              }
+            },
+            "notes": {
+              "login/c": {
+                "text": "Client prefers this split layout for the sign-in page.",
+                "at": 1760000400000
+              },
+              "dashboard/a": {
+                "text": "Show the KPI cards above the fold.",
+                "at": 1760000500000
+              },
+              "login/b": {
+                "text": "AC2 per-screen note on login/b",
+                "at": 1791924644864
+              }
+            },
+            "general": {
+              "text": "Synthetic sample state for the embed fixture — no client data.",
+              "at": 1760000600000
+            },
+            "savedAt": "2026-10-13T20:50:44.864Z"
+          },
+          "reason": "note",
+          "v": 1
+        },
+        "t": 1791924644872
+      },
+      {
+        "frame": "src",
+        "dir": "in",
+        "msg": {
+          "type": "design-sandbox:state",
+          "state": {
+            "v": 2,
+            "client": null,
+            "bar": {
+              "density": "compact",
+              "palette": "03",
+              "font": "f3",
+              "mode": "dark",
+              "navicons": "off",
+              "at": 1760000000000
+            },
+            "ov": {
+              "login/a": {
+                "palette": "02",
+                "density": "comfortable",
+                "at": 1760000100000
+              },
+              "dashboard/a": {
+                "_del": true,
+                "at": 1791924644306
+              },
+              "login/b": {
+                "density": "comfortable",
+                "at": 1791924644387
+              }
+            },
+            "locks": {
+              "login/c": {
+                "density": "comfortable",
+                "palette": "05",
+                "font": "f2",
+                "mode": "light",
+                "navicons": "on",
+                "at": 1760000200000
+              },
+              "dashboard/b~m": {
+                "density": "compact",
+                "palette": "07",
+                "font": "f4",
+                "mode": "dark",
+                "navicons": "on",
+                "at": 1760000300000
+              },
+              "dashboard/a": {
+                "_del": true,
+                "at": 1791924644306
+              }
+            },
+            "notes": {
+              "login/c": {
+                "text": "Client prefers this split layout for the sign-in page.",
+                "at": 1760000400000
+              },
+              "dashboard/a": {
+                "text": "Show the KPI cards above the fold.",
+                "at": 1760000500000
+              },
+              "login/b": {
+                "text": "AC2 per-screen note on login/b",
+                "at": 1791924644864
+              }
+            },
+            "general": {
+              "text": "AC2 general note",
+              "at": 1791924645350
+            },
+            "savedAt": "2026-10-13T20:50:45.350Z"
+          },
+          "reason": "general",
+          "v": 1
+        },
+        "t": 1791924645351
+      }
+    ]
+  }
+}

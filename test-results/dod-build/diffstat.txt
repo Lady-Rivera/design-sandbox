@@ -1,0 +1,2 @@
+$ git diff --stat -- references/artboard-*.md references/canvas-layout.md prebuilt/*.dc.html prebuilt/canvas.json prebuilt/design-sandbox*.html
+(end; empty means the committed prebuilt/ matches a fresh build)

@@ -1,0 +1,14 @@
+{
+  "sandboxed": {
+    "setItemCalls": 0,
+    "localStorage": {
+      "blocked": "SecurityError"
+    }
+  },
+  "unsandboxed": {
+    "setItemCalls": 0,
+    "localStorageLength": 0,
+    "keys": [],
+    "sessionStorageLength": 0
+  }
+}

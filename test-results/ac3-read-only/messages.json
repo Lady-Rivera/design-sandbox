@@ -1,0 +1,219 @@
+{
+  "positiveControl": [
+    "lock",
+    "unlock",
+    "bar",
+    "bar"
+  ],
+  "attempts": [
+    "canvas padlock click (dashboard/a)",
+    "card padlock click",
+    "card override click (density comfortable)",
+    "card \"Use the set values\"",
+    "card font select change",
+    "card note input event",
+    "bar density/mode/nav icons/swatch clicks",
+    "bar font select change",
+    "Reset click",
+    "Apply brand click (absent in this build: no brand)",
+    "keys l (card open) and d",
+    "Clear notes (first click)",
+    "Clear notes (second click)",
+    "general note input event",
+    "typing into the general note",
+    "pane Save to screen and pane padlock clicks"
+  ],
+  "controls": {
+    "readOnlyFlag": true,
+    "canvasPadlocks": {
+      "n": 16,
+      "hidden": true
+    },
+    "cardPadlock": {
+      "n": 1,
+      "hidden": true
+    },
+    "barDensity": {
+      "n": 2,
+      "disabled": true,
+      "aria": true
+    },
+    "barMode": {
+      "n": 2,
+      "disabled": true,
+      "aria": true
+    },
+    "barNavicons": {
+      "n": 2,
+      "disabled": true,
+      "aria": true
+    },
+    "barSwatches": {
+      "n": 10,
+      "disabled": true,
+      "aria": true
+    },
+    "barFont": {
+      "n": 1,
+      "disabled": true,
+      "aria": true
+    },
+    "reset": {
+      "n": 1,
+      "disabled": true,
+      "aria": true
+    },
+    "cardFieldset": {
+      "n": 1,
+      "disabled": true,
+      "aria": true
+    },
+    "cardUseSetValues": {
+      "n": 1,
+      "disabled": true,
+      "aria": true
+    },
+    "screens": 16,
+    "applyBrand": {
+      "n": 0,
+      "disabled": true,
+      "aria": true
+    },
+    "notesReadonly": true,
+    "noteFields": 5,
+    "paneSave": {
+      "n": 2,
+      "aria": true
+    },
+    "paneLock": {
+      "n": 2,
+      "aria": true
+    },
+    "clearNotes": {
+      "panelOpen": true,
+      "disabled": true,
+      "aria": true
+    }
+  },
+  "compare": {
+    "open": true,
+    "paneDirty": true,
+    "paneButtons": {
+      "save": true,
+      "lock": true,
+      "lockVisible": true
+    },
+    "confirm": {
+      "shown": true,
+      "acts": [
+        "discard",
+        "back"
+      ],
+      "text": "Read-only — the look on the left side (Login A1 — Centered card) cannot be saved."
+    }
+  },
+  "messagesSinceReadOnly": [
+    {
+      "frame": "src",
+      "dir": "out",
+      "msg": {
+        "type": "design-sandbox:init",
+        "state": {
+          "v": 2,
+          "client": null,
+          "bar": {
+            "density": "compact",
+            "palette": "03",
+            "font": "f3",
+            "mode": "dark",
+            "navicons": "off",
+            "at": 1791924651633
+          },
+          "ov": {
+            "login/a": {
+              "palette": "02",
+              "density": "comfortable",
+              "at": 1760000100000
+            },
+            "login/b": {
+              "_del": true,
+              "at": 1791924651535
+            }
+          },
+          "locks": {
+            "login/c": {
+              "density": "comfortable",
+              "palette": "05",
+              "font": "f2",
+              "mode": "light",
+              "navicons": "on",
+              "at": 1760000200000
+            },
+            "dashboard/b~m": {
+              "density": "compact",
+              "palette": "07",
+              "font": "f4",
+              "mode": "dark",
+              "navicons": "on",
+              "at": 1760000300000
+            },
+            "login/b": {
+              "_del": true,
+              "at": 1791924651535
+            }
+          },
+          "notes": {
+            "login/c": {
+              "text": "Client prefers this split layout for the sign-in page.",
+              "at": 1760000400000
+            },
+            "dashboard/a": {
+              "text": "Show the KPI cards above the fold.",
+              "at": 1760000500000
+            }
+          },
+          "general": {
+            "text": "Synthetic sample state for the embed fixture — no client data.",
+            "at": 1760000600000
+          },
+          "savedAt": "2026-10-13T20:50:51.633Z"
+        },
+        "readOnly": true,
+        "theme": {
+          "dark": false,
+          "tokens": {
+            "--ui-bg": "#f6f3ec",
+            "--ui-dot": "rgba(19, 35, 60, 0.14)",
+            "--ui-panel": "#ffffff",
+            "--ui-panel-2": "#fbf9f3",
+            "--ui-raised": "#ffffff",
+            "--ui-border": "rgba(19, 35, 60, 0.11)",
+            "--ui-border-strong": "rgba(19, 35, 60, 0.3)",
+            "--ui-text": "#13233c",
+            "--ui-muted": "#5a6a80",
+            "--ui-accent": "#316dca",
+            "--ui-accent-hover": "#316dca",
+            "--ui-on-accent": "#ffffff",
+            "--ui-warn": "#b58414",
+            "--ui-warn-bg": "rgba(181, 132, 20, 0.14)",
+            "--ui-warn-border": "#b58414",
+            "--ui-lock": "#1a9e56",
+            "--ui-lock-bg": "rgba(26, 158, 86, 0.09)",
+            "--ui-lock-border": "rgba(26, 158, 86, 0.35)",
+            "--ui-on-lock": "#ffffff",
+            "--ui-shadow": "0 2px 12px rgba(19, 35, 60, 0.06)",
+            "--ui-shadow-card": "0 2px 12px rgba(19, 35, 60, 0.06)",
+            "--ui-shadow-sm": "0 1px 3px rgba(19, 35, 60, 0.06)",
+            "--ui-focus": "#316dca"
+          },
+          "fonts": {
+            "ui": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif"
+          }
+        },
+        "v": 1
+      },
+      "t": 1791924651720
+    }
+  ],
+  "stateMessages": 0
+}
