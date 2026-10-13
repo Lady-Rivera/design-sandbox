@@ -22,10 +22,17 @@ const SAMPLE = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/fixtures/samp
 const EMBEDDED_TEXT = fs.readFileSync(EMBEDDED, 'utf8');
 const BASELINE_REF = '4c05b19';
 const STORE_KEY = 'sb-meeting:sandbox';   // the standalone page's key (CLIENT is null in the prebuilt pages)
-const FAMILIES = ['Manrope', 'Public Sans', 'DM Serif Display', 'DM Sans', 'Space Grotesk', 'IBM Plex Sans', 'Playfair Display', 'Source Sans 3', 'Nunito', 'Nunito Sans'];
 const STATE_KEYS = ['bar', 'client', 'general', 'locks', 'notes', 'ov', 'savedAt', 'v'];
 
-const only = (() => { const i = process.argv.indexOf('--only'); return i > 0 ? process.argv[i + 1].split(',') : null; })();
+const ACS = ['ac1', 'ac2', 'ac3', 'ac4', 'ac5', 'ac6'];
+const only = (() => {
+  const i = process.argv.indexOf('--only'); if (i < 0) return null;
+  const v = process.argv[i + 1];
+  if (!v || v.startsWith('--')) { console.error(`verify-embedded: --only needs a comma-separated list drawn from ${ACS.join(', ')}`); process.exit(2); }
+  const list = v.split(',').map(x => x.trim()).filter(Boolean), bad = list.filter(x => !ACS.includes(x));
+  if (!list.length || bad.length) { console.error(`verify-embedded: unknown --only value ${JSON.stringify(bad.length ? bad.join(',') : v)}; expected some of ${ACS.join(', ')}`); process.exit(2); }
+  return list;
+})();
 const want = (ac) => !only || only.includes(ac);
 
 // ---------- reporting ----------
@@ -71,13 +78,37 @@ async function openFixture(ctx, { query = '', srcdoc = false } = {}) {
 }
 const hostLog = (page) => page.evaluate(() => window.embedHost.log);
 const stateMsgs = async (page, frame, since = 0) => (await hostLog(page)).slice(since).filter(e => e.frame === frame && e.dir === 'in' && e.msg.type === 'design-sandbox:state');
-async function waitStates(page, frame, n, since = 0, timeout = 4000) {
+async function waitStates(ac, page, frame, n, since = 0, timeout = 4000) {
   const t0 = Date.now();
   while (Date.now() - t0 < timeout) { const m = await stateMsgs(page, frame, since); if (m.length >= n) return m; await sleep(50); }
-  return stateMsgs(page, frame, since);
+  const m = await stateMsgs(page, frame, since);
+  check(ac, `timed out waiting for ${n} state messages (got ${m.length})`, false);
+  return m;
 }
-const settle = async (frame) => { await frame.evaluate(() => document.fonts.ready); await sleep(150); };
+// host-log entries matching pred since an index, polled until at least one arrives or the timeout passes
+async function waitLog(page, pred, since, timeout = 2000) {
+  const t0 = Date.now();
+  for (;;) { const m = (await hostLog(page)).slice(since).filter(pred); if (m.length || Date.now() - t0 >= timeout) return m; await sleep(50); }
+}
+// settle: wait until the frame shows the expected DOM state (a FAIL line on timeout), then for its fonts
+async function settle(ac, frame, label, fn, arg, timeout = 10000) {
+  try { await frame.waitForFunction(fn, arg, { timeout, polling: 50 }); }
+  catch { check(ac, `timed out after ${timeout} ms waiting for ${label}`, false); return false; }
+  await frame.evaluate(() => document.fonts.ready); return true;
+}
 const live = (e) => !!(e && !e._del);
+const lockCount = (n) => [`${n} locked screens on the canvas`, (k) => document.querySelectorAll('.sb-ov').length > 0 && document.querySelectorAll('.sb-ov.is-locked').length === k, n];
+const SAMPLE_LOCKS = Object.values(SAMPLE.locks).filter(live).length;
+const darkIs = (d) => [`the page ${d ? 'dark' : 'light'}`, (x) => document.querySelector('.sb').classList.contains('dark') === x, d];
+const readOnlyIs = (ro) => [`the page ${ro ? 'read-only' : 'editable'}`, (x) => document.querySelector('.sb').classList.contains('readonly') === x, ro];
+// barrier: the page handles messages in order, so once a theme carrying a fresh marker token is applied,
+// everything posted before it has been handled
+let markerN = 0;
+async function barrier(page, frame, key = 'src') {
+  const m = 'sync-' + (++markerN);
+  await page.evaluate(([k, x]) => window.embedHost.post(k, { type: 'design-sandbox:theme', theme: { dark: false, tokens: { '--ui-sync-marker': x } } }), [key, m]);
+  await frame.waitForFunction((x) => document.querySelector('.sb').style.getPropertyValue('--ui-sync-marker') === x, m, { timeout: 5000 });
+}
 function stripAt(x) {
   if (Array.isArray(x)) return x.map(stripAt);
   if (x && typeof x === 'object') { const o = {}; for (const k of Object.keys(x).sort()) if (k !== 'at' && k !== 'savedAt') o[k] = stripAt(x[k]); return o; }
@@ -113,7 +144,7 @@ if (want('ac1')) {
   await page.evaluate(() => window.embedHost.sendSample());
   const dom = {};
   for (const key of ['src', 'srcdoc']) {
-    const f = frames[key]; await settle(f);
+    const f = frames[key]; await settle('ac1', f, ...lockCount(SAMPLE_LOCKS));
     const canvas = await readCanvas(f);
     await openCard(f, 'login/a'); const cardOverride = await readCard(f);
     await openCard(f, 'login/c'); const cardLocked = await readCard(f);
@@ -137,9 +168,9 @@ if (want('ac1')) {
 }
 
 // ============ AC2 — every change posts the full new state; nothing is written to browser storage ============
-async function editFlow(page, f, key) {
+async function editFlow(ac, page, f, key) {
   const steps = [];
-  const step = async (reason, act) => { const before = (await stateMsgs(page, key)).length; await act(); const got = await waitStates(page, key, before + 1); steps.push({ reason, got: got.length - before }); };
+  const step = async (reason, act) => { const before = (await stateMsgs(page, key)).length; await act(); const got = await waitStates(ac, page, key, before + 1); steps.push({ reason, got: got.length - before }); };
   await step('lock', () => f.locator('.sb-ov[data-id="dashboard/a"] .sb-lockbtn').dispatchEvent('click'));
   await step('unlock', () => f.locator('.sb-ov[data-id="dashboard/a"] .sb-lockbtn').dispatchEvent('click'));
   await openCard(f, 'login/b');
@@ -154,6 +185,7 @@ function assertFlowMessages(ac, label, msgs) {
   const reasons = msgs.map(m => m.msg.reason);
   check(ac, `${label}: exactly 5 state messages, reasons lock, unlock, override, note, general`, eq(reasons, ['lock', 'unlock', 'override', 'note', 'general']), reasons);
   check(ac, `${label}: every message is v: 1 with the full serialize() shape (v 2, client, bar, ov, locks, notes, general, savedAt)`, msgs.every(m => m.msg.v === 1 && m.msg.type === 'design-sandbox:state' && eq(Object.keys(m.msg.state).sort(), STATE_KEYS) && m.msg.state.v === 2), msgs.map(m => Object.keys(m.msg.state || {})));
+  check(ac, `${label}: every message carries client null (the build's CLIENT, as the host sent none)`, msgs.length > 0 && msgs.every(m => m.msg.state.client === null), msgs.map(m => m.msg.state.client));
   check(ac, `${label}: every message still carries the sample's locks, notes and general note (full state, not a diff)`, msgs.every((m, i) => live(m.msg.state.locks['login/c']) && live(m.msg.state.locks['dashboard/b~m']) && live(m.msg.state.notes['dashboard/a']) && (i === 4 || m.msg.state.general.text === SAMPLE.general.text)));
   const [l, u, o, n, g] = msgs.map(m => m.msg.state);
   if (msgs.length === 5) {
@@ -169,8 +201,8 @@ if (want('ac2')) {
   // (1) the fixture's own frame: sandbox="allow-scripts" (storage is blocked by the browser there)
   const a = await newContext();
   const A = await openFixture(a.ctx);
-  await A.page.evaluate(() => window.embedHost.sendSample()); await settle(A.frames.src);
-  const stepsA = await editFlow(A.page, A.frames.src, 'src');
+  await A.page.evaluate(() => window.embedHost.sendSample()); await settle('ac2', A.frames.src, ...lockCount(SAMPLE_LOCKS));
+  const stepsA = await editFlow('ac2', A.page, A.frames.src, 'src');
   const msgsA = await stateMsgs(A.page, 'src');
   assertFlowMessages('ac2', 'sandboxed src frame', msgsA);
   const storA = await A.frames.src.evaluate(() => { let access; try { access = { length: localStorage.length }; } catch (e) { access = { blocked: e.name }; } return { setItemCalls: window.__setItemCalls, localStorage: access }; });
@@ -180,8 +212,8 @@ if (want('ac2')) {
   const B = await openFixture(b.ctx, { query: '?sandbox=off' });
   const sandboxAttr = await B.page.evaluate(() => document.getElementById('frame-src').getAttribute('sandbox'));
   check('ac2', 'un-sandboxed run: frame (a) has no sandbox attribute', sandboxAttr === null, sandboxAttr);
-  await B.page.evaluate(() => window.embedHost.sendSample()); await settle(B.frames.src);
-  const stepsB = await editFlow(B.page, B.frames.src, 'src');
+  await B.page.evaluate(() => window.embedHost.sendSample()); await settle('ac2', B.frames.src, ...lockCount(SAMPLE_LOCKS));
+  const stepsB = await editFlow('ac2', B.page, B.frames.src, 'src');
   const msgsB = await stateMsgs(B.page, 'src');
   assertFlowMessages('ac2', 'un-sandboxed src frame', msgsB);
   const storB = await B.frames.src.evaluate(() => ({ setItemCalls: window.__setItemCalls, localStorageLength: localStorage.length, keys: Object.keys(localStorage), sessionStorageLength: sessionStorage.length }));
@@ -191,6 +223,34 @@ if (want('ac2')) {
   writeJson(path.join(dir, 'messages.json'), { sandboxed: { steps: stepsA, messages: msgsA }, unsandboxed: { steps: stepsB, messages: msgsB } });
   writeJson(path.join(dir, 'storage.json'), { sandboxed: storA, unsandboxed: storB });
   await a.ctx.close(); await b.ctx.close();
+
+  // (3) a theme message mid-typing never drops the note; the host's client round-trips
+  const c = await newContext();
+  const C = await openFixture(c.ctx); const cf = C.frames.src;
+  await C.page.evaluate(() => window.embedHost.sendSample()); await settle('ac2', cf, ...lockCount(SAMPLE_LOCKS));
+  await cf.locator('.sb-notesbtn').dispatchEvent('click');
+  const sinceT = (await stateMsgs(C.page, 'src')).length;
+  const TYPED = 'Typed just before a theme change';
+  const t0 = Date.now();
+  await cf.locator('.sb-general').fill(TYPED);
+  await C.page.evaluate(() => window.embedHost.setDark(true));
+  const themeAfter = Date.now() - t0;
+  check('ac2', `theme mid-typing: the theme message went out ${themeAfter} ms after the typing (inside the 400 ms debounce)`, themeAfter < 400, themeAfter);
+  await waitStates('ac2', C.page, 'src', sinceT + 1); await sleep(800);
+  const typed = (await stateMsgs(C.page, 'src')).slice(sinceT).map(m => ({ reason: m.msg.reason, general: m.msg.state.general && m.msg.state.general.text }));
+  check('ac2', 'theme mid-typing: exactly one state message, reason general, carrying the typed text', eq(typed, [{ reason: 'general', general: TYPED }]), typed);
+  const kept = await cf.evaluate(() => ({ value: document.querySelector('.sb-general').value, dark: document.querySelector('.sb').classList.contains('dark') }));
+  check('ac2', 'theme mid-typing: the general note textarea keeps the typed text, and the theme applied', kept.value === TYPED && kept.dark, kept);
+  const CLIENT_SENT = 'Round Trip Co (synthetic)';
+  await C.page.evaluate((s) => window.embedHost.sendInit('src', s, false), { ...SAMPLE, client: CLIENT_SENT });
+  await barrier(C.page, cf);
+  const sinceC = (await stateMsgs(C.page, 'src')).length;
+  await cf.locator('.sb-title').click(); await C.page.keyboard.press('d');
+  const cm = (await waitStates('ac2', C.page, 'src', sinceC + 1)).slice(sinceC);
+  check('ac2', 'client round-trips: after an init whose state carries a client, the next state message carries that client', cm.length === 1 && cm[0].msg.state.client === CLIENT_SENT, cm.map(m => m.msg.state.client));
+  check('ac2', 'no request left the theme/client fixture', c.net.aborted.length === 0, c.net.aborted);
+  writeJson(path.join(dir, 'theme-and-client.json'), { themeSentMsAfterTyping: themeAfter, messagesAfterTyping: typed, textarea: kept, clientSent: CLIENT_SENT, clientPosted: cm.map(m => m.msg.state.client) });
+  await c.ctx.close();
 }
 
 // ============ AC3 — read-only: editing controls disabled or hidden; Compare still opens ============
@@ -199,9 +259,15 @@ if (want('ac3')) {
   const { ctx, net } = await newContext();
   const { page, frames } = await openFixture(ctx);
   const f = frames.src;
-  await page.evaluate(() => window.embedHost.sendSample()); await settle(f);
+  await page.evaluate(() => window.embedHost.sendSample()); await settle('ac3', f, ...lockCount(SAMPLE_LOCKS));
+  // positive control, still editable: the l key (card open) and the d key each post a state message
+  await openCard(f, 'login/b'); await f.locator('.sb-title').click();
+  const posBefore = (await stateMsgs(page, 'src')).length; let posN = 0;
+  for (const k of ['l', 'l', 'd', 'd']) { await page.keyboard.press(k); await waitStates('ac3', page, 'src', posBefore + ++posN); }
+  const positive = (await stateMsgs(page, 'src')).slice(posBefore).map(m => m.msg.reason);
+  check('ac3', 'positive control (editable): keys l (card open) and d each post a state message — lock, unlock, bar, bar', eq(positive, ['lock', 'unlock', 'bar', 'bar']), positive);
   const since = (await hostLog(page)).length;
-  await page.evaluate(() => window.embedHost.setReadOnly(true)); await settle(f);
+  await page.evaluate(() => window.embedHost.setReadOnly(true)); await settle('ac3', f, ...readOnlyIs(true));
   const initMsg = (await hostLog(page)).slice(since).find(e => e.dir === 'out' && e.msg.type === 'design-sandbox:init');
   check('ac3', 'the host re-sent init with readOnly: true', initMsg && initMsg.msg.readOnly === true);
   await openCard(f, 'login/b');
@@ -213,15 +279,16 @@ if (want('ac3')) {
       readOnlyFlag: !document.querySelector('.sb-roflag').hidden,
       canvasPadlocks: hidden('.sb-ov .sb-lockbtn'), cardPadlock: hidden('.sb-pop .sb-poplock'),
       barDensity: dis('.sb-bar [data-density]'), barMode: dis('.sb-bar [data-mode]'), barNavicons: dis('.sb-bar [data-navicons]'), barSwatches: dis('.sb-bar .sb-swatch'), barFont: dis('.sb-bar select[data-font]'),
-      reset: dis('.sb-resetall'), cardFieldset: dis('.sb-popcontrols'), cardUseSetValues: dis('.sb-popreset'),
-      applyBrand: { n: all('.sb-applybrand').length }, notesReadonly: all('.sb-note, .sb-general').every(t => t.readOnly), noteFields: all('.sb-note, .sb-general').length,
+      reset: dis('.sb-resetall'), cardFieldset: dis('.sb-popcontrols'), cardUseSetValues: dis('.sb-popreset'), screens: all('.sb-screen').length,
+      applyBrand: dis('.sb-applybrand'), notesReadonly: all('.sb-note, .sb-general').every(t => t.readOnly), noteFields: all('.sb-note, .sb-general').length,
       paneSave: { n: all('.sb-panesave').length, aria: all('.sb-panesave').every(e => e.getAttribute('aria-disabled') === 'true') }, paneLock: { n: all('.sb-panelock').length, aria: all('.sb-panelock').every(e => e.getAttribute('aria-disabled') === 'true') },
     };
   });
   check('ac3', 'the Read-only flag shows in the title row', controls.readOnlyFlag);
-  check('ac3', 'canvas padlocks (16) and the card padlock are hidden', controls.canvasPadlocks.n === 16 && controls.canvasPadlocks.hidden && controls.cardPadlock.n === 1 && controls.cardPadlock.hidden, [controls.canvasPadlocks, controls.cardPadlock]);
+  check('ac3', `canvas padlocks (one per screen, ${controls.screens}) and the card padlock are hidden`, controls.canvasPadlocks.n > 0 && controls.canvasPadlocks.n === controls.screens && controls.canvasPadlocks.hidden && controls.cardPadlock.n === 1 && controls.cardPadlock.hidden, [controls.canvasPadlocks, controls.cardPadlock]);
   for (const k of ['barDensity', 'barMode', 'barNavicons', 'barSwatches', 'barFont', 'reset', 'cardFieldset']) check('ac3', `${k}: disabled with aria-disabled="true"`, controls[k].n > 0 && controls[k].disabled && controls[k].aria, controls[k]);
-  check('ac3', 'card "Use the set values": disabled with aria-disabled="true"', controls.cardUseSetValues.disabled && controls.cardUseSetValues.aria, controls.cardUseSetValues);
+  check('ac3', 'Apply brand: absent from this build, or disabled with aria-disabled="true"', controls.applyBrand.n === 0 || (controls.applyBrand.disabled && controls.applyBrand.aria), controls.applyBrand);
+  check('ac3', 'card "Use the set values": disabled with aria-disabled="true"', controls.cardUseSetValues.n > 0 && controls.cardUseSetValues.disabled && controls.cardUseSetValues.aria, controls.cardUseSetValues);
   check('ac3', 'every note field is readonly', controls.noteFields > 0 && controls.notesReadonly, controls.noteFields);
   check('ac3', 'Compare pane Save to screen and padlock carry aria-disabled="true"', controls.paneSave.n === 2 && controls.paneSave.aria && controls.paneLock.n === 2 && controls.paneLock.aria, [controls.paneSave, controls.paneLock]);
   await page.locator('#frame-src').screenshot({ path: path.join(dir, 'controls.png') });
@@ -245,7 +312,7 @@ if (want('ac3')) {
   await f.locator('.sb-notesbtn').dispatchEvent('click');
   controls.clearNotes = await f.evaluate(() => { const b = document.querySelector('.sb-notes .sb-clearnotes'); return { panelOpen: !document.querySelector('.sb-notes').hidden, disabled: b.disabled, aria: b.getAttribute('aria-disabled') === 'true' }; });
   check('ac3', 'notes panel open: Clear notes disabled with aria-disabled="true"', controls.clearNotes.panelOpen && controls.clearNotes.disabled && controls.clearNotes.aria, controls.clearNotes);
-  await tryDom('Clear notes clicked twice', clickEl, '.sb-clearnotes'); await tryDom('Clear notes (second click)', clickEl, '.sb-clearnotes');
+  await tryDom('Clear notes (first click)', clickEl, '.sb-clearnotes'); await tryDom('Clear notes (second click)', clickEl, '.sb-clearnotes');
   await tryDom('general note input event', () => { const t = document.querySelector('.sb-general'); t.value = 'read-only attempt'; t.dispatchEvent(new Event('input', { bubbles: true })); });
   await f.locator('.sb-general').focus(); await page.keyboard.type('typed'); await f.locator('.sb-general').blur(); attempts.push('typing into the general note');
   const generalAfter = await f.evaluate(() => document.querySelector('.sb-general').value);
@@ -274,8 +341,91 @@ if (want('ac3')) {
   check('ac3', 'zero state messages after read-only was switched on', stateAfter.length === 0, stateAfter.map(e => e.msg.reason));
   check('ac3', 'typing did not change the readonly general note', !generalAfter.includes('typed'), generalAfter);
   check('ac3', 'no request left the fixture', net.aborted.length === 0, net.aborted);
-  writeJson(path.join(dir, 'messages.json'), { attempts, controls, compare: { open: compareOpen, paneDirty, paneButtons, confirm }, messagesSinceReadOnly: after, stateMessages: stateAfter.length });
+  writeJson(path.join(dir, 'messages.json'), { positiveControl: positive, attempts, controls, compare: { open: compareOpen, paneDirty, paneButtons, confirm }, messagesSinceReadOnly: after, stateMessages: stateAfter.length });
   await ctx.close();
+
+  // ---- unrecognised states stay read-only; readOnly is editable only when it is exactly false ----
+  const evidence = { badFirstInit: {}, badReInit: null, readOnlyValues: {}, nullState: null, fixtureReadOnlyBeforeState: null };
+  const readMode = (fr) => fr.evaluate(() => ({ readOnly: document.querySelector('.sb').classList.contains('readonly'), flag: !document.querySelector('.sb-roflag').hidden, locked: [...document.querySelectorAll('.sb-ov.is-locked')].map(e => e.dataset.id).sort(), noteDots: [...document.querySelectorAll('.sb-ov')].filter(e => !e.querySelector('.sb-notedot').hidden).map(e => e.dataset.id).sort() }));
+  const sendRaw = (pg, msg) => pg.evaluate((m) => window.embedHost.post('src', m), msg);
+  const isErr = (e) => e.frame === 'src' && e.dir === 'in' && e.msg.type === 'design-sandbox:error';
+  const badStateErr = (errs) => errs.length === 1 && errs[0].msg.v === 1 && errs[0].msg.code === 'bad-state' && typeof errs[0].msg.message === 'string' && errs[0].msg.message.length > 0;
+  // edit attempts: a padlock click, bar clicks and the d key — then the 800 ms window for anything late
+  async function tryEdits(pg, fr) {
+    const before = (await stateMsgs(pg, 'src')).length;
+    await fr.evaluate(() => { for (const el of document.querySelectorAll('.sb-ov[data-id="dashboard/a"] .sb-lockbtn, .sb-bar [data-navicons="off"], .sb-bar [data-navicons="on"]')) el.click(); });
+    await fr.locator('.sb-title').click(); await pg.keyboard.press('d'); await sleep(800);
+    return (await stateMsgs(pg, 'src')).slice(before).map(m => m.msg.reason);
+  }
+  const BAD = [
+    ['a JSON string', JSON.stringify(SAMPLE)],
+    ['v: 3', { ...SAMPLE, v: 3 }],
+    ['general.text: 5', { ...SAMPLE, general: { text: 5, at: 1760000600000 } }],
+    ['a lock entry that is a string', { ...SAMPLE, locks: { ...SAMPLE.locks, 'login/a': 'locked' } }],
+  ];
+  const nets = [];
+  for (const [label, bad] of BAD) {
+    const X = await newContext(); nets.push(X.net);
+    const { page: xp, frames: xf } = await openFixture(X.ctx); const fr = xf.src;
+    const since0 = (await hostLog(xp)).length;
+    await sendRaw(xp, { type: 'design-sandbox:init', state: bad, readOnly: false }); await barrier(xp, fr);
+    const mode = await readMode(fr), errs = await waitLog(xp, isErr, since0), posted = await tryEdits(xp, fr);
+    evidence.badFirstInit[label] = { mode, errors: errs.map(e => e.msg), stateMessages: posted };
+    check('ac3', `bad state (${label}) with readOnly: false: the page stays read-only, flag shown`, mode.readOnly && mode.flag, mode);
+    check('ac3', `bad state (${label}): the default canvas (no locks, no notes)`, mode.locked.length === 0 && mode.noteDots.length === 0, mode);
+    check('ac3', `bad state (${label}): posts design-sandbox:error { v: 1, code: "bad-state", message }`, badStateErr(errs), errs.map(e => e.msg));
+    check('ac3', `bad state (${label}): a padlock click, bar clicks and the d key post no state`, posted.length === 0, posted);
+    await X.ctx.close();
+  }
+  // a failed re-init keeps the current state and makes the page read-only; a later valid init recovers
+  {
+    const X = await newContext(); nets.push(X.net);
+    const { page: xp, frames: xf } = await openFixture(X.ctx); const fr = xf.src;
+    await xp.evaluate(() => window.embedHost.sendSample()); await settle('ac3', fr, ...lockCount(SAMPLE_LOCKS)); await settle('ac3', fr, ...readOnlyIs(false));
+    const since0 = (await hostLog(xp)).length;
+    await sendRaw(xp, { type: 'design-sandbox:init', state: { ...SAMPLE, v: 3 }, readOnly: false }); await barrier(xp, fr);
+    const mode = await readMode(fr), errs = await waitLog(xp, isErr, since0), posted = await tryEdits(xp, fr);
+    check('ac3', 'failed re-init (v: 3) after a valid one: read-only, flag shown', mode.readOnly && mode.flag, mode);
+    check('ac3', 'failed re-init: the previous state is not wiped (locks login/c, dashboard/b~m; note dots dashboard/a, login/c)', eq(mode.locked, ['dashboard/b~m', 'login/c']) && eq(mode.noteDots, ['dashboard/a', 'login/c']), mode);
+    check('ac3', 'failed re-init: posts design-sandbox:error code bad-state', badStateErr(errs), errs.map(e => e.msg));
+    check('ac3', 'failed re-init: edit attempts post no state', posted.length === 0, posted);
+    await xp.evaluate((s) => window.embedHost.sendInit('src', s, false), SAMPLE); await barrier(xp, fr);
+    const beforeR = (await stateMsgs(xp, 'src')).length;
+    await fr.locator('.sb-title').click(); await xp.keyboard.press('d');
+    const rec = (await waitStates('ac3', xp, 'src', beforeR + 1)).slice(beforeR);
+    check('ac3', 'a later valid init makes the page editable again: the d key posts one state with the sample locks', rec.length === 1 && rec[0].msg.reason === 'bar' && live(rec[0].msg.state.locks['login/c']) && live(rec[0].msg.state.locks['dashboard/b~m']), rec.map(m => m.msg.reason));
+    evidence.badReInit = { mode, errors: errs.map(e => e.msg), stateMessagesWhileBad: posted, afterValidInit: rec.map(m => m.msg.reason) };
+    await X.ctx.close();
+  }
+  // readOnly fail-safe, the fixture's read-only toggle before any state, and a null state
+  {
+    const X = await newContext(); nets.push(X.net);
+    const { page: xp, frames: xf } = await openFixture(X.ctx); const fr = xf.src;
+    const sinceF = (await hostLog(xp)).length;
+    await xp.evaluate(() => { window.embedHost.setReadOnly(true); window.embedHost.setReadOnly(false); });
+    const outInits = (await hostLog(xp)).slice(sinceF).filter(e => e.frame === 'src' && e.dir === 'out' && e.msg.type === 'design-sandbox:init').map(e => ({ readOnly: e.msg.readOnly, state: e.msg.state }));
+    evidence.fixtureReadOnlyBeforeState = outInits;
+    check('ac3', 'fixture: Read-only on / off before any state was sent re-sends state: null (never the sample unasked)', outInits.length === 2 && outInits.every(i => i.state === null), outInits.map(i => (i.state === null ? null : 'a state')));
+    for (const [label, val] of [['"false"', 'false'], ['missing', undefined], ['1', 1], ['null', null]]) {
+      await xp.evaluate((s) => window.embedHost.sendInit('src', s, false), SAMPLE); await barrier(xp, fr);
+      const msg = { type: 'design-sandbox:init', state: SAMPLE }; if (label !== 'missing') msg.readOnly = val;
+      await sendRaw(xp, msg); await barrier(xp, fr);
+      const mode = await readMode(fr), posted = await tryEdits(xp, fr);
+      evidence.readOnlyValues[label] = { mode, stateMessages: posted };
+      check('ac3', `readOnly ${label}: read-only (only readOnly === false is editable), and edits post no state`, mode.readOnly && mode.flag && posted.length === 0, { mode, posted });
+    }
+    const sinceN = (await hostLog(xp)).length;
+    await sendRaw(xp, { type: 'design-sandbox:init', state: null, readOnly: false }); await barrier(xp, fr);
+    const mode = await readMode(fr), errs = await waitLog(xp, isErr, sinceN, 800);
+    const beforeN = (await stateMsgs(xp, 'src')).length;
+    await fr.locator('.sb-title').click(); await xp.keyboard.press('d');
+    const nm = (await waitStates('ac3', xp, 'src', beforeN + 1)).slice(beforeN);
+    evidence.nullState = { mode, errors: errs.map(e => e.msg), stateMessages: nm.map(m => m.msg.reason) };
+    check('ac3', 'state null with readOnly false: editable default canvas, no error, and the d key posts one state', !mode.readOnly && mode.locked.length === 0 && errs.length === 0 && nm.length === 1, evidence.nullState);
+    await X.ctx.close();
+  }
+  check('ac3', 'no request left the bad-state fixtures', nets.every(n => n.aborted.length === 0), nets.flatMap(n => n.aborted));
+  writeJson(path.join(dir, 'bad-states.json'), evidence);
 }
 
 // ============ AC4 — chrome follows the host's tokens, fonts and light/dark; mockups identical ============
@@ -286,7 +436,7 @@ if (want('ac4')) {
   const { page, frames } = await openFixture(ctx);
   const f = frames.src;
   const { TOKENS, FONTS } = await page.evaluate(() => ({ TOKENS: window.embedHost.TOKENS, FONTS: window.embedHost.FONTS }));
-  await page.evaluate(() => window.embedHost.sendSample());
+  await page.evaluate(() => window.embedHost.sendSample()); await settle('ac4', f, ...lockCount(SAMPLE_LOCKS));
   const norm = (s) => s.replace(/\s+/g, ' ').replace(/'/g, '"').trim();
   const readChrome = () => f.evaluate(async () => {
     await document.fonts.ready; const sb = document.querySelector('.sb'), cs = getComputedStyle(sb);
@@ -295,7 +445,7 @@ if (want('ac4')) {
   for (const width of [1440, 1024]) {
     await page.setViewportSize({ width, height: 900 });
     for (const mode of ['light', 'dark']) {
-      await page.evaluate((d) => window.embedHost.setDark(d), mode === 'dark'); await settle(f);
+      await page.evaluate((d) => window.embedHost.setDark(d), mode === 'dark'); await settle('ac4', f, ...darkIs(mode === 'dark'));
       const c = await readChrome(); result.chrome[`${mode}-${width}`] = c;
       const t = TOKENS[mode];
       check('ac4', `${mode} ${width}: computed --ui-bg on .sb equals the sent ${t['--ui-bg']}`, c.uiBg === t['--ui-bg'], c.uiBg);
@@ -310,7 +460,7 @@ if (want('ac4')) {
   // focus ring: a Tab-focused bar button in each theme uses --ui-focus
   await page.setViewportSize({ width: 1440, height: 900 });
   for (const mode of ['light', 'dark']) {
-    await page.evaluate((d) => window.embedHost.setDark(d), mode === 'dark'); await settle(f);
+    await page.evaluate((d) => window.embedHost.setDark(d), mode === 'dark'); await settle('ac4', f, ...darkIs(mode === 'dark'));
     await f.locator('.sb-title').click(); await page.keyboard.press('Tab');
     const fr = await f.evaluate(() => {
       const a = document.activeElement, cs = getComputedStyle(a);
@@ -330,7 +480,7 @@ if (want('ac4')) {
   const VIEW = { width: 1600, height: 1300 };
   const TARGETS = ['login/a', 'login/c', 'dashboard/b', 'dashboard/b~m'];   // override, lock, follows the bar, locked mobile
   const pin = (fr, id) => fr.evaluate((id) => {
-    const l = LAYOUT.find(x => x.id === id); view.s = 1; view.x = 40 - l.x; view.y = 40 - l.y; apply();   // eslint-disable-line no-undef
+    const l = LAYOUT.find(x => x.id === id); view.s = 1; view.x = 40 - l.x; view.y = 40 - l.y; apply();   // LAYOUT, view, apply: the page's own globals
     // the stage is will-change: transform, so Chromium keeps a raster scale chosen from the page's zoom history;
     // drop the hint on both sides so each re-rasters at exactly scale 1 and only the markup can differ
     document.querySelector('.sb-stage').style.willChange = 'auto';
@@ -347,7 +497,7 @@ if (want('ac4')) {
   };
   const E = await newContext({ viewport: VIEW });
   const EF = await openFixture(E.ctx, { query: '?frame=full' });
-  await EF.page.evaluate(() => { window.embedHost.setDark(true); window.embedHost.sendSample(); }); await settle(EF.frames.src);
+  await EF.page.evaluate(() => { window.embedHost.setDark(true); window.embedHost.sendSample(); }); await settle('ac4', EF.frames.src, ...lockCount(SAMPLE_LOCKS)); await settle('ac4', EF.frames.src, ...darkIs(true));
   const off = await EF.page.locator('#frame-src').boundingBox();
   // the standalone page in the same edge-to-edge frame shape (un-sandboxed, so it reads the injected localStorage),
   // so both sides go through the same compositing path and only the page itself can differ
@@ -356,7 +506,7 @@ if (want('ac4')) {
   fs.writeFileSync(hostFile, `<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0}iframe{position:fixed;left:0;top:0;width:100vw;height:100vh;border:0}</style></head><body><iframe id="frame-src" src="${pathToFileURL(STANDALONE).href}"></iframe></body></html>`);
   const S = await newContext({ viewport: VIEW, storage: { [STORE_KEY]: JSON.stringify(SAMPLE) } });
   const SP = await S.ctx.newPage(); await SP.goto(pathToFileURL(hostFile).href);
-  const SF = await (await SP.$('#frame-src')).contentFrame(); await SF.waitForFunction(() => document.querySelectorAll('.sb-ov').length > 0); await settle(SF);
+  const SF = await (await SP.$('#frame-src')).contentFrame(); await settle('ac4', SF, ...lockCount(SAMPLE_LOCKS));
   const soff = await SP.locator('#frame-src').boundingBox();
   const sLocked = await SF.evaluate(() => [...document.querySelectorAll('.sb-ov.is-locked')].map(e => e.dataset.id).sort());
   check('ac4', 'standalone page loaded the same state from localStorage (locks login/c, dashboard/b~m)', eq(sLocked, ['dashboard/b~m', 'login/c']), sLocked);
@@ -380,16 +530,20 @@ if (want('ac5')) {
   const { ctx, net } = await newContext();
   const { page, frames } = await openFixture(ctx, { srcdoc: true });
   await page.evaluate(() => window.embedHost.sendSample());
-  const f = frames.srcdoc; await settle(f);
-  const inFrame = await f.evaluate(async (families) => {
+  const f = frames.srcdoc; await settle('ac5', f, ...lockCount(SAMPLE_LOCKS));
+  const inFrame = await f.evaluate(async () => {
+    // the families come from the page's own @font-face rules (source text, as verify-fonts.mjs reads them)
+    const unq = (x) => x.trim().replace(/^["']|["']$/g, ''), families = [];
+    for (const st of document.querySelectorAll('style')) for (const m of st.textContent.matchAll(/@font-face\s*\{[^}]*?font-family\s*:\s*([^;}]+)/g)) { const x = unq(m[1]); if (x && !families.includes(x)) families.push(x); }
     const fonts = {};
     for (const fam of families) { try { await document.fonts.load(`400 16px "${fam}"`); await document.fonts.load(`600 16px "${fam}"`); } catch {} fonts[fam] = { check: document.fonts.check(`16px "${fam}"`), loadedFaces: [...document.fonts].filter(ff => ff.family.replace(/^"|"$/g, '') === fam && ff.status === 'loaded').length }; }
     const csp = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
-    return { url: location.href, compatMode: document.compatMode, csp: csp ? csp.content : null, cspViolations: window.__cspViolations, fonts, locked: [...document.querySelectorAll('.sb-ov.is-locked')].map(e => e.dataset.id).sort() };
-  }, FAMILIES);
+    return { url: location.href, compatMode: document.compatMode, csp: csp ? csp.content : null, cspViolations: window.__cspViolations, families, fonts, locked: [...document.querySelectorAll('.sb-ov.is-locked')].map(e => e.dataset.id).sort() };
+  });
   check('ac5', 'frame (b) is the srcdoc document with the CSP meta, in standards mode', inFrame.url === 'about:srcdoc' && !!inFrame.csp && inFrame.csp.startsWith("default-src 'none'") && inFrame.compatMode === 'CSS1Compat', { url: inFrame.url, csp: inFrame.csp, compatMode: inFrame.compatMode });
   check('ac5', 'frame (b) rendered the sent state (locks login/c, dashboard/b~m)', eq(inFrame.locked, ['dashboard/b~m', 'login/c']), inFrame.locked);
-  for (const fam of FAMILIES) check('ac5', `frame (b): document.fonts.check("${fam}") with a loaded face`, inFrame.fonts[fam].check && inFrame.fonts[fam].loadedFaces > 0, inFrame.fonts[fam]);
+  check('ac5', `frame (b) declares @font-face families (${inFrame.families.length})`, inFrame.families.length > 0, inFrame.families);
+  for (const fam of inFrame.families) check('ac5', `frame (b): document.fonts.check("${fam}") with a loaded face`, inFrame.fonts[fam].check && inFrame.fonts[fam].loadedFaces > 0, inFrame.fonts[fam]);
   check('ac5', 'frame (b): zero CSP violations', inFrame.cspViolations.length === 0, inFrame.cspViolations);
   check('ac5', 'zero aborted (non-file:/data:) requests', net.aborted.length === 0, net.aborted);
   writeJson(path.join(dir, 'srcdoc-network.json'), { blockedExcept: ['file:', 'data:'], requests: net.requests, aborted: net.aborted, frame: inFrame });
@@ -406,7 +560,7 @@ if (want('ac6')) {
   const flows = {}, exportsText = {}, aborted = [];
   for (const [name, file] of Object.entries(pages)) {
     const { ctx, net } = await newContext({ storage: { [STORE_KEY]: JSON.stringify(SAMPLE) } });
-    const p = await ctx.newPage(); await p.goto(pathToFileURL(file).href); await settle(p.mainFrame());
+    const p = await ctx.newPage(); await p.goto(pathToFileURL(file).href); await settle('ac6', p.mainFrame(), ...lockCount(SAMPLE_LOCKS));
     // lock → Compare → Save to screen → note
     await p.locator('.sb-ov[data-id="dashboard/a"] .sb-lockbtn').dispatchEvent('click');
     await p.locator('.sb-comparebtn').dispatchEvent('click');
@@ -419,9 +573,10 @@ if (want('ac6')) {
     const closed = await p.evaluate(() => document.querySelector('.sb-compare').hidden);
     await p.locator('.sb-ov[data-id="login/b"] .sb-pick').dispatchEvent('click');
     await p.locator('.sb-pop .sb-note').fill('AC6 note after Compare');
-    await sleep(700);
-    flows[name] = { opened, closed, state: await p.evaluate(() => serialize()), stored: await p.evaluate((k) => JSON.parse(localStorage.getItem(k)), STORE_KEY) };   // eslint-disable-line no-undef
-    exportsText[name] = await p.evaluate(() => [designText(), htmlText()]);   // eslint-disable-line no-undef
+    await settle('ac6', p.mainFrame(), `${name}: localStorage holding the login/b note`, (k) => { try { const s = JSON.parse(localStorage.getItem(k)); return !!(s && s.notes && s.notes['login/b'] && s.notes['login/b'].text === 'AC6 note after Compare'); } catch { return false; } }, STORE_KEY);
+    // serialize, designText, htmlText: the page's own globals
+    flows[name] = { opened, closed, state: await p.evaluate(() => serialize()), stored: await p.evaluate((k) => JSON.parse(localStorage.getItem(k)), STORE_KEY) };
+    exportsText[name] = await p.evaluate(() => [designText(), htmlText()]);
     aborted.push(...net.aborted);
     await ctx.close();
   }
@@ -439,7 +594,7 @@ if (want('ac6')) {
     const bufs = {};
     for (const [name, file] of Object.entries(pages)) {
       const { ctx, net } = await newContext({ storage: { [STORE_KEY]: finalState, 'sb-theme': mode } });
-      const p = await ctx.newPage(); await p.goto(pathToFileURL(file).href); await settle(p.mainFrame());
+      const p = await ctx.newPage(); await p.goto(pathToFileURL(file).href); await settle('ac6', p.mainFrame(), ...lockCount(Object.values(flows.new.state.locks).filter(live).length));
       // same raster normalisation on both sides as AC4: re-raster the will-change stage at its final scale
       await p.evaluate(() => { document.querySelector('.sb-stage').style.willChange = 'auto'; return new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res))); }); await sleep(300);
       bufs[name] = await p.screenshot({ path: path.join(dir, `${name}-${mode}.png`), fullPage: true });
@@ -455,6 +610,7 @@ if (want('ac6')) {
 }
 
 await browser.close();
+if (!results.length) { console.log('FAIL  verify-embedded: zero assertions ran'); process.exit(1); }
 const failed = results.filter(r => !r.ok);
 const byAc = {};
 for (const r of results) { byAc[r.ac] = byAc[r.ac] || { pass: 0, fail: 0 }; byAc[r.ac][r.ok ? 'pass' : 'fail']++; }

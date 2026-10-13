@@ -21,7 +21,7 @@
 </style>
 <style>
 html, body { margin: 0; height: 100%; background: #E9EAEE; overflow: hidden; }
-/* the page's own chrome is neutral in both themes so the screens are the only color on it; light is the default, the moon button flips it */
+/* the page's own chrome is neutral in both themes so the screens are the only color on it; light is the default — the standalone page's moon button flips it, the embedded build follows the host's theme message */
 .sb { position: fixed; inset: 0; display: grid; grid-template-rows: auto 1fr; font-family: var(--ui-font); font-size: 14px; color-scheme: light;
 --ui-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; --ui-focus: var(--ui-accent);
 --ui-bg: #E9EAEE; --ui-dot: #D3D6DC; --ui-panel: #FFFFFF; --ui-panel-2: #EEF0F3; --ui-raised: #FFFFFF; --ui-border: #D7DAE0; --ui-border-strong: #C5C9D1;
@@ -1220,10 +1220,11 @@ const CLIENT = null;
 const FONTS_HREF = "https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Public+Sans:wght@400;500;600&family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=Playfair+Display:wght@500;600;700&family=Source+Sans+3:wght@400;500;600&family=Nunito:wght@600;700;800&family=Nunito+Sans:wght@400;500;600&display=swap";
 const BRAND = null;
 // Embedded build (a host page frames this one): state comes and goes over the bridge, never browser storage.
-// Read-only until the host's first init; with no parent at all it stays read-only and never posts.
+// Read-only until the host's first valid init; with no parent at all it stays read-only and never posts.
+// stateClient: the client the host's state carries (round-trips in serialize()), else the build's CLIENT.
 const EMBEDDED = true;
 const HAS_PARENT = EMBEDDED && window.parent !== window;
-let READ_ONLY = EMBEDDED, hostOrigin = null;
+let READ_ONLY = EMBEDDED, hostOrigin = null, stateClient = CLIENT;
 const DENSITIES = ['comfortable', 'compact'], MODES = ['light', 'dark'], FIELDS = ['density', 'palette', 'font', 'mode', 'navicons'];
 const next = (list, cur) => list[(list.indexOf(cur) + 1) % list.length];
 const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -1272,7 +1273,7 @@ const noteOf = (uid) => (live(state.notes[uid]) ? state.notes[uid].text : '');
 const lockedUnits = () => UNITS.filter(u => isLocked(u.id));
 // ---------- persistence: this browser + the hosted page's database ----------
 const STORE_KEY = 'sb-meeting:' + (CLIENT || 'sandbox');
-const serialize = () => ({ v: 2, client: CLIENT, bar: state.bar, ov: state.ov, locks: state.locks, notes: state.notes, general: state.general, savedAt: new Date().toISOString() });
+const serialize = () => ({ v: 2, client: stateClient, bar: state.bar, ov: state.ov, locks: state.locks, notes: state.notes, general: state.general, savedAt: new Date().toISOString() });
 function mergeMap(local, remote) { for (const [k, v] of Object.entries(remote || {})) { if (!v || typeof v !== 'object') continue; if (!local[k] || (v.at || 0) > (local[k].at || 0)) local[k] = v; } }
 function merge(remote) {
 if (!remote || remote.v !== 2) return false;
@@ -1301,13 +1302,29 @@ if (!HAS_PARENT) return;
 const target = msg.type === 'design-sandbox:ready' || !hostOrigin || hostOrigin === 'null' ? '*' : hostOrigin;
 window.parent.postMessage({ ...msg, v: 1 }, target);
 }
-function replaceState(s) {
-const copy = (m) => (m && typeof m === 'object' ? JSON.parse(JSON.stringify(m)) : {});
-state.bar = { ...DEFAULT_BAR }; state.ov = {}; state.locks = {}; state.notes = {}; state.general = { text: '', at: 0 };
-if (!s || s.v !== 2) return;
-if (s.bar && typeof s.bar === 'object') state.bar = { ...DEFAULT_BAR, ...copy(s.bar) };
-state.ov = copy(s.ov); state.locks = copy(s.locks); state.notes = copy(s.notes);
-if (s.general && typeof s.general === 'object') state.general = { text: '', at: 0, ...copy(s.general) };
+// A host state is checked before it replaces anything: a copy (so a cyclic or unclonable value fails here),
+// v: 2, and every field and entry of the right type. An unrecognised state never becomes editable.
+const isObj = (x) => !!x && typeof x === 'object' && !Array.isArray(x);
+const optStr = (x) => x === undefined || typeof x === 'string', optNum = (x) => x === undefined || typeof x === 'number', optBool = (x) => x === undefined || typeof x === 'boolean';
+const validEntry = (e, fields) => isObj(e) && optNum(e.at) && optBool(e._del) && fields.every(f => optStr(e[f]));
+const validMap = (m, fields) => m === undefined || (isObj(m) && Object.values(m).every(e => validEntry(e, fields)));
+const errText = (err) => String((err && err.message) || err);
+function checkState(s) {
+let c; try { c = JSON.parse(JSON.stringify(s)); } catch (err) { return { error: 'state cannot be copied (' + errText(err) + ')' }; }
+if (!isObj(c)) return { error: 'state is ' + (Array.isArray(s) ? 'an array' : typeof s) + ', not a v: 2 object' };
+if (c.v !== 2) return { error: 'state.v is ' + JSON.stringify(c.v) + ', expected 2' };
+if (!(c.client === undefined || c.client === null || typeof c.client === 'string')) return { error: 'state.client is not a string' };
+if (!(c.bar === undefined || validEntry(c.bar, FIELDS))) return { error: 'state.bar has a field of the wrong type' };
+for (const k of ['ov', 'locks']) if (!validMap(c[k], FIELDS)) return { error: 'state.' + k + ' has an entry of the wrong type' };
+if (!validMap(c.notes, ['text'])) return { error: 'state.notes has an entry of the wrong type' };
+if (!(c.general === undefined || validEntry(c.general, ['text']))) return { error: 'state.general has a field of the wrong type' };
+return { state: c };
+}
+// c: a checked copy, or null for the default state
+function replaceState(c) {
+state.bar = { ...DEFAULT_BAR, ...(c && c.bar) }; state.ov = (c && c.ov) || {}; state.locks = (c && c.locks) || {}; state.notes = (c && c.notes) || {};
+state.general = { text: '', at: 0, ...(c && c.general) };
+stateClient = c && typeof c.client === 'string' ? c.client : CLIENT;
 }
 function applyHostTheme(t) {
 const sb = $('.sb'); if (!t || typeof t !== 'object') return;
@@ -1318,16 +1335,35 @@ if (t.fonts && typeof t.fonts.ui === 'string') sb.style.setProperty('--ui-font',
 sb.classList.toggle('dark', !!t.dark); sb.style.colorScheme = t.dark ? 'dark' : 'light';
 }
 function onBridge(e) {
-if (window.parent === window || e.source !== window.parent) return;
+if (!HAS_PARENT || e.source !== window.parent) return;
 const m = e.data; if (!m || typeof m !== 'object' || m.v !== 1) return;
 if (m.type !== 'design-sandbox:init' && m.type !== 'design-sandbox:theme') return;
 if (hostOrigin === null) hostOrigin = e.origin;
-clearTimeout(noteTimer);
-if (m.type === 'design-sandbox:theme') return applyHostTheme(m.theme);
+if (m.type === 'design-sandbox:theme') return applyHostTheme(m.theme);   // touches neither state, read-only nor a pending note
+onInit(m);
+}
+// init: replace the state wholesale and set read-only (editable only when readOnly === false). A state that is
+// not a valid v: 2 object leaves the current state as it was, makes the page read-only and reports bad-state.
+function onInit(m) {
 const ae = document.activeElement; if (ae && ae.matches && ae.matches('textarea')) ae.blur();
-replaceState(m.state); READ_ONLY = !!m.readOnly;
-if (m.theme) applyHostTheme(m.theme);
-paint();
+clearTimeout(noteTimer);   // only init drops a pending note: the state it was typed into is being replaced
+const prev = { bar: state.bar, ov: state.ov, locks: state.locks, notes: state.notes, general: state.general, client: stateClient };
+const restore = () => { state.bar = prev.bar; state.ov = prev.ov; state.locks = prev.locks; state.notes = prev.notes; state.general = prev.general; stateClient = prev.client; };
+let error = null;
+try {
+const checked = m.state == null ? { state: null } : checkState(m.state);
+if (checked.error) error = checked.error;
+else { replaceState(checked.state); READ_ONLY = m.readOnly !== false; }
+} catch (err) { error = 'state could not be applied (' + errText(err) + ')'; restore(); }
+if (error) READ_ONLY = true;
+try { if (m.theme) applyHostTheme(m.theme); } catch {}
+try { paint(); }
+catch (err) {   // a state that passed the checks but cannot be shown: back to the previous one, read-only
+if (!error) { error = 'state could not be shown (' + errText(err) + ')'; restore(); }
+READ_ONLY = true;
+try { paint(); } catch { paintReadOnly(); }
+}
+if (error) bridgePost({ type: 'design-sandbox:error', code: 'bad-state', message: error });
 }
 function loadLocal() { try { const raw = localStorage.getItem(STORE_KEY); if (raw) merge(JSON.parse(raw)); } catch {} }
 // The database: ask once at load (so no prompt appears in front of a client), then subscribe live.
@@ -1350,6 +1386,7 @@ el.textContent = EMBEDDED ? 'Saved to the host' : dbState === 'synced' ? 'Saved 
 }
 // ---------- theme ----------
 function paint() {
+paintReadOnly();   // first, so a step below that throws can never leave read-only half-applied
 $$('.sb-bar [data-density]').forEach(b => b.classList.toggle('on', b.dataset.density === state.bar.density));
 $$('.sb-bar [data-mode]').forEach(b => b.classList.toggle('on', b.dataset.mode === state.bar.mode));
 $$('.sb-bar [data-navicons]').forEach(b => b.classList.toggle('on', b.dataset.navicons === (state.bar.navicons || 'on')));
@@ -1370,7 +1407,7 @@ const nd = $('.sb-notedot', root); if (nd) nd.hidden = !noteOf(l.unit);
 }
 }
 const n = lockedUnits().length, lc = $('.sb-lockcount'); if (lc) lc.textContent = n ? String(n) : '';
-paintPop(); paintNotes(); paintCompare(); paintReadOnly();
+paintPop(); paintNotes(); paintCompare();
 }
 // read-only (embedded only): every editing control disabled, note fields readonly, padlocks hidden (CSS)
 const RO_DISABLE = '.sb-bar [data-density], .sb-bar [data-mode], .sb-bar [data-navicons], .sb-bar .sb-swatch, .sb-bar select[data-font], .sb-applybrand, .sb-resetall';
@@ -1511,6 +1548,8 @@ toast((BRAND.name || 'Brand') + ' applied to every unlocked screen.');
 // writes a pane's look into the real screen's overrides (or its lock, if locked); Done asks about unsaved looks.
 const cmp = () => state.compare, cmpEl = $('.sb-compare'), chooseEl = $('.sb-choose');
 let noteTimer = null;
+// every note field saves the same way: debounced 400 ms, and not at all if the page went read-only meanwhile
+function debounceNote(save) { clearTimeout(noteTimer); noteTimer = setTimeout(() => { if (READ_ONLY) return; save(); }, 400); }
 function paneLook(i) { const uid = cmp().pins[i]; return uid ? { ...effective(uid), ...cmp().pov[i] } : null; }
 function dirty(i) { const uid = cmp().pins[i]; if (!uid) return false; const eff = effective(uid), pov = cmp().pov[i]; return FIELDS.some(f => pov[f] !== undefined && pov[f] !== (eff[f] || (f === 'navicons' ? 'on' : ''))); }
 function startChoose(seed) {
@@ -1556,9 +1595,10 @@ const conf = $('.sb-cmpconfirm', cmpEl); conf.hidden = !c.confirm;
 if (c.confirm) {
 const same = c.pins[0] === c.pins[1], d0 = dirty(0), d1 = dirty(1), name = (i) => esc(unitTitle(unitOf(c.pins[i])));
 const btn = (act, label) => '<button type="button" class="sb-btn" data-cmpact="' + act + '">' + label + '</button>';
-if (READ_ONLY) { const side = d0 && d1 ? 'both sides' : d0 ? 'the left side (' + name(0) + ')' : 'the right side (' + name(1) + ')'; $('.sb-cmpconfirmtext', conf).innerHTML = 'Read-only — the look on ' + side + ' cannot be saved.'; $('.sb-cmpconfirmbtns', conf).innerHTML = btn('discard', 'Discard') + btn('back', 'Keep comparing'); }
+const side = d0 && d1 ? 'both sides' : d0 ? 'the left side (' + name(0) + ')' : 'the right side (' + name(1) + ')';
+if (READ_ONLY) { $('.sb-cmpconfirmtext', conf).innerHTML = 'Read-only — the look on ' + side + ' cannot be saved.'; $('.sb-cmpconfirmbtns', conf).innerHTML = btn('discard', 'Discard') + btn('back', 'Keep comparing'); }
 else if (same && d0 && d1) { $('.sb-cmpconfirmtext', conf).innerHTML = 'Both sides changed ' + name(0) + ' — which look should it keep?'; $('.sb-cmpconfirmbtns', conf).innerHTML = btn('left', 'Left') + btn('right', 'Right') + btn('discard', 'Neither') + btn('back', 'Keep comparing'); }
-else { const side = d0 && d1 ? 'both sides' : d0 ? 'the left side (' + name(0) + ')' : 'the right side (' + name(1) + ')'; $('.sb-cmpconfirmtext', conf).innerHTML = 'Unsaved look on ' + side + '.'; $('.sb-cmpconfirmbtns', conf).innerHTML = btn('save', 'Save & close') + btn('discard', 'Discard') + btn('back', 'Keep comparing'); }
+else { $('.sb-cmpconfirmtext', conf).innerHTML = 'Unsaved look on ' + side + '.'; $('.sb-cmpconfirmbtns', conf).innerHTML = btn('save', 'Save & close') + btn('discard', 'Discard') + btn('back', 'Keep comparing'); }
 }
 cmpEl.classList.toggle('focus-0', c.focus === 0); cmpEl.classList.toggle('focus-1', c.focus === 1);
 const same = c.pins[0] === c.pins[1]; cmpEl.classList.toggle('shared', same); $('.sb-sharednote', cmpEl).hidden = !same;
@@ -1615,7 +1655,7 @@ chooseEl.addEventListener('click', (e) => { if (e.target.closest('.sb-choosecanc
 cmpEl.addEventListener('input', (e) => {
 const t = e.target; if (READ_ONLY || !t.classList.contains('sb-pnote')) return;
 const pane = t.closest('.sb-pane'); const uid = pane ? cmp().pins[Number(pane.dataset.pane)] : cmp().pins[0];
-clearTimeout(noteTimer); noteTimer = setTimeout(() => { setNote(uid, t.value); persist('note'); paint(); }, 400);
+debounceNote(() => { setNote(uid, t.value); persist('note'); paint(); });
 });
 // ---------- controls ----------
 document.addEventListener('click', (e) => {
@@ -1640,7 +1680,6 @@ if (b.classList.contains('sb-theme')) return setTheme(!$('.sb').classList.contai
 else if (b.classList.contains('sb-resetall')) { for (const u of UNITS) clearOverride(u.id); }
 else if (b.classList.contains('sb-notesbtn')) { state.panel = state.panel === 'notes' ? null : 'notes'; return paint(); }
 else if (b.classList.contains('sb-comparebtn')) return cmp().open ? requestClose() : cmp().choosing ? cancelChoose() : startChoose();
-if (EMBEDDED && !editing) return paint();   // only real edits reach the host
 persist(reason); return paint();
 }
 if (b.closest('.sb-pop')) {
@@ -1675,8 +1714,8 @@ if (sel.closest('.sb-pop') && state.active && sel.dataset.field && !isLocked(sta
 // notes save as you type (debounced), and show a small "saved" confirmation
 document.addEventListener('input', (e) => {
 const t = e.target; if (READ_ONLY) return;
-if (t.classList.contains('sb-note') && state.active) { const uid = state.active; clearTimeout(noteTimer); noteTimer = setTimeout(() => { setNote(uid, t.value); persist('note'); paint(); const s = $('.sb-notesaved', pop); s.hidden = false; clearTimeout(s._t); s._t = setTimeout(() => { s.hidden = true; }, 1500); }, 400); }
-else if (t.classList.contains('sb-general')) { clearTimeout(noteTimer); noteTimer = setTimeout(() => { if (READ_ONLY) return; state.general = { text: t.value, at: now() }; persist('general'); paintSync(); }, 400); }
+if (t.classList.contains('sb-note') && state.active) { const uid = state.active; debounceNote(() => { setNote(uid, t.value); persist('note'); paint(); const s = $('.sb-notesaved', pop); s.hidden = false; clearTimeout(s._t); s._t = setTimeout(() => { s.hidden = true; }, 1500); }); }
+else if (t.classList.contains('sb-general')) debounceNote(() => { state.general = { text: t.value, at: now() }; persist('general'); paintSync(); });
 });
 document.addEventListener('keydown', (e) => {
 if (e.target.matches('input, select, textarea')) { if (e.key === 'Escape') e.target.blur(); return; }

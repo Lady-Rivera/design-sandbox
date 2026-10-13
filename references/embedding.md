@@ -11,9 +11,10 @@ All `type` strings are prefixed `design-sandbox:`.
 | Direction | Message | Fields |
 |---|---|---|
 | page → host | `design-sandbox:ready` | `{ v: 1 }`. Sent once, as soon as the page's scripts are up. Carries no state. Always posted to `'*'`. |
-| host → page | `design-sandbox:init` | `{ v: 1, state, readOnly, theme }`. `state` is a `state` payload below, or `null` for the default state (anything that is not `v: 2` is treated as `null`). Replaces the page's state wholesale; `readOnly: true` makes the page read-only, anything else makes it editable; `theme` is optional (see below). May be re-sent at any time, e.g. to flip read-only when a meeting ends. A focused note textarea is blurred and pending note timers are cleared first, so a half-typed note is dropped, not written over the new state. |
-| host → page | `design-sandbox:theme` | `{ v: 1, theme }`. Live light/dark or token change. Does not touch state or read-only; pending note timers are cleared. |
+| host → page | `design-sandbox:init` | `{ v: 1, state, readOnly, theme }`. `state` is a `state` payload below, or `null` for the default state. Replaces the page's state wholesale. The page is editable **only when `readOnly === false`**; any other value (`true`, missing, `"false"`, `1`, `null`) makes it read-only. `theme` is optional (see below). May be re-sent at any time, e.g. to flip read-only when a meeting ends. A focused note textarea is blurred and pending note timers are cleared first, so a half-typed note is dropped, not written over the new state. A `state` the page does not recognise is rejected (see [Unrecognised states](#unrecognised-states)). |
+| host → page | `design-sandbox:theme` | `{ v: 1, theme }`. Live light/dark or token change. Touches neither the state, read-only, nor pending note timers: a note typed just before a theme change is still posted when its debounce ends. |
 | page → host | `design-sandbox:state` | `{ v: 1, state, reason }`. Posted after every change the page persists. `state` is the full document, not a delta. |
+| page → host | `design-sandbox:error` | `{ v: 1, code: 'bad-state', message }`. Posted when an `init` carried a state the page could not accept. `message` is a short human-readable reason (for a log, not for matching). `bad-state` is the only code in v1. |
 
 `state` is the Sandbox's persisted shape, version 2:
 
@@ -22,6 +23,25 @@ All `type` strings are prefixed `design-sandbox:`.
 ```
 
 `bar` is the master bar values (`density`, `palette`, `font`, `mode`, `navicons`, `at`); `ov` holds per-screen overrides, `locks` the captured look of each locked screen, `notes` the per-screen notes, `general` the meeting notes `{ text, at }`. Entries carry `at` (ms); a removed entry is the tombstone `{ _del: true, at }`. The host stores the object as an opaque JSON value and sends it back unchanged in `init`.
+
+`client` round-trips: when the state in `init` carries a string `client`, every later `state` message carries that same `client`; when it carries none (`null` or missing, or the `init` state is `null`), the page posts the build's own client name (`null` in the prebuilt pages).
+
+### Unrecognised states
+
+An `init` whose `state` is not `null` must be a valid `v: 2` object: a plain object (not an array or a JSON string), `v === 2`, `client` a string or `null`, `bar` and `general` objects, `ov`, `locks` and `notes` objects of entry objects, and every field the right type (look fields and `text` strings, `at` a number, `_del` a boolean). A missing field is fine. The page checks a copy first, so a cyclic or otherwise uncopyable value counts as invalid too.
+
+When the state is invalid, the page:
+
+- keeps the state it already had (on a first `init`, the default canvas) — a failed `init` never wipes it;
+- becomes read-only **whatever `readOnly` says**;
+- posts `design-sandbox:error` `{ v: 1, code: 'bad-state', message }`;
+- posts no `state` message until a later valid `init`.
+
+If a state passes the checks but the page still fails to show it, the page goes back to the previous state, stays read-only, and posts the same `bad-state` error.
+
+### Ordering
+
+The bridge has no acknowledgement. An `init` replaces the page's state wholesale, so a host that re-sends `init` (to flip read-only, say) should send the latest `state` it received from the page, not an older copy it kept; anything the page posted after that copy would be lost.
 
 ### Reason codes
 
@@ -51,12 +71,12 @@ View-only bar buttons (Show, zoom, View all, Notes, Compare) post nothing.
 ## Persistence when embedded
 
 - The page never touches browser storage: no `localStorage` (not for state, not for the Show filter or the theme) and no `window.claude` database. Show is kept in memory only. The Notes panel says "Saved to the host".
-- The page is **read-only until the first `init`**, so nothing can be edited and then replaced. The host must send `init` after `ready` (a host that sends it earlier may lose it because the page is not listening yet; wait for `ready`).
+- The page is **read-only until the first valid `init` with `readOnly: false`**, so nothing can be edited and then replaced. The host must send `init` after `ready` (a host that sends it earlier may lose it because the page is not listening yet; wait for `ready`).
 - With **no parent** (`window.parent === window`, for instance when the file is opened directly, as `scripts/verify-fonts.mjs` does) the page renders the default state, stays read-only, and never posts.
 
 ## Read-only
 
-With `readOnly: true`:
+With any `readOnly` other than `false` (or after an unrecognised state):
 
 - Canvas padlocks and card padlocks are hidden. The Compare pane padlock is visible but disabled.
 - Disabled (with `aria-disabled="true"`): the card's settings and "Use the set values" button, the bar's density, font, mode, nav-icons and palette controls, Reset, Clear notes, Apply brand, and Compare's Save to screen. Note textareas are `readonly`. The `d` and `l` keys do nothing.
@@ -114,7 +134,7 @@ Some chrome text (the title, row titles) uses weight 800. DM Sans is bundled at 
 
 ## Running the fixture
 
-`scripts/fixtures/embed-host.html` is a small host that frames the embedded build twice: (a) `<iframe src sandbox="allow-scripts">` and (b) `<iframe srcdoc sandbox="allow-scripts">` with a `Content-Security-Policy` meta tag inserted right after the page's `<head>` (`default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; font-src data:; img-src data:`), the shape a locked-down host uses. (Placing it before `<!doctype>` would put the frame in quirks mode.) It has Light/Dark, Read-only on/off and Send sample state buttons, a message log, and Copilot token values for both themes mapped onto the `--ui-*` names above.
+`scripts/fixtures/embed-host.html` is a small host that frames the embedded build twice: (a) `<iframe src sandbox="allow-scripts">` and (b) `<iframe srcdoc sandbox="allow-scripts">` with a `Content-Security-Policy` meta tag inserted right after the page's `<head>` (`default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; font-src data:; img-src data:`), the shape a locked-down host uses. (Placing it before `<!doctype>` would put the frame in quirks mode.) It has Light/Dark, Read-only on/off (re-sends each frame's latest state, or `state: null` if none was exchanged yet — never the sample unasked) and Send sample state buttons, a message log, and Copilot token values for both themes mapped onto the `--ui-*` names above.
 
 A `file://` page cannot read another file, so frame (b) gets the page text from the fixture's file picker (choose `prebuilt/design-sandbox.embedded.html`) or, from a script, `embedHost.loadSrcdoc(text)`. The sample state is inlined in the fixture; `scripts/fixtures/sample-state.json` is the same synthetic state (two locks, an override, notes, a non-default bar), and the verification script checks the two are equal. Two query switches exist for the verification script only: `?sandbox=off` (frame (a) without the sandbox, to check browser storage) and `?frame=full` (one edge-to-edge frame, for the mockup screenshots).
 
@@ -132,8 +152,10 @@ Playwright is needed for the scripts (`mkdir -p node_modules && npm install --pr
 ```sh
 node scripts/build.mjs --out prebuilt --minify --emit-md references
 node scripts/build.mjs --check-palettes
-node scripts/verify-fonts.mjs prebuilt/design-sandbox.embedded.html   # each bundled font family measured against a monospace fallback, network blocked
-                                                                       # (it prints to the terminal; tee it to keep a record)
+mkdir -p test-results/ac5-offline
+node scripts/verify-fonts.mjs prebuilt/design-sandbox.embedded.html | tee test-results/ac5-offline/verify-fonts.txt   # each bundled font family measured against a monospace fallback, network blocked
 node scripts/verify-fonts.mjs prebuilt/design-sandbox.html
-node scripts/verify-embedded.mjs                                       # the bridge, read-only, tokens, offline and standalone-regression checks (3–4 minutes); evidence in test-results/
+node scripts/verify-embedded.mjs                                       # the bridge, read-only, bad states, tokens, offline and standalone-regression checks (3–4 minutes); evidence in test-results/
 ```
+
+`verify-embedded.mjs --only ac2,ac3` runs a subset; a missing or unknown name (anything outside `ac1` to `ac6`) exits 2, and a run in which no assertion ran fails. AC5 keeps `verify-fonts.txt` in its evidence directory (it does not clear that directory).
