@@ -1,0 +1,182 @@
+{
+  "badFirstInit": {
+    "a JSON string": {
+      "mode": {
+        "readOnly": true,
+        "flag": true,
+        "locked": [],
+        "noteDots": []
+      },
+      "errors": [
+        {
+          "type": "design-sandbox:error",
+          "code": "bad-state",
+          "message": "state is string, not a v: 2 object",
+          "v": 1
+        }
+      ],
+      "stateMessages": []
+    },
+    "v: 3": {
+      "mode": {
+        "readOnly": true,
+        "flag": true,
+        "locked": [],
+        "noteDots": []
+      },
+      "errors": [
+        {
+          "type": "design-sandbox:error",
+          "code": "bad-state",
+          "message": "state.v is 3, expected 2",
+          "v": 1
+        }
+      ],
+      "stateMessages": []
+    },
+    "general.text: 5": {
+      "mode": {
+        "readOnly": true,
+        "flag": true,
+        "locked": [],
+        "noteDots": []
+      },
+      "errors": [
+        {
+          "type": "design-sandbox:error",
+          "code": "bad-state",
+          "message": "state.general has a field of the wrong type",
+          "v": 1
+        }
+      ],
+      "stateMessages": []
+    },
+    "a lock entry that is a string": {
+      "mode": {
+        "readOnly": true,
+        "flag": true,
+        "locked": [],
+        "noteDots": []
+      },
+      "errors": [
+        {
+          "type": "design-sandbox:error",
+          "code": "bad-state",
+          "message": "state.locks has an entry of the wrong type",
+          "v": 1
+        }
+      ],
+      "stateMessages": []
+    }
+  },
+  "badReInit": {
+    "mode": {
+      "readOnly": true,
+      "flag": true,
+      "locked": [
+        "dashboard/b~m",
+        "login/c"
+      ],
+      "noteDots": [
+        "dashboard/a",
+        "login/c"
+      ]
+    },
+    "errors": [
+      {
+        "type": "design-sandbox:error",
+        "code": "bad-state",
+        "message": "state.v is 3, expected 2",
+        "v": 1
+      }
+    ],
+    "stateMessagesWhileBad": [],
+    "afterValidInit": [
+      "bar"
+    ]
+  },
+  "readOnlyValues": {
+    "1": {
+      "mode": {
+        "readOnly": true,
+        "flag": true,
+        "locked": [
+          "dashboard/b~m",
+          "login/c"
+        ],
+        "noteDots": [
+          "dashboard/a",
+          "login/c"
+        ]
+      },
+      "stateMessages": []
+    },
+    "\"false\"": {
+      "mode": {
+        "readOnly": true,
+        "flag": true,
+        "locked": [
+          "dashboard/b~m",
+          "login/c"
+        ],
+        "noteDots": [
+          "dashboard/a",
+          "login/c"
+        ]
+      },
+      "stateMessages": []
+    },
+    "missing": {
+      "mode": {
+        "readOnly": true,
+        "flag": true,
+        "locked": [
+          "dashboard/b~m",
+          "login/c"
+        ],
+        "noteDots": [
+          "dashboard/a",
+          "login/c"
+        ]
+      },
+      "stateMessages": []
+    },
+    "null": {
+      "mode": {
+        "readOnly": true,
+        "flag": true,
+        "locked": [
+          "dashboard/b~m",
+          "login/c"
+        ],
+        "noteDots": [
+          "dashboard/a",
+          "login/c"
+        ]
+      },
+      "stateMessages": []
+    }
+  },
+  "nullState": {
+    "mode": {
+      "readOnly": false,
+      "flag": false,
+      "locked": [],
+      "noteDots": []
+    },
+    "errors": [],
+    "stateMessages": [
+      "bar"
+    ]
+  },
+  "fixtureReadOnlyBeforeState": [
+    {
+      "readOnly": true,
+      "state": null
+    },
+    {
+      "readOnly": false,
+      "state": null
+    }
+  ]
+}

@@ -1,0 +1,169 @@
+PASS  AC1  the fixture's inlined sample state equals scripts/fixtures/sample-state.json
+PASS  AC1  src: locks shown on login/c and dashboard/b~m only
+PASS  AC1  src: lock count reads 2
+PASS  AC1  src: override shown on login/a only
+PASS  AC1  src: note dots on login/c and dashboard/a
+PASS  AC1  src: bar shows compact · Indigo Slate (03) · f3 · dark · nav icons off
+PASS  AC1  src: not read-only after init (readOnly: false)
+PASS  AC1  src: login/a card shows its overrides (comfortable, palette 02, rest "Set")
+PASS  AC1  src: login/c card shows its lock (comfortable, 05, f2, light, icons on) and note
+PASS  AC1  src: notes panel shows the general note and both per-screen notes
+PASS  AC1  srcdoc: locks shown on login/c and dashboard/b~m only
+PASS  AC1  srcdoc: lock count reads 2
+PASS  AC1  srcdoc: override shown on login/a only
+PASS  AC1  srcdoc: note dots on login/c and dashboard/a
+PASS  AC1  srcdoc: bar shows compact · Indigo Slate (03) · f3 · dark · nav icons off
+PASS  AC1  srcdoc: not read-only after init (readOnly: false)
+PASS  AC1  srcdoc: login/a card shows its overrides (comfortable, palette 02, rest "Set")
+PASS  AC1  srcdoc: login/c card shows its lock (comfortable, 05, f2, light, icons on) and note
+PASS  AC1  srcdoc: notes panel shows the general note and both per-screen notes
+PASS  AC1  no request left the fixture
+PASS  AC2  sandboxed src frame: exactly 5 state messages, reasons lock, unlock, override, note, general
+PASS  AC2  sandboxed src frame: every message is v: 1 with the full serialize() shape (v 2, client, bar, ov, locks, notes, general, savedAt)
+PASS  AC2  sandboxed src frame: every message carries client null (the build's CLIENT, as the host sent none)
+PASS  AC2  sandboxed src frame: every message still carries the sample's locks, notes and general note (full state, not a diff)
+PASS  AC2  sandboxed src frame: lock message has dashboard/a locked
+PASS  AC2  sandboxed src frame: unlock message has dashboard/a's lock as a tombstone
+PASS  AC2  sandboxed src frame: override message has login/b density comfortable
+PASS  AC2  sandboxed src frame: note message has login/b's note
+PASS  AC2  sandboxed src frame: general message has the general note
+PASS  AC2  sandboxed src frame: Storage.prototype.setItem called 0 times
+PASS  AC2  un-sandboxed run: frame (a) has no sandbox attribute
+PASS  AC2  un-sandboxed src frame: exactly 5 state messages, reasons lock, unlock, override, note, general
+PASS  AC2  un-sandboxed src frame: every message is v: 1 with the full serialize() shape (v 2, client, bar, ov, locks, notes, general, savedAt)
+PASS  AC2  un-sandboxed src frame: every message carries client null (the build's CLIENT, as the host sent none)
+PASS  AC2  un-sandboxed src frame: every message still carries the sample's locks, notes and general note (full state, not a diff)
+PASS  AC2  un-sandboxed src frame: lock message has dashboard/a locked
+PASS  AC2  un-sandboxed src frame: unlock message has dashboard/a's lock as a tombstone
+PASS  AC2  un-sandboxed src frame: override message has login/b density comfortable
+PASS  AC2  un-sandboxed src frame: note message has login/b's note
+PASS  AC2  un-sandboxed src frame: general message has the general note
+PASS  AC2  un-sandboxed src frame: Storage.prototype.setItem called 0 times
+PASS  AC2  un-sandboxed src frame: localStorage.length === 0 and sessionStorage.length === 0
+PASS  AC2  no request left either fixture
+PASS  AC2  theme mid-typing: the theme message went out 53 ms after the typing (inside the 400 ms debounce)
+PASS  AC2  theme mid-typing: exactly one state message, reason general, carrying the typed text
+PASS  AC2  theme mid-typing: the general note textarea keeps the typed text, and the theme applied
+PASS  AC2  client round-trips: after an init whose state carries a client, the next state message carries that client
+PASS  AC2  no request left the theme/client fixture
+PASS  AC3  positive control (editable): keys l (card open) and d each post a state message — lock, unlock, bar, bar
+PASS  AC3  the host re-sent init with readOnly: true
+PASS  AC3  the Read-only flag shows in the title row
+PASS  AC3  canvas padlocks (one per screen, 16) and the card padlock are hidden
+PASS  AC3  barDensity: disabled with aria-disabled="true"
+PASS  AC3  barMode: disabled with aria-disabled="true"
+PASS  AC3  barNavicons: disabled with aria-disabled="true"
+PASS  AC3  barSwatches: disabled with aria-disabled="true"
+PASS  AC3  barFont: disabled with aria-disabled="true"
+PASS  AC3  reset: disabled with aria-disabled="true"
+PASS  AC3  cardFieldset: disabled with aria-disabled="true"
+PASS  AC3  Apply brand: absent from this build, or disabled with aria-disabled="true"
+PASS  AC3  card "Use the set values": disabled with aria-disabled="true"
+PASS  AC3  every note field is readonly
+PASS  AC3  Compare pane Save to screen and padlock carry aria-disabled="true"
+PASS  AC3  notes panel open: Clear notes disabled with aria-disabled="true"
+PASS  AC3  c + two picks opens Compare
+PASS  AC3  a pane-local tweak still works in Compare
+PASS  AC3  Compare pane Save to screen disabled; pane padlock visible but disabled
+PASS  AC3  Done with a pane tweak offers Discard / Keep comparing only
+PASS  AC3  Discard closes Compare
+PASS  AC3  zero state messages after read-only was switched on
+PASS  AC3  typing did not change the readonly general note
+PASS  AC3  no request left the fixture
+PASS  AC3  bad state (a JSON string) with readOnly: false: the page stays read-only, flag shown
+PASS  AC3  bad state (a JSON string): the default canvas (no locks, no notes)
+PASS  AC3  bad state (a JSON string): posts design-sandbox:error { v: 1, code: "bad-state", message }
+PASS  AC3  bad state (a JSON string): a padlock click, bar clicks and the d key post no state
+PASS  AC3  bad state (v: 3) with readOnly: false: the page stays read-only, flag shown
+PASS  AC3  bad state (v: 3): the default canvas (no locks, no notes)
+PASS  AC3  bad state (v: 3): posts design-sandbox:error { v: 1, code: "bad-state", message }
+PASS  AC3  bad state (v: 3): a padlock click, bar clicks and the d key post no state
+PASS  AC3  bad state (general.text: 5) with readOnly: false: the page stays read-only, flag shown
+PASS  AC3  bad state (general.text: 5): the default canvas (no locks, no notes)
+PASS  AC3  bad state (general.text: 5): posts design-sandbox:error { v: 1, code: "bad-state", message }
+PASS  AC3  bad state (general.text: 5): a padlock click, bar clicks and the d key post no state
+PASS  AC3  bad state (a lock entry that is a string) with readOnly: false: the page stays read-only, flag shown
+PASS  AC3  bad state (a lock entry that is a string): the default canvas (no locks, no notes)
+PASS  AC3  bad state (a lock entry that is a string): posts design-sandbox:error { v: 1, code: "bad-state", message }
+PASS  AC3  bad state (a lock entry that is a string): a padlock click, bar clicks and the d key post no state
+PASS  AC3  failed re-init (v: 3) after a valid one: read-only, flag shown
+PASS  AC3  failed re-init: the previous state is not wiped (locks login/c, dashboard/b~m; note dots dashboard/a, login/c)
+PASS  AC3  failed re-init: posts design-sandbox:error code bad-state
+PASS  AC3  failed re-init: edit attempts post no state
+PASS  AC3  a later valid init makes the page editable again: the d key posts one state with the sample locks
+PASS  AC3  fixture: Read-only on / off before any state was sent re-sends state: null (never the sample unasked)
+PASS  AC3  readOnly "false": read-only (only readOnly === false is editable), and edits post no state
+PASS  AC3  readOnly missing: read-only (only readOnly === false is editable), and edits post no state
+PASS  AC3  readOnly 1: read-only (only readOnly === false is editable), and edits post no state
+PASS  AC3  readOnly null: read-only (only readOnly === false is editable), and edits post no state
+PASS  AC3  state null with readOnly false: editable default canvas, no error, and the d key posts one state
+PASS  AC3  no request left the bad-state fixtures
+PASS  AC4  light 1440: computed --ui-bg on .sb equals the sent #f6f3ec
+PASS  AC4  light 1440: --ui-focus and --ui-accent equal the sent values
+PASS  AC4  light 1440: font-family on .sb equals the sent fonts.ui
+PASS  AC4  light 1440: .sb.dark off and color-scheme light
+PASS  AC4  light 1440: document.fonts.check('16px "DM Sans"') in the frame
+PASS  AC4  light 1440: no theme toggle, Export button or export modal
+PASS  AC4  dark 1440: computed --ui-bg on .sb equals the sent #0a1120
+PASS  AC4  dark 1440: --ui-focus and --ui-accent equal the sent values
+PASS  AC4  dark 1440: font-family on .sb equals the sent fonts.ui
+PASS  AC4  dark 1440: .sb.dark on and color-scheme dark
+PASS  AC4  dark 1440: document.fonts.check('16px "DM Sans"') in the frame
+PASS  AC4  dark 1440: no theme toggle, Export button or export modal
+PASS  AC4  light 1024: computed --ui-bg on .sb equals the sent #f6f3ec
+PASS  AC4  light 1024: --ui-focus and --ui-accent equal the sent values
+PASS  AC4  light 1024: font-family on .sb equals the sent fonts.ui
+PASS  AC4  light 1024: .sb.dark off and color-scheme light
+PASS  AC4  light 1024: document.fonts.check('16px "DM Sans"') in the frame
+PASS  AC4  light 1024: no theme toggle, Export button or export modal
+PASS  AC4  dark 1024: computed --ui-bg on .sb equals the sent #0a1120
+PASS  AC4  dark 1024: --ui-focus and --ui-accent equal the sent values
+PASS  AC4  dark 1024: font-family on .sb equals the sent fonts.ui
+PASS  AC4  dark 1024: .sb.dark on and color-scheme dark
+PASS  AC4  dark 1024: document.fonts.check('16px "DM Sans"') in the frame
+PASS  AC4  dark 1024: no theme toggle, Export button or export modal
+PASS  AC4  focus light: Tab focuses a bar button with a visible 2px solid ring in --ui-focus (rgb(49, 109, 202))
+PASS  AC4  focus dark: Tab focuses a bar button with a visible 2px solid ring in --ui-focus (rgb(83, 155, 245))
+PASS  AC4  no request left the fixture
+PASS  AC4  standalone page loaded the same state from localStorage (locks login/c, dashboard/b~m)
+PASS  AC4  mockup login/a: inner .screen fits the 1600×1300 viewport in both
+PASS  AC4  mockup login/a: embedded and standalone PNG buffers byte-equal
+PASS  AC4  mockup login/c: inner .screen fits the 1600×1300 viewport in both
+PASS  AC4  mockup login/c: embedded and standalone PNG buffers byte-equal
+PASS  AC4  mockup dashboard/b: inner .screen fits the 1600×1300 viewport in both
+PASS  AC4  mockup dashboard/b: embedded and standalone PNG buffers byte-equal
+PASS  AC4  mockup dashboard/b~m: inner .screen fits the 1600×1300 viewport in both
+PASS  AC4  mockup dashboard/b~m: embedded and standalone PNG buffers byte-equal
+PASS  AC4  no request left either mockup page
+PASS  AC5  frame (b) is the srcdoc document with the CSP meta, in standards mode
+PASS  AC5  frame (b) rendered the sent state (locks login/c, dashboard/b~m)
+PASS  AC5  frame (b) declares @font-face families (10)
+PASS  AC5  frame (b): document.fonts.check("Manrope") with a loaded face
+PASS  AC5  frame (b): document.fonts.check("Public Sans") with a loaded face
+PASS  AC5  frame (b): document.fonts.check("DM Serif Display") with a loaded face
+PASS  AC5  frame (b): document.fonts.check("DM Sans") with a loaded face
+PASS  AC5  frame (b): document.fonts.check("Space Grotesk") with a loaded face
+PASS  AC5  frame (b): document.fonts.check("IBM Plex Sans") with a loaded face
+PASS  AC5  frame (b): document.fonts.check("Playfair Display") with a loaded face
+PASS  AC5  frame (b): document.fonts.check("Source Sans 3") with a loaded face
+PASS  AC5  frame (b): document.fonts.check("Nunito") with a loaded face
+PASS  AC5  frame (b): document.fonts.check("Nunito Sans") with a loaded face
+PASS  AC5  frame (b): zero CSP violations
+PASS  AC5  zero aborted (non-file:/data:) requests
+PASS  AC6  the flow opened and closed Compare in both pages
+PASS  AC6  the flow left equal serialize() (modulo at/savedAt)
+PASS  AC6  the flow changed the state as expected (dashboard/a locked, login/b saved look and note)
+PASS  AC6  both pages persisted the same state to localStorage (modulo at/savedAt)
+PASS  AC6  designText() equal modulo the date
+PASS  AC6  htmlText() equal modulo the date
+PASS  AC6  fresh load with the final state, light: baseline and new full-page screenshots byte-equal
+PASS  AC6  fresh load with the final state, dark: baseline and new full-page screenshots byte-equal
+PASS  AC6  no request left either page
+
+PASS  AC1  20 passed, 0 failed
+PASS  AC2  28 passed, 0 failed
+PASS  AC3  52 passed, 0 failed
+PASS  AC4  37 passed, 0 failed
+PASS  AC5  15 passed, 0 failed
+PASS  AC6  9 passed, 0 failed
+PASS  verify-embedded: 161/161 assertions passed

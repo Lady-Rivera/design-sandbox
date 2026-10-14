@@ -1,0 +1,12 @@
+id  palette             light trio (text on #F1F2F5)            dark trio (on #171B22)
+01  Harbor Blue         #23508F 7.2  #1F6F73 5.2  #8A5A17 5.3   #6C9CDF 6.1  #2BA8AE 6.0  #D4881E 6.0
+02  Evergreen & Clay    #15624A 6.5  #9A4A26 5.5  #7A5C10 5.6   #22B184 6.3  #DB865F 6.2  #C69415 6.3
+03  Indigo Slate        #3F4A8C 7.3  #6B4F8A 6.0  #2F6B5E 5.5   #8C96CE 6.1  #A891C2 6.2  #49AD97 6.3
+04  Ink & Rust          #1F2328 14.1  #A34A2A 5.3  #2E5C8A 6.2   #919CAB 6.2  #DA8263 6.0  #6C9ED1 6.1
+05  Deep Teal & Plum    #0F5F63 6.6  #6E3563 8.0  #8A5A00 5.3   #17AFB7 6.5  #C888BC 6.3  #DC8F00 6.6
+06  Navy & Copper       #1F3A7A 9.6  #8F5430 5.4  #4A6318 6.1   #7A99E0 6.1  #CE8B62 6.2  #7CA825 6.2
+07  Aubergine & Rose    #5E2758 9.8  #964258 5.8  #1F6B5C 5.7   #CE83C6 6.3  #CC8699 6.1  #2EAD94 6.2
+08  Forest & Slate      #1E4A2E 9.0  #3B4A5E 8.1  #5B4E9A 6.3   #45B26C 6.4  #879BB5 6.1  #A096CC 6.4
+09  Burgundy & Olive    #7A2233 8.9  #55622A 5.9  #2A5C73 6.5   #DE7F92 6.2  #8EA543 6.3  #5BA5C7 6.3
+10  Amber & Graphite    #2E2B27 12.6  #8A5A17 5.3  #2F5D8A 6.1   #D4881E 6.0  #979DA8 6.3  #6D9FD0 6.2
+palettes 0

@@ -1,0 +1,3 @@
+emitted artboard-login.md, artboard-dashboard.md, canvas-layout.md → references
+built Main.dc.html, Dashboard.dc.html, canvas.json, design-sandbox.html, design-sandbox.artifact.html, design-sandbox.embedded.html → /Users/arivera/Documents/GitHub/discovery_copilot/design-sandbox/prebuilt
+build 0

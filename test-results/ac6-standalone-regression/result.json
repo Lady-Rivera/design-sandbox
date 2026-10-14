@@ -1,0 +1,97 @@
+{
+  "baseline": "git show 4c05b19:prebuilt/design-sandbox.html (temp, not committed)",
+  "flow": "lock dashboard/a → Compare login/b vs login/d → pane 0 mode tweak → Save to screen → Done → note on login/b",
+  "serializeEqual": true,
+  "finalState": {
+    "v": 2,
+    "client": null,
+    "bar": {
+      "density": "compact",
+      "palette": "03",
+      "font": "f3",
+      "mode": "dark",
+      "navicons": "off",
+      "at": 1760000000000
+    },
+    "ov": {
+      "login/a": {
+        "palette": "02",
+        "density": "comfortable",
+        "at": 1760000100000
+      },
+      "dashboard/a": {
+        "_del": true,
+        "at": 1791924685360
+      },
+      "login/b": {
+        "mode": "light",
+        "at": 1791924686008
+      }
+    },
+    "locks": {
+      "login/c": {
+        "density": "comfortable",
+        "palette": "05",
+        "font": "f2",
+        "mode": "light",
+        "navicons": "on",
+        "at": 1760000200000
+      },
+      "dashboard/b~m": {
+        "density": "compact",
+        "palette": "07",
+        "font": "f4",
+        "mode": "dark",
+        "navicons": "on",
+        "at": 1760000300000
+      },
+      "dashboard/a": {
+        "navicons": "off",
+        "density": "compact",
+        "palette": "03",
+        "font": "f3",
+        "mode": "dark",
+        "at": 1791924685360
+      }
+    },
+    "notes": {
+      "login/c": {
+        "text": "Client prefers this split layout for the sign-in page.",
+        "at": 1760000400000
+      },
+      "dashboard/a": {
+        "text": "Show the KPI cards above the fold.",
+        "at": 1760000500000
+      },
+      "login/b": {
+        "text": "AC6 note after Compare",
+        "at": 1791924686566
+      }
+    },
+    "general": {
+      "text": "Synthetic sample state for the embed fixture — no client data.",
+      "at": 1760000600000
+    },
+    "savedAt": "2026-10-13T20:51:26.578Z"
+  },
+  "exportsEqual": {
+    "designText": true,
+    "htmlText": true
+  },
+  "screenshots": {
+    "light": {
+      "byteEqual": true,
+      "bytes": [
+        216475,
+        216475
+      ]
+    },
+    "dark": {
+      "byteEqual": true,
+      "bytes": [
+        213866,
+        213866
+      ]
+    }
+  }
+}

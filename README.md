@@ -24,7 +24,10 @@ node scripts/build.mjs --brand brand.json --client "Acme" --out out    # a brand
 node scripts/build.mjs --check-palettes                                # contrast table for assets/palettes.json
 node scripts/build.mjs --picks picks.json --out out                    # Claude Design artboards for the locked screens
 node scripts/verify-fonts.mjs prebuilt/design-sandbox.html             # Playwright: fonts load with the network blocked
+node scripts/verify-embedded.mjs                                       # Playwright: the embedded build's bridge, read-only mode and tokens
 ```
+
+`prebuilt/design-sandbox.embedded.html` is the same page for a host frame, with a postMessage bridge instead of browser storage; `references/embedding.md` documents the protocol, tokens and read-only rules.
 
 The build fails if a palette in `assets/palettes.json` falls below 4.5:1 (light) or 6:1 (dark) on the page surfaces.
 
@@ -43,8 +46,10 @@ scripts/
   canvas-page.mjs     the sandbox page itself: canvas, bar, cards, locks, notes, compare, exports, persistence
   fetch-fonts.*       vendor the fonts (needs network)
   verify-fonts.mjs    offline-font check
+  verify-embedded.mjs checks for the embedded build (bridge, read-only, tokens, offline, standalone regression)
+  fixtures/           embed-host.html (a host page framing the embedded build) and sample-state.json
 references/           brand intake, running the sandbox, templates and review record, palettes, font pairs, design baseline, prototype spec
-prebuilt/             the finished, unbranded output — used byte for byte where nothing can run
+prebuilt/             the finished, unbranded output (including design-sandbox.embedded.html) — used byte for byte where nothing can run
 ```
 
 ## Labels

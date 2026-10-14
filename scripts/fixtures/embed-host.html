@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design Sandbox — embed host fixture (bridge v1)</title>
+<!--
+  A small host page for prebuilt/design-sandbox.embedded.html — the shape the Discovery Copilot uses.
+  Open this file in a browser (file:// is fine). Two frames of the embedded build:
+    (a) <iframe src sandbox="allow-scripts">     — loads ../../prebuilt/design-sandbox.embedded.html
+    (b) <iframe srcdoc sandbox="allow-scripts">  — the same page text with a CSP <meta> added to its <head>;
+        a file:// page cannot read another file, so pick prebuilt/design-sandbox.embedded.html with
+        "srcdoc page" (scripts/verify-embedded.mjs calls embedHost.loadSrcdoc(text) instead).
+  Buttons: Light / Dark (a `theme` message), Read-only on / off (re-sends `init` with each frame's latest
+  state, or `state: null` if none was exchanged yet), Send sample state (`init` with sample-state.json's content, inlined below). Every message in
+  either direction is listed in the log.
+  Test-only switches: ?sandbox=off drops the sandbox attribute from frame (a), so storage is reachable there;
+  ?frame=full shows only frame (a), edge to edge at the top-left of the window (for pixel comparisons).
+  Synthetic data only.
+-->
+<style>
+  html, body { margin: 0; }
+  body { font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif; font-size: 14px; background: var(--host-bg); color: var(--host-text); }
+  .controls { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 16px; background: var(--host-panel); border-bottom: 1px solid var(--host-border); }
+  .controls b { margin-right: 8px; }
+  .controls button { font: inherit; padding: 5px 10px; border-radius: 6px; border: 1px solid var(--host-border); background: var(--host-bg); color: var(--host-text); cursor: pointer; }
+  .controls button[aria-pressed="true"] { background: var(--host-accent); border-color: var(--host-accent); color: var(--host-on-accent); }
+  .controls label { color: var(--host-dim); }
+  #status { margin-left: auto; color: var(--host-dim); }
+  main { display: grid; gap: 16px; padding: 16px; }
+  section h2 { margin: 0 0 6px; font-size: 13px; font-weight: 600; color: var(--host-dim); }
+  iframe { display: block; width: 100%; height: 760px; border: 1px solid var(--host-border); border-radius: 8px; background: var(--host-panel); }
+  .log { padding: 0 16px 24px; }
+  #log { margin: 0; padding: 0 0 0 22px; font: 12px/1.5 ui-monospace, Menlo, Consolas, monospace; max-height: 260px; overflow: auto; }
+  #log .in { color: var(--host-accent); }
+  .full .controls, .full .log, .full main > section:nth-child(2), .full section h2 { display: none; }
+  .full main { padding: 0; }
+  .full #frame-src { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; border: 0; border-radius: 0; }
+</style>
+</head>
+<body>
+<header class="controls">
+  <b>Embed host fixture · bridge v1</b>
+  <button type="button" id="btn-light">Light</button>
+  <button type="button" id="btn-dark">Dark</button>
+  <button type="button" id="btn-ro-on">Read-only on</button>
+  <button type="button" id="btn-ro-off">Read-only off</button>
+  <button type="button" id="btn-send">Send sample state</button>
+  <label>srcdoc page <input type="file" id="srcdoc-file" accept=".html,text/html"></label>
+  <span id="status"></span>
+</header>
+<main>
+  <section><h2>(a) src · sandbox="allow-scripts"</h2><iframe id="frame-src" title="Design Sandbox (src frame)"></iframe></section>
+  <section><h2>(b) srcdoc + CSP · sandbox="allow-scripts"</h2><iframe id="frame-srcdoc" sandbox="allow-scripts" title="Design Sandbox (srcdoc frame)"></iframe></section>
+</main>
+<section class="log"><h2>Message log</h2><ol id="log"></ol></section>
+
+<!-- a copy of scripts/fixtures/sample-state.json (verify-embedded.mjs asserts the two are equal) -->
+<script type="application/json" id="sample-state">
+{
+  "v": 2,
+  "client": null,
+  "bar": { "density": "compact", "palette": "03", "font": "f3", "mode": "dark", "navicons": "off", "at": 1760000000000 },
+  "ov": {
+    "login/a": { "palette": "02", "density": "comfortable", "at": 1760000100000 }
+  },
+  "locks": {
+    "login/c": { "density": "comfortable", "palette": "05", "font": "f2", "mode": "light", "navicons": "on", "at": 1760000200000 },
+    "dashboard/b~m": { "density": "compact", "palette": "07", "font": "f4", "mode": "dark", "navicons": "on", "at": 1760000300000 }
+  },
+  "notes": {
+    "login/c": { "text": "Client prefers this split layout for the sign-in page.", "at": 1760000400000 },
+    "dashboard/a": { "text": "Show the KPI cards above the fold.", "at": 1760000500000 }
+  },
+  "general": { "text": "Synthetic sample state for the embed fixture — no client data.", "at": 1760000600000 },
+  "savedAt": "2025-10-09T09:03:20.000Z"
+}
+</script>
+<script>
+(() => {
+  // The Copilot's tokens (discovery_copilot/src/app/globals.css: :root:not(.dark) = light, :root = dark),
+  // mapped onto the page's --ui-* names — a full set per theme. Comments name the Copilot variable.
+  const TOKENS = {
+    light: {
+      '--ui-bg': '#f6f3ec',                          // --bg
+      '--ui-dot': 'rgba(19, 35, 60, 0.14)',          // --rule
+      '--ui-panel': '#ffffff',                       // --panel
+      '--ui-panel-2': '#fbf9f3',                     // --panel2
+      '--ui-raised': '#ffffff',                      // --panel
+      '--ui-border': 'rgba(19, 35, 60, 0.11)',       // --border
+      '--ui-border-strong': 'rgba(19, 35, 60, 0.3)', // --border-hover
+      '--ui-text': '#13233c',                        // --text
+      '--ui-muted': '#5a6a80',                       // --dim
+      '--ui-accent': '#316dca',                      // --blue
+      '--ui-accent-hover': '#316dca',                // --blue
+      '--ui-on-accent': '#ffffff',                   // --panel
+      '--ui-warn': '#b58414',                        // --yellow
+      '--ui-warn-bg': 'rgba(181, 132, 20, 0.14)',    // --chip-part
+      '--ui-warn-border': '#b58414',                 // --yellow
+      '--ui-lock': '#1a9e56',                        // --green
+      '--ui-lock-bg': 'rgba(26, 158, 86, 0.09)',     // --ok-bg
+      '--ui-lock-border': 'rgba(26, 158, 86, 0.35)', // --ok-border
+      '--ui-on-lock': '#ffffff',                     // --panel
+      '--ui-shadow': '0 2px 12px rgba(19, 35, 60, 0.06)',      // --shadow
+      '--ui-shadow-card': '0 2px 12px rgba(19, 35, 60, 0.06)', // --shadow
+      '--ui-shadow-sm': '0 1px 3px rgba(19, 35, 60, 0.06)',    // --card-shadow
+      '--ui-focus': '#316dca',                       // --blue
+    },
+    dark: {
+      '--ui-bg': '#0a1120',                          // --bg
+      '--ui-dot': 'rgba(236, 229, 216, 0.14)',       // --rule
+      '--ui-panel': '#121c30',                       // --panel
+      '--ui-panel-2': '#0e1728',                     // --panel2
+      '--ui-raised': '#121c30',                      // --panel
+      '--ui-border': 'rgba(148, 170, 205, 0.14)',    // --border
+      '--ui-border-strong': 'rgba(148, 170, 205, 0.35)', // --border-hover
+      '--ui-text': '#ece5d8',                        // --text
+      '--ui-muted': '#8b98ab',                       // --dim
+      '--ui-accent': '#539bf5',                      // --blue
+      '--ui-accent-hover': '#539bf5',                // --blue
+      '--ui-on-accent': '#0a1120',                   // --bg
+      '--ui-warn': '#d4a72c',                        // --yellow
+      '--ui-warn-bg': 'rgba(210, 153, 34, 0.16)',    // --chip-part
+      '--ui-warn-border': '#d4a72c',                 // --yellow
+      '--ui-lock': '#3fb970',                        // --green
+      '--ui-lock-bg': 'rgba(63, 185, 112, 0.1)',     // --ok-bg
+      '--ui-lock-border': 'rgba(63, 185, 112, 0.3)', // --ok-border
+      '--ui-on-lock': '#0a1120',                     // --bg
+      '--ui-shadow': '0 2px 14px rgba(3, 8, 18, 0.45)',      // --shadow
+      '--ui-shadow-card': '0 2px 14px rgba(3, 8, 18, 0.45)', // --shadow
+      '--ui-shadow-sm': '0 1px 2px rgba(3, 8, 18, 0.35)',    // --card-shadow
+      '--ui-focus': '#539bf5',                       // --blue
+    },
+  };
+  const FONTS = { ui: '"DM Sans", ui-sans-serif, system-ui, sans-serif' };   // DM Sans is bundled in the page (pair f2)
+  const CSP = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; font-src data:; img-src data:">`;
+  const SAMPLE = JSON.parse(document.getElementById('sample-state').textContent);
+  const params = new URLSearchParams(location.search);
+
+  const frames = { src: document.getElementById('frame-src'), srcdoc: document.getElementById('frame-srcdoc') };
+  const ready = { src: false, srcdoc: false }, lastState = { src: null, srcdoc: null };
+  const host = { dark: false, readOnly: false };
+  const log = [];
+
+  const theme = () => ({ dark: host.dark, tokens: { ...TOKENS[host.dark ? 'dark' : 'light'] }, fonts: { ...FONTS } });
+  const clone = (x) => JSON.parse(JSON.stringify(x));
+
+  function record(frame, dir, msg) {
+    log.push({ frame, dir, msg: clone(msg), t: Date.now() });
+    const li = document.createElement('li'); li.className = dir;
+    const st = msg.state && typeof msg.state === 'object' ? msg.state : null;
+    const count = (m) => Object.values(m || {}).filter(e => e && !e._del).length;
+    li.textContent = (dir === 'in' ? '← ' : '→ ') + frame + '  ' + msg.type + (msg.reason ? ' (' + msg.reason + ')' : '') +
+      (st ? '  locks ' + count(st.locks) + ' · overrides ' + count(st.ov) + ' · notes ' + count(st.notes) : '') +
+      ('readOnly' in msg ? '  readOnly ' + msg.readOnly : '') + (msg.theme ? '  ' + (msg.theme.dark ? 'dark' : 'light') : '');
+    const ol = document.getElementById('log'); ol.appendChild(li); ol.scrollTop = ol.scrollHeight;
+  }
+  function post(key, msg) {
+    const w = frames[key].contentWindow; if (!w) return;
+    const m = { ...msg, v: 1 };
+    w.postMessage(m, '*');   // the frames are sandboxed (opaque origin "null"), so '*' is the only target that delivers
+    record(key, 'out', m);
+  }
+  const keys = () => Object.keys(frames).filter(k => ready[k]);
+  function sendInit(key, state, readOnly = host.readOnly) { post(key, { type: 'design-sandbox:init', state: state == null ? null : clone(state), readOnly: !!readOnly, theme: theme() }); }
+  function sendSample() { for (const k of keys()) { lastState[k] = clone(SAMPLE); sendInit(k, SAMPLE); } paintControls(); }
+  function setDark(dark) { host.dark = !!dark; for (const k of keys()) post(k, { type: 'design-sandbox:theme', theme: theme() }); paintControls(); }
+  // each frame's latest state (sent or received) only; null when nothing has been exchanged yet
+  function setReadOnly(ro) { host.readOnly = !!ro; for (const k of keys()) sendInit(k, lastState[k]); paintControls(); }
+  function loadSrcdoc(text) {
+    ready.srcdoc = false; lastState.srcdoc = null;
+    const HEAD = /<head(?:\s[^>]*)?>/i;   // <head> or <head …>, never <header>
+    const page = HEAD.test(text) ? text.replace(HEAD, (h) => h + '\n' + CSP) : CSP + text;   // inside <head>, so the page keeps its doctype (no quirks mode)
+    frames.srcdoc.srcdoc = page; paintControls();
+  }
+
+  window.addEventListener('message', (e) => {
+    const key = Object.keys(frames).find(k => frames[k].contentWindow === e.source); if (!key) return;
+    const m = e.data; if (!m || typeof m !== 'object' || typeof m.type !== 'string' || !m.type.startsWith('design-sandbox:')) return;
+    record(key, 'in', m);
+    if (m.type === 'design-sandbox:ready') ready[key] = true;
+    if (m.type === 'design-sandbox:state' && m.state) lastState[key] = clone(m.state);
+    paintControls();
+  });
+
+  function paintControls() {
+    const t = TOKENS[host.dark ? 'dark' : 'light'], r = document.documentElement.style;
+    r.setProperty('--host-bg', t['--ui-bg']); r.setProperty('--host-panel', t['--ui-panel']); r.setProperty('--host-border', t['--ui-border']);
+    r.setProperty('--host-text', t['--ui-text']); r.setProperty('--host-dim', t['--ui-muted']); r.setProperty('--host-accent', t['--ui-accent']); r.setProperty('--host-on-accent', t['--ui-on-accent']);
+    r.colorScheme = host.dark ? 'dark' : 'light';
+    document.getElementById('btn-light').setAttribute('aria-pressed', String(!host.dark));
+    document.getElementById('btn-dark').setAttribute('aria-pressed', String(host.dark));
+    document.getElementById('btn-ro-on').setAttribute('aria-pressed', String(host.readOnly));
+    document.getElementById('btn-ro-off').setAttribute('aria-pressed', String(!host.readOnly));
+    document.getElementById('status').textContent = 'ready: ' + (Object.keys(frames).map(k => k + ' ' + (ready[k] ? 'yes' : 'no')).join(' · '));
+  }
+
+  document.getElementById('btn-light').addEventListener('click', () => setDark(false));
+  document.getElementById('btn-dark').addEventListener('click', () => setDark(true));
+  document.getElementById('btn-ro-on').addEventListener('click', () => setReadOnly(true));
+  document.getElementById('btn-ro-off').addEventListener('click', () => setReadOnly(false));
+  document.getElementById('btn-send').addEventListener('click', sendSample);
+  document.getElementById('srcdoc-file').addEventListener('change', async (e) => { const f = e.target.files[0]; if (f) loadSrcdoc(await f.text()); });
+
+  if (params.get('frame') === 'full') document.body.classList.add('full');
+  if (params.get('sandbox') !== 'off') frames.src.setAttribute('sandbox', 'allow-scripts');
+  frames.src.src = '../../prebuilt/design-sandbox.embedded.html';
+  paintControls();
+
+  window.embedHost = { TOKENS, FONTS, SAMPLE, frames, ready, lastState, log, theme, sendInit, sendSample, setDark, setReadOnly, loadSrcdoc, post };
+})();
+</script>
+</body>
+</html>

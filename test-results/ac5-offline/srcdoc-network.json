@@ -1,0 +1,75 @@
+{
+  "blockedExcept": [
+    "file:",
+    "data:"
+  ],
+  "requests": [
+    "file:///Users/arivera/Documents/GitHub/discovery_copilot/design-sandbox/scripts/fixtures/embed-host.html",
+    "file:///Users/arivera/Documents/GitHub/discovery_copilot/design-sandbox/prebuilt/design-sandbox.embedded.html"
+  ],
+  "aborted": [],
+  "frame": {
+    "url": "about:srcdoc",
+    "compatMode": "CSS1Compat",
+    "csp": "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; font-src data:; img-src data:",
+    "cspViolations": [],
+    "families": [
+      "Manrope",
+      "Public Sans",
+      "DM Serif Display",
+      "DM Sans",
+      "Space Grotesk",
+      "IBM Plex Sans",
+      "Playfair Display",
+      "Source Sans 3",
+      "Nunito",
+      "Nunito Sans"
+    ],
+    "fonts": {
+      "Manrope": {
+        "check": true,
+        "loadedFaces": 1
+      },
+      "Public Sans": {
+        "check": true,
+        "loadedFaces": 1
+      },
+      "DM Serif Display": {
+        "check": true,
+        "loadedFaces": 1
+      },
+      "DM Sans": {
+        "check": true,
+        "loadedFaces": 1
+      },
+      "Space Grotesk": {
+        "check": true,
+        "loadedFaces": 1
+      },
+      "IBM Plex Sans": {
+        "check": true,
+        "loadedFaces": 1
+      },
+      "Playfair Display": {
+        "check": true,
+        "loadedFaces": 1
+      },
+      "Source Sans 3": {
+        "check": true,
+        "loadedFaces": 1
+      },
+      "Nunito": {
+        "check": true,
+        "loadedFaces": 1
+      },
+      "Nunito Sans": {
+        "check": true,
+        "loadedFaces": 1
+      }
+    },
+    "locked": [
+      "dashboard/b~m",
+      "login/c"
+    ]
+  }
+}

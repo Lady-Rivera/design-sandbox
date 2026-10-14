@@ -1,0 +1,13 @@
+Sample (93 chars) width in the monospace fallback: 1785.89px
+PASS  Manrope            loaded faces: 1  check: true  width: 1510.38px
+PASS  Public Sans        loaded faces: 1  check: true  width: 1551.75px
+PASS  DM Serif Display   loaded faces: 1  check: true  width: 1443.75px
+PASS  DM Sans            loaded faces: 1  check: true  width: 1518.19px
+PASS  Space Grotesk      loaded faces: 1  check: true  width: 1554.19px
+PASS  IBM Plex Sans      loaded faces: 1  check: true  width: 1505.34px
+PASS  Playfair Display   loaded faces: 1  check: true  width: 1492.05px
+PASS  Source Sans 3      loaded faces: 1  check: true  width: 1356.2px
+PASS  Nunito             loaded faces: 1  check: true  width: 1561.39px
+PASS  Nunito Sans        loaded faces: 1  check: true  width: 1538.91px
+10 families, 10 distinct sample widths.
+No network requests left the page.

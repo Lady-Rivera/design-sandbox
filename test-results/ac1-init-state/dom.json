@@ -1,0 +1,118 @@
+{
+  "sample": "scripts/fixtures/sample-state.json",
+  "frames": {
+    "src": {
+      "canvas": {
+        "locked": [
+          "dashboard/b~m",
+          "login/c"
+        ],
+        "overridden": [
+          "login/a"
+        ],
+        "noteDots": [
+          "dashboard/a",
+          "login/c"
+        ],
+        "bar": {
+          "density": "compact",
+          "mode": "dark",
+          "navicons": "off",
+          "palette": "03",
+          "font": "f3"
+        },
+        "lockCount": "2",
+        "readOnlyFlagShown": false
+      },
+      "cardOverride": {
+        "hidden": false,
+        "name": "A1",
+        "density": "comfortable",
+        "mode": "",
+        "navicons": "",
+        "palette": "02",
+        "font": "",
+        "lockedFlag": false,
+        "overriddenFlag": true,
+        "note": ""
+      },
+      "cardLocked": {
+        "hidden": false,
+        "name": "C1",
+        "density": "comfortable",
+        "mode": "light",
+        "navicons": "on",
+        "palette": "05",
+        "font": "f2",
+        "lockedFlag": true,
+        "overriddenFlag": false,
+        "note": "Client prefers this split layout for the sign-in page."
+      },
+      "notes": {
+        "general": "Synthetic sample state for the embed fixture — no client data.",
+        "perScreen": [
+          "dashboard/a",
+          "login/c"
+        ],
+        "sync": "Saved to the host"
+      }
+    },
+    "srcdoc": {
+      "canvas": {
+        "locked": [
+          "dashboard/b~m",
+          "login/c"
+        ],
+        "overridden": [
+          "login/a"
+        ],
+        "noteDots": [
+          "dashboard/a",
+          "login/c"
+        ],
+        "bar": {
+          "density": "compact",
+          "mode": "dark",
+          "navicons": "off",
+          "palette": "03",
+          "font": "f3"
+        },
+        "lockCount": "2",
+        "readOnlyFlagShown": false
+      },
+      "cardOverride": {
+        "hidden": false,
+        "name": "A1",
+        "density": "comfortable",
+        "mode": "",
+        "navicons": "",
+        "palette": "02",
+        "font": "",
+        "lockedFlag": false,
+        "overriddenFlag": true,
+        "note": ""
+      },
+      "cardLocked": {
+        "hidden": false,
+        "name": "C1",
+        "density": "comfortable",
+        "mode": "light",
+        "navicons": "on",
+        "palette": "05",
+        "font": "f2",
+        "lockedFlag": true,
+        "overriddenFlag": false,
+        "note": "Client prefers this split layout for the sign-in page."
+      },
+      "notes": {
+        "general": "Synthetic sample state for the embed fixture — no client data.",
+        "perScreen": [
+          "dashboard/a",
+          "login/c"
+        ],
+        "sync": "Saved to the host"
+      }
+    }
+  },
+  "abortedRequests": []
+}
